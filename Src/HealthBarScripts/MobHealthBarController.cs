@@ -33,7 +33,7 @@ namespace SilkenImpact {
         private bool guardExist(GameObject mobGO) {
 
             if (!healthBarGoOf.ContainsKey(mobGO)) {
-#if !UNITY_EDITOR
+#if !(UNITY_EDITOR || UNITY_STANDALONE)
                 Plugin.Logger.LogWarning($"MobHealthBarController: GuardExist failed, mobGO {mobGO.name} not found in healthBarGoOf");
 #endif
                 return false;
@@ -49,7 +49,7 @@ namespace SilkenImpact {
         private void OnMobSpawn(GameObject mobGO, float maxHp) {
             GameObject prefab;
             GameObject healthBarGO;
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE
             prefab = Addressables.LoadAssetAsync<GameObject>("Assets/Addressables/Prefabs/HealthBar.prefab").WaitForCompletion();
             healthBarGO = Instantiate(prefab);
 #else

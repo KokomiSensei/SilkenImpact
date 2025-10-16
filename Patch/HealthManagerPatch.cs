@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using JetBrains.Annotations;
 using UnityEngine;
 
 namespace SilkenImpact.Patch {
@@ -71,9 +70,28 @@ namespace SilkenImpact.Patch {
         [HarmonyPatch("TakeDamage")]
         [HarmonyPostfix]
         public static void HealthManager_TakeDamage_Postfix(HitInstance hitInstance, HealthManager __instance) {
+            // this is how the damage is calculated in HealthManager.TakeDamage
+            // #TODO BUT, there may be more than one damage sourse, so be cautious
             int damage = Mathf.RoundToInt((float)hitInstance.DamageDealt * hitInstance.Multiplier);
             Plugin.Logger.LogInfo($"{__instance.gameObject.name} took {damage} damage, hp -> {__instance.hp}");
+            SpawnDamageText(__instance, damage, null);
             EventHandle<MobOwnerEvent>.SendEvent<GameObject, float>(HealthBarOwnerEventType.Damage, __instance.gameObject, damage);
+        }
+
+        public static void SpawnDamageText(HealthManager __instance, float damage, Color? color) {
+            var damageTextGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/DamageOldText.prefab", $"{__instance}.DamageText = {damage}");
+            var sprite = __instance.gameObject.GetComponent<SpriteRenderer>();
+            Vector3 spriteSize = sprite ? sprite.bounds.size : new Vector3(1, 1, 0);
+
+            Vector3 randomOffset = spriteSize;
+            randomOffset.x *= Random.Range(-0.5f, 0.5f);
+            randomOffset.y *= Random.Range(0f, 0.5f);
+            damageTextGO.transform.position = __instance.gameObject.transform.position + randomOffset;
+            damageTextGO.transform.SetParent(GameObject.Find("WorldSpaceCanvas").transform, true);
+
+            var text = damageTextGO.GetComponent<DamageText>();
+            text.DamageString = ((int)damage).ToString();
+            text.TextColor = color ?? ColourPalette.Pyro;
         }
 
     }

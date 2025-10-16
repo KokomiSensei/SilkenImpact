@@ -22,11 +22,7 @@ public class Plugin : BaseUnityPlugin {
         Logger.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
 
         // Asset Bundle
-        PluginFolder = Path.GetDirectoryName(Info.Location);
-        string assetFolder = Path.Combine(PluginFolder, "Assets");
-        string latestBundlePath = LatestBundleInFolder(assetFolder); //TODO For Quick Debugging Only
-        bundle = AssetBundle.LoadFromFile(latestBundlePath);
-        Logger.LogInfo($"Loaded AssetBundle from {latestBundlePath}");
+        LoadAssetBundle();
 
         // Patch 
         _harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
@@ -54,6 +50,12 @@ public class Plugin : BaseUnityPlugin {
         _harmony?.UnpatchSelf();
     }
 
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.F5)) {
+            Logger.LogInfo("Reloading AssetBundle...");
+            LoadAssetBundle();
+        }
+    }
 
 
     public string LatestBundleInFolder(string folderPath) {
@@ -62,6 +64,17 @@ public class Plugin : BaseUnityPlugin {
                             .OrderByDescending(f => f.LastWriteTime)
                             .FirstOrDefault();
         return file?.FullName;
+    }
+
+    public void LoadAssetBundle() {
+        if (bundle != null) {
+            bundle.Unload(true);
+        }
+        PluginFolder = Path.GetDirectoryName(Info.Location);
+        string assetFolder = Path.Combine(PluginFolder, "Assets");
+        string latestBundlePath = LatestBundleInFolder(assetFolder); //TODO For Quick Debugging Only
+        bundle = AssetBundle.LoadFromFile(latestBundlePath);
+        Logger.LogInfo($"Loaded AssetBundle from {latestBundlePath}");
     }
 
     public static GameObject InstantiateFromAssetsBundle(string path, string name) {

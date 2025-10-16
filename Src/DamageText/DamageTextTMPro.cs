@@ -3,11 +3,11 @@ using UnityEngine;
 namespace SilkenImpact {
     public class DamageTextTMPro : DamageText {
         public TextMeshProUGUI textComponent;
-        protected override string text {
+        public override string DamageString {
             get => textComponent.text;
-            set => textComponent.text = text;
+            set => textComponent.text = DamageString;
         }
-        protected override Color color {
+        public override Color TextColor {
             get => textComponent.color;
             set => textComponent.color = value;
         }

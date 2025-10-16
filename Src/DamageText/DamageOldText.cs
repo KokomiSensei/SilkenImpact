@@ -6,11 +6,11 @@ namespace SilkenImpact {
     public class DamageOldText : DamageText {
         public Text textComponent;
 
-        protected override string text {
+        public override string DamageString {
             get => textComponent.text;
             set => textComponent.text = value;
         }
-        protected override Color color {
+        public override Color TextColor {
             get => textComponent.color;
             set => textComponent.color = value;
         }

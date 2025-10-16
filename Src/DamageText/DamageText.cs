@@ -8,6 +8,8 @@ namespace SilkenImpact {
         public float maxWidth;
         public float maxHeight;
 
+        private float yScale;
+
         public RectTransform rectTransform;
         public Material fontMaterial;
 
@@ -16,16 +18,18 @@ namespace SilkenImpact {
         [SerializeField] private Vector2 baseSize;
         [SerializeField] private Color baseColor;
 
-        protected abstract string text { get; set; }
-        protected abstract Color color { get; set; }
+        public abstract string DamageString { get; set; }
+        public abstract Color TextColor { get; set; }
 
         private void Start() {
             startPosition = transform.position;
             secondsElapsed = 0;
 
             baseSize = new Vector2(maxWidth, maxHeight);
-            baseColor = this.color;
+            baseColor = this.TextColor;
             rectTransform.sizeDelta = baseSize;
+
+            yScale = transform.lossyScale.y;
         }
 
         private void Update() {
@@ -46,7 +50,7 @@ namespace SilkenImpact {
             c.r = Mathf.Clamp01(c.r - 0.5f);
             c.g = Mathf.Clamp01(c.g - 0.5f);
             c.b = Mathf.Clamp01(c.b - 0.5f);
-            this.color = Color.Lerp(c, baseColor, config.alphaCurve.Evaluate(progress));
+            this.TextColor = Color.Lerp(c, baseColor, config.alphaCurve.Evaluate(progress));
 
             // Blur
             //fontMaterial.SetFloat("_FaceSoftness", config.blurCurve.Evaluate(progress));
@@ -55,7 +59,7 @@ namespace SilkenImpact {
             rectTransform.sizeDelta = baseSize * config.scaleCurve.Evaluate(progress);
 
             // Position
-            transform.position = startPosition + new Vector3(0, config.verticalOffsetCurve.Evaluate(progress) * maxHeight, 0);
+            transform.position = startPosition + new Vector3(0, yScale * config.verticalOffsetCurve.Evaluate(progress) * maxHeight, 0);
         }
     }
 }

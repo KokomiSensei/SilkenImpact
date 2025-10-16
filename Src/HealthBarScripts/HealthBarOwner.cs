@@ -7,7 +7,7 @@ namespace SilkenImpact {
         public float minBossHealth = 100;
         private bool spawned = false;
         void Start() {
-#if !UNITY_EDITOR
+#if !(UNITY_EDITOR || UNITY_STANDALONE)
             var hm = GetComponent<HealthManager>();
             float hp = hm.hp;
             if (hp < minMobHealth) {
