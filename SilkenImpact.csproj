@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>SilkenImpact</AssemblyName>
-    <Product>My first plugin</Product>
+    <Product>Silken Impact</Product>
     <Version>1.0.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
@@ -16,6 +16,36 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Src\CameraFollow.cs.meta" />
+    <None Remove="Src\ColourPalette.cs.meta" />
+    <None Remove="Src\DamageText.meta" />
+    <None Remove="Src\DamageText\DamageOldText.cs.meta" />
+    <None Remove="Src\DamageText\DamageText.cs.meta" />
+    <None Remove="Src\DamageText\DamageTextAnimationConfig.cs.meta" />
+    <None Remove="Src\DamageText\DamageTextTMPro.cs.meta" />
+    <None Remove="Src\HealthBarController.cs.meta" />
+    <None Remove="Src\HealthBarScripts.meta" />
+    <None Remove="Src\HealthBarScripts\Bar.cs.meta" />
+    <None Remove="Src\HealthBarScripts\Deprecated.meta" />
+    <None Remove="Src\HealthBarScripts\Deprecated\HealthBar.cs.meta" />
+    <None Remove="Src\HealthBarScripts\EventHandle.cs.meta" />
+    <None Remove="Src\HealthBarScripts\HealthBar.cs.meta" />
+    <None Remove="Src\HealthBarScripts\HealthBarConfig.cs.meta" />
+    <None Remove="Src\HealthBarScripts\HealthBarOwner.cs.meta" />
+    <None Remove="Src\HealthBarScripts\HealthBarOwnerEvent.cs.meta" />
+    <None Remove="Src\HealthBarScripts\MobHealthBarController.cs.meta" />
+    <None Remove="Src\HealthBarScripts\SpriteBar.cs.meta" />
+    <None Remove="Src\HealthBarScripts\UI.meta" />
+    <None Remove="Src\HealthBarScripts\UIBar.cs.meta" />
+    <None Remove="Src\HealthBarScripts\UIHealthBar.cs.meta" />
+    <None Remove="Src\HealthManager.cs.meta" />
+    <None Remove="Src\NewBehaviourScript.cs.meta" />
+    <None Remove="Src\PlayerController.cs.meta" />
+    <None Remove="Src\Playground.cs.meta" />
+    <None Remove="Src\SpriteTracker.cs.meta" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
     <PackageReference Include="BepInEx.Core" Version="5.*" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
@@ -26,7 +56,34 @@
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
   </ItemGroup>
   
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\..\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TeamCherry.Localization">
+      <HintPath>..\..\..\..\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\TeamCherry.Localization.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Addressables">
+      <HintPath>..\..\..\..\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\Unity.Addressables.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.ResourceManager">
+      <HintPath>..\..\..\..\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\Unity.ResourceManager.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>..\..\..\..\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\..\..\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if not exist &quot;D:\Apps\Steam\steamapps\common\Hollow Knight Silksong\BepInEx\scripts\SilkenImpact&quot; mkdir &quot;D:\Apps\Steam\steamapps\common\Hollow Knight Silksong\BepInEx\scripts\SilkenImpact&quot; &#xD;&#xA;xcopy &quot;$(TargetDir)$(TargetName).dll&quot; &quot;D:\Apps\Steam\steamapps\common\Hollow Knight Silksong\BepInEx\scripts\SilkenImpact&quot; /Y" />
+    <Exec Command="if not exist &quot;D:\Apps\Steam\steamapps\common\Hollow Knight Silksong\BepInEx\plugins\SilkenImpact&quot; mkdir &quot;D:\Apps\Steam\steamapps\common\Hollow Knight Silksong\BepInEx\plugins\SilkenImpact&quot; &#xD;&#xA;xcopy &quot;$(TargetDir)$(TargetName).dll&quot; &quot;D:\Apps\Steam\steamapps\common\Hollow Knight Silksong\BepInEx\plugins\SilkenImpact&quot; /Y" />
   </Target>
 </Project>
