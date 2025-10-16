@@ -61,6 +61,10 @@
       <HintPath>..\..\..\..\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="PlayMaker">
+      <HintPath>..\..\..\..\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\PlayMaker.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="TeamCherry.Localization">
       <HintPath>..\..\..\..\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\TeamCherry.Localization.dll</HintPath>
       <Private>False</Private>

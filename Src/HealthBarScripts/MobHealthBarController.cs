@@ -31,8 +31,11 @@ namespace SilkenImpact {
         }
 
         private bool guardExist(GameObject mobGO) {
+
             if (!healthBarGoOf.ContainsKey(mobGO)) {
+#if !UNITY_EDITOR
                 Plugin.Logger.LogWarning($"MobHealthBarController: GuardExist failed, mobGO {mobGO.name} not found in healthBarGoOf");
+#endif
                 return false;
             }
             return true;

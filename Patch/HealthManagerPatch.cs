@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace SilkenImpact.Patch {
@@ -28,6 +29,13 @@ namespace SilkenImpact.Patch {
          * RefillHP 也会把 isDead 置为 false
          * 
          */
+
+        [HarmonyPatch("SendDeathEvent")]
+        [HarmonyPrefix]
+        public static void HealthManager_SendDeathEvent_Prefix(HealthManager __instance) {
+            Plugin.Logger.LogWarning($"{__instance.gameObject.name} Die, hp -> {__instance.hp}, isDead -> {__instance.isDead}");
+            Object.Destroy(__instance.gameObject.GetComponent<HealthBarOwner>());
+        }
 
         [HarmonyPatch("HealToMax")]
         [HarmonyPostfix]
