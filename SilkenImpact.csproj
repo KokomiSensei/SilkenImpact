@@ -69,6 +69,10 @@
       <HintPath>..\..\..\..\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\TeamCherry.Localization.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="TeamCherry.TK2D">
+      <HintPath>..\..\..\..\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\TeamCherry.TK2D.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Addressables">
       <HintPath>..\..\..\..\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\Unity.Addressables.dll</HintPath>
       <Private>False</Private>

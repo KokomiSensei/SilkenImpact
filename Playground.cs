@@ -1,3 +1,6 @@
+using HarmonyLib;
+using HutongGames.PlayMaker.Actions;
+using System.Collections.Generic;
 using UnityEngine;
 namespace SilkenImpact {
 
@@ -12,6 +15,103 @@ namespace SilkenImpact {
                     _player = GameObject.Find("Hero_Hornet(Clone)");
                 }
                 return _player;
+            }
+        }
+        private GameObject _stubTemplate;
+
+        private void makeCleanStubTemplate(GameObject go) {
+            if (_stubTemplate == null) {
+                return;
+            }
+            // Remove all Children GameObjects
+            var children = new List<GameObject>();
+            foreach (Transform child in go.transform) {
+                children.Add(child.gameObject);
+            }
+            foreach (var child in children) {
+                DestroyImmediate(child);
+            }
+            // [Not Necessary?]
+            // Remove most of the components, except: Transform, MeshFilter, MeshRenderer, tk2dSprite, tk2dSpriteAnimator, Rigidbody2D, Collider2D, HealthManager, HealthBarOwner, DamageHero
+            // 需要保留的组件类型
+            System.Type[] typesToKeep = new System.Type[] {
+                typeof(Transform),          // Transform必须保留
+                typeof(MeshFilter),
+                typeof(MeshRenderer),
+                typeof(tk2dSprite),
+                typeof(tk2dSpriteAnimator),
+                typeof(Rigidbody2D),
+                typeof(Collider2D),         // 包含所有2D碰撞体类型
+                typeof(HealthManager),
+                typeof(HealthBarOwner),
+                typeof(DamageHero),
+                typeof(EnemyDeathEffects),
+                typeof(TagDamageTaker),
+            };
+            Component[] allComponents = go.GetComponents<Component>();
+
+            // 收集需要删除的组件
+            List<Component> componentsToRemove = new List<Component>();
+
+            foreach (Component component in allComponents) {
+                bool shouldKeep = false;
+
+                // 跳过空组件
+                if (component == null) continue;
+
+                System.Type componentType = component.GetType();
+
+                // 检查组件是否为要保留的类型或者是其子类
+                foreach (System.Type typeToKeep in typesToKeep) {
+                    if (typeToKeep.IsAssignableFrom(componentType)) {
+                        shouldKeep = true;
+                        break;
+                    }
+                }
+
+                // 如果不需要保留，加入待删除列表
+                if (!shouldKeep) {
+                    componentsToRemove.Add(component);
+                }
+            }
+
+            // 删除收集到的组件
+            foreach (Component componentToRemove in componentsToRemove) {
+                try {
+                    Plugin.Logger.LogInfo($"移除组件: {componentToRemove.GetType().Name} 从 {go.name}");
+                    DestroyImmediate(componentToRemove);
+                } catch (System.Exception e) {
+                    Plugin.Logger.LogError($"无法移除组件 {componentToRemove.GetType().Name}: {e.Message}");
+                }
+            }
+
+            Plugin.Logger.LogInfo($"已完成清理模板 {go.name}");
+        }
+        private GameObject Stub {
+            get {
+                if (_stubTemplate == null) {
+                    GameObject original = null;
+                    original = GameObject.FindFirstObjectByType<MobHealthBarController>()?.GetRandomMobGO();
+                    if (!original)
+                        return null;
+                    _stubTemplate = Instantiate(original);
+                    _stubTemplate.name = "Stub Template";
+                    _stubTemplate.SetActive(false);
+                    makeCleanStubTemplate(_stubTemplate);
+                    Object.DontDestroyOnLoad(_stubTemplate);
+                }
+
+                var copy = Instantiate(_stubTemplate);
+                copy.name = "Stub";
+                copy.SetActive(true);
+
+                List<MonoBehaviour> toDestroy = new();
+                toDestroy.AddRange(copy.GetComponents<tk2dSpriteAnimator>());
+                toDestroy.AddRange(copy.GetComponents<DamageHero>());
+                foreach (MonoBehaviour comp in toDestroy) {
+                    comp.enabled = false;
+                }
+                return copy;
             }
         }
 
@@ -30,24 +130,22 @@ namespace SilkenImpact {
                 Plugin.Logger.LogInfo($"Player Position {pos}");
 
             }
-            if (Input.GetKeyDown(KeyCode.F8)) {
-                Plugin.Logger.LogInfo("F8 Pressed");
-                Vector3 mousePosition = Input.mousePosition;
-                mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
-                mousePosition.z = 1;
-                Plugin.Logger.LogInfo($"Mouse Position {mousePosition}");
-
-                HealthManager hm = null;
-                if (bean == null) {
-                    Plugin.Logger.LogInfo("Instantiating Bean");
-                    bean = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/Bean.prefab", "Bean");
-                    bean.transform.position = mousePosition;
-                    hm = bean.AddComponent<HealthManager>();
+            if (Input.GetKeyDown(KeyCode.F3)) {
+                Vector3 pos = Player.transform.position;
+                var copy = Stub;
+                if (copy == null) {
+                    Plugin.Logger.LogWarning("No Stub found to instantiate");
+                    return;
                 }
-                hm = bean.GetComponent<HealthManager>();
-                if (hm) {
-                    hm.hp = 500;
-                    hm.IsInvincible = false;
+                Plugin.Logger.LogInfo($"Instantiating Stub {copy.name} at Player Position {pos}");
+                Renderer renderer = copy.GetComponent<Renderer>();
+                if (renderer != null) {
+                    float bottomOffset = renderer.bounds.min.y - copy.transform.position.y;
+                    Vector3 adjustedPos = pos;
+                    adjustedPos.y -= bottomOffset;
+                    copy.transform.position = adjustedPos;
+                } else {
+                    copy.transform.position = pos;
                 }
             }
             //if (Input.GetKeyDown(KeyCode.F9)) {

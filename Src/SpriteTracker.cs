@@ -14,7 +14,7 @@ namespace SilkenImpact {
         public void SetTarget(GameObject target) {
             this.target = target;
             basicOffset = Vector3.zero;
-            if (target != null && target.TryGetComponent<SpriteRenderer>(out var s)) {
+            if (target != null && target.TryGetComponent<Renderer>(out var s)) {
                 float halfHeight = s.bounds.extents.y; // extents = size/2
                 basicOffset = new Vector3(0, halfHeight, 0);
             }

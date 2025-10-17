@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using System;
@@ -14,7 +15,19 @@ public class Plugin : BaseUnityPlugin {
     public static string PluginFolder { private set; get; }
     private static AssetBundle bundle;
     private Harmony _harmony;
-    public static bool isAddressableUpdated = false; //TODO private dude
+    //public static bool isAddressableUpdated = false; //TODO private dude
+
+    //public ConfigEntry<bool> configDamageOnTop;
+
+    //private void bindConfigs() {
+    //    configDamageOnTop = Config.Bind<bool>(
+    //       "General",
+    //       "DamageTextOnTopOfAll",
+    //       true,
+    //       "If true, damage texts will be rendered on top of all other UI elements."
+    //   );
+    //}
+
 
     private void Awake() {
         // Plugin startup logic
@@ -36,9 +49,10 @@ public class Plugin : BaseUnityPlugin {
         // Addressables
         //StartCoroutine(UpdateAddressableOnAwake());
 
-        Summon();
+        summon();
+        //bindConfigs();
     }
-    void Summon() {
+    void summon() {
         var go = new GameObject("MobHealthManager");
         go.AddComponent<MobHealthBarController>();
         DontDestroyOnLoad(go);

@@ -15,7 +15,7 @@ namespace SilkenImpact {
 
         [SerializeField] private float secondsElapsed;
         [SerializeField] private Vector3 startPosition;
-        [SerializeField] private Vector2 baseSize;
+        [SerializeField] private Vector2 baseSize => new Vector2(maxWidth, maxHeight);
         [SerializeField] private Color baseColor;
 
         public abstract string DamageString { get; set; }
@@ -25,9 +25,7 @@ namespace SilkenImpact {
             startPosition = transform.position;
             secondsElapsed = 0;
 
-            baseSize = new Vector2(maxWidth, maxHeight);
             baseColor = this.TextColor;
-            rectTransform.sizeDelta = baseSize;
 
             yScale = transform.lossyScale.y;
         }

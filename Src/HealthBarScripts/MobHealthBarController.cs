@@ -2,22 +2,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.UI;
 
 namespace SilkenImpact {
     public class MobHealthBarController : MonoBehaviour {
         Dictionary<GameObject, GameObject> healthBarGoOf = new();
-        Canvas _worldSpaceCanvas;
-        Canvas WorldSpaceCanvas {
-            get {
-                if (_worldSpaceCanvas == null) {
-                    var go = new GameObject("WorldSpaceCanvas");
-                    _worldSpaceCanvas = go.AddComponent<Canvas>();
-                    _worldSpaceCanvas.renderMode = RenderMode.WorldSpace;
-                    _worldSpaceCanvas.worldCamera = Camera.main;
-                }
-                return _worldSpaceCanvas;
-            }
-        }
+
 
         void Awake() {
             EventHandle<MobOwnerEvent>.Register<GameObject, float>(HealthBarOwnerEventType.Spawn, OnMobSpawn);
@@ -31,7 +21,6 @@ namespace SilkenImpact {
         }
 
         private bool guardExist(GameObject mobGO) {
-
             if (!healthBarGoOf.ContainsKey(mobGO)) {
 #if !(UNITY_EDITOR || UNITY_STANDALONE)
                 Plugin.Logger.LogWarning($"MobHealthBarController: GuardExist failed, mobGO {mobGO.name} not found in healthBarGoOf");
@@ -41,12 +30,32 @@ namespace SilkenImpact {
             return true;
         }
 
+        public GameObject GetRandomMobGO() {
+            foreach (var kvp in healthBarGoOf) {
+                if (kvp.Key != null)
+                    return kvp.Key;
+            }
+            return null;
+        }
+
         private void OnMobShow(GameObject mobGO) {
+            if (!guardExist(mobGO)) return;
             var bar = healthBarGoOf[mobGO];
             bar.SetActive(true);
         }
 
         private void OnMobSpawn(GameObject mobGO, float maxHp) {
+            if (healthBarGoOf.ContainsKey(mobGO)) {
+#if !(UNITY_EDITOR || UNITY_STANDALONE)
+                Plugin.Logger.LogWarning($"MobHealthBarController: OnMobSpawn called but mobGO {mobGO.name} already has a health bar");
+                Plugin.Logger.LogWarning($"MobHealthBarController: Overwriting maxHp mobGO {mobGO.name} with [{maxHp}]");
+#endif
+                var go = healthBarGoOf[mobGO];
+                var bar = go.GetComponent<HealthBar>();
+                bar.SetMaxHealth(maxHp);
+                return;
+            }
+
             GameObject prefab;
             GameObject healthBarGO;
 #if UNITY_EDITOR || UNITY_STANDALONE
@@ -55,14 +64,19 @@ namespace SilkenImpact {
 #else
             healthBarGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/HealthBarSmall.prefab", "MobHealthBar");
 #endif
-            healthBarGO.transform.SetParent(WorldSpaceCanvas.transform);
+
+            healthBarGoOf[mobGO] = healthBarGO;
+            healthBarGO.transform.SetParent(WorldSpaceCanvas.GetWorldSpaceCanvas.transform);
             healthBarGO.GetComponent<SpriteTracker>().SetTarget(mobGO);
             healthBarGO.GetComponent<HealthBar>().SetMaxHealth(maxHp);
+            if (!mobGO.GetComponent<HealthBarOwner>())
+                mobGO.AddComponent<HealthBarOwner>();
+
             //TODO set the size of the health bar based on mobGO's sprite size
-            healthBarGoOf[mobGO] = healthBarGO;
         }
 
         private void OnMobDamage(GameObject mobGO, float amount) {
+            if (!guardExist(mobGO)) return;
             var go = healthBarGoOf[mobGO];
             var bar = go.GetComponent<HealthBar>();
             bar.TakeDamage(amount);
@@ -76,11 +90,13 @@ namespace SilkenImpact {
         }
 
         private void OnMobHide(GameObject mobGO) {
+            if (!guardExist(mobGO)) return;
             var go = healthBarGoOf[mobGO];
             go.SetActive(false);
         }
 
         private void OnMobDie(GameObject mobGO) {
+            if (!guardExist(mobGO)) return;
             var go = healthBarGoOf[mobGO];
             Destroy(go);
             healthBarGoOf.Remove(mobGO);

@@ -1,16 +1,33 @@
 ﻿using HarmonyLib;
+using HutongGames.PlayMaker.Actions;
 using UnityEngine;
 
 namespace SilkenImpact.Patch {
     [HarmonyPatch]
     [HarmonyPatch(typeof(HealthManager))]
     public class HealthManagerPatch {
+        public static readonly float minMobHealth = 10;
+        public static readonly float minBossHealth = 100;
+
         [HarmonyPatch("Awake")]
         [HarmonyPostfix]
         public static void HealthManager_Awake_Postfix(HealthManager __instance) {
             Plugin.Logger.LogInfo($"{__instance.gameObject.name}.Health Manager Awoken, hp -> {__instance.hp}");
+
+            float hp = __instance.hp;
+            if (hp < minMobHealth) {
+                return;
+            }
+
             var go = __instance.gameObject;
-            go.AddComponent<HealthBarOwner>();
+            if (hp < minBossHealth) {
+                EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
+                EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Show, go);
+            } else {
+                //TODO boss thingy
+                EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
+                EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Show, go);
+            }
         }
 
         /* 
@@ -80,18 +97,22 @@ namespace SilkenImpact.Patch {
 
         public static void SpawnDamageText(HealthManager __instance, float damage, Color? color) {
             var damageTextGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/DamageOldText.prefab", $"{__instance}.DamageText = {damage}");
-            var sprite = __instance.gameObject.GetComponent<SpriteRenderer>();
-            Vector3 spriteSize = sprite ? sprite.bounds.size : new Vector3(1, 1, 0);
+            var renderer = __instance.gameObject.GetComponent<Renderer>();
+            Vector3 spriteSize = renderer ? renderer.bounds.size : new Vector3(1, 1, 0);
 
             Vector3 randomOffset = spriteSize;
             randomOffset.x *= Random.Range(-0.5f, 0.5f);
             randomOffset.y *= Random.Range(0f, 0.5f);
+            float randomSizeScale = Random.Range(0.5f, 1.5f);
+
             damageTextGO.transform.position = __instance.gameObject.transform.position + randomOffset;
-            damageTextGO.transform.SetParent(GameObject.Find("WorldSpaceCanvas").transform, true);
+            damageTextGO.transform.SetParent(WorldSpaceCanvas.GetWorldSpaceCanvas.transform, true);
 
             var text = damageTextGO.GetComponent<DamageText>();
             text.DamageString = ((int)damage).ToString();
             text.TextColor = color ?? ColourPalette.Pyro;
+            text.maxHeight *= randomSizeScale;
+            text.maxWidth *= randomSizeScale;
         }
 
     }
