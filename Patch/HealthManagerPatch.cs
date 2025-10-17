@@ -102,7 +102,7 @@ namespace SilkenImpact.Patch {
 
             Vector3 randomOffset = spriteSize;
             randomOffset.x *= Random.Range(-0.5f, 0.5f);
-            randomOffset.y *= Random.Range(0f, 0.5f);
+            randomOffset.y *= Random.Range(-0.2f, 0.5f);
             float randomSizeScale = Random.Range(0.5f, 1.5f);
 
             damageTextGO.transform.position = __instance.gameObject.transform.position + randomOffset;

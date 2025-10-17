@@ -9,6 +9,7 @@ namespace SilkenImpact {
         Dictionary<GameObject, GameObject> healthBarGoOf = new();
 
 
+
         void Awake() {
             EventHandle<MobOwnerEvent>.Register<GameObject, float>(HealthBarOwnerEventType.Spawn, OnMobSpawn);
             EventHandle<MobOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.Die, OnMobDie);
@@ -18,6 +19,8 @@ namespace SilkenImpact {
 
             EventHandle<MobOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.Hide, OnMobHide);
             EventHandle<MobOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.Show, OnMobShow);
+
+            EventHandle<MobOwnerEvent>.Register<GameObject, float>(HealthBarOwnerEventType.SetHP, OnMobSetHP);
         }
 
         private bool guardExist(GameObject mobGO) {
@@ -100,6 +103,13 @@ namespace SilkenImpact {
             var go = healthBarGoOf[mobGO];
             Destroy(go);
             healthBarGoOf.Remove(mobGO);
+        }
+
+        private void OnMobSetHP(GameObject mobGO, float hp) {
+            if (!guardExist(mobGO)) return;
+            var go = healthBarGoOf[mobGO];
+            var bar = go.GetComponent<HealthBar>();
+            bar.ResetHealth(hp);
         }
 
         // Update is called once per frame

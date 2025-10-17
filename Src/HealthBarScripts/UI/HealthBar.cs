@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 namespace SilkenImpact {
 
@@ -95,6 +96,12 @@ namespace SilkenImpact {
             //}
             delayedEffect.SetPercentage(currentHealth / maxHealth, config.healthChangeDuration);
             hp.SetPercentage(currentHealth / maxHealth, config.healthChangeDuration);
+        }
+
+        public void ResetHealth(float hp) {
+            currentHealth = hp;
+            maxHealth = hp;
+            OnStart();
         }
     }
 }

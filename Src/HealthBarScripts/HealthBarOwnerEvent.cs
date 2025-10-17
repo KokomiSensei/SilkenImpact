@@ -5,7 +5,8 @@ namespace SilkenImpact {
         Hide,
         Die,
         Damage,
-        Heal
+        Heal,
+        SetHP
     }
 
     public class BossOwnerEvent {
