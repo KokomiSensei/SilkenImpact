@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using HutongGames.PlayMaker.Actions;
+using System.Reflection;
 using UnityEngine;
 
 namespace SilkenImpact.Patch {
@@ -8,6 +9,13 @@ namespace SilkenImpact.Patch {
     public class HealthManagerPatch {
         public static readonly float minMobHealth = 10;
         public static readonly float minBossHealth = 100;
+        public static float avgDamagePerHit = -1;
+        public static float weightOfNew;
+
+        private static MethodInfo isImmuneToMethod = AccessTools.Method(typeof(HealthManager), "IsImmuneTo");
+        private static bool IsImmune(HealthManager __instance, HitInstance hitInstance) {
+            return (bool)isImmuneToMethod.Invoke(__instance, new object[] { hitInstance, true });
+        }
 
         [HarmonyPatch("Awake")]
         [HarmonyPostfix]
@@ -87,15 +95,32 @@ namespace SilkenImpact.Patch {
         [HarmonyPatch("TakeDamage")]
         [HarmonyPostfix]
         public static void HealthManager_TakeDamage_Postfix(HitInstance hitInstance, HealthManager __instance) {
+            if (IsImmune(__instance, hitInstance)) {
+                return;
+            }
             // this is how the damage is calculated in HealthManager.TakeDamage
             // #TODO BUT, there may be more than one damage sourse, so be cautious
             int damage = Mathf.RoundToInt((float)hitInstance.DamageDealt * hitInstance.Multiplier);
             Plugin.Logger.LogInfo($"{__instance.gameObject.name} took {damage} damage, hp -> {__instance.hp}");
-            SpawnDamageText(__instance, damage, null);
+            SpawnDamageText(__instance, damage, null, hitInstance.CriticalHit);
             EventHandle<MobOwnerEvent>.SendEvent<GameObject, float>(HealthBarOwnerEventType.Damage, __instance.gameObject, damage);
         }
 
-        public static void SpawnDamageText(HealthManager __instance, float damage, Color? color) {
+        private static void updateAvgDamagePerHit(float damage) {
+            if (avgDamagePerHit <= 0) {
+                avgDamagePerHit = damage;
+                return;
+            }
+            avgDamagePerHit = weightOfNew * damage + (1 - weightOfNew) * avgDamagePerHit;
+        }
+
+        private static float damageScale(float damage) {
+            if (avgDamagePerHit <= 0) return 1;
+            return damage / avgDamagePerHit;
+        }
+
+
+        public static void SpawnDamageText(HealthManager __instance, float damage, Color? color, bool isCritHit) {
             var damageTextGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/DamageOldText.prefab", $"{__instance}.DamageText = {damage}");
             var renderer = __instance.gameObject.GetComponent<Renderer>();
             Vector3 spriteSize = renderer ? renderer.bounds.size : new Vector3(1, 1, 0);
@@ -103,14 +128,16 @@ namespace SilkenImpact.Patch {
             Vector3 randomOffset = spriteSize;
             randomOffset.x *= Random.Range(-0.5f, 0.5f);
             randomOffset.y *= Random.Range(-0.2f, 0.5f);
-            float randomSizeScale = Random.Range(0.5f, 1.5f);
+
+            float randomSizeScale = Random.Range(0.8f, 1.2f) * (isCritHit ? Mathf.Clamp(damageScale(damage), 2, 2.5f) : Mathf.Clamp01(damageScale(damage)));
+            updateAvgDamagePerHit(damage);
 
             damageTextGO.transform.position = __instance.gameObject.transform.position + randomOffset;
             damageTextGO.transform.SetParent(WorldSpaceCanvas.GetWorldSpaceCanvas.transform, true);
 
             var text = damageTextGO.GetComponent<DamageText>();
             text.DamageString = ((int)damage).ToString();
-            text.TextColor = color ?? ColourPalette.Pyro;
+            text.TextColor = color ?? (isCritHit ? ColourPalette.Geo : Playground.Instance.DefaultColor());
             text.maxHeight *= randomSizeScale;
             text.maxWidth *= randomSizeScale;
         }

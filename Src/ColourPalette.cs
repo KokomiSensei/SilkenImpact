@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 namespace SilkenImpact {
     public static class ColourPalette {
@@ -20,6 +21,19 @@ namespace SilkenImpact {
         public static Color Electro => FromHexString("#E5AAFF");
         public static Color Dendro => FromHexString("#00C94E");
         public static Color Physical => FromHexString("#FFFFFF");
+        public static Color HornetDress => FromHexString("#A83448");
+
+        public static List<Color> AllElementColors => new List<Color> {
+            Hydro,
+            Cryo,
+            Pyro,
+            Anemo,
+            Geo,
+            Electro,
+            Dendro,
+            Physical,
+            HornetDress
+        };
     }
 
 }

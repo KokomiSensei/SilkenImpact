@@ -17,7 +17,19 @@ namespace SilkenImpact {
                 return _player;
             }
         }
+        private List<Color> colors = ColourPalette.AllElementColors;
+        private int colorIndex = 0;
+
+        public Color DefaultColor() {
+            return colors[colorIndex % colors.Count];
+        }
+
+        public static Playground Instance { get; private set; }
+
         private GameObject _stubTemplate;
+        private void Awake() {
+            Instance = this;
+        }
 
         private void makeCleanStubTemplate(GameObject go) {
             if (_stubTemplate == null) {
@@ -117,14 +129,14 @@ namespace SilkenImpact {
 
 
         private void Update() {
-            //if (target != null) {
-            //    if (Input.GetKeyDown(KeyCode.Comma)) {
-            //        target.TakeDamage(10);
-            //    }
-            //    if (Input.GetKeyDown(KeyCode.Period)) {
-            //        target.Heal(10);
-            //    }
-            //}
+
+            if (Input.GetKeyDown(KeyCode.Comma)) {
+                colorIndex--;
+            }
+            if (Input.GetKeyDown(KeyCode.Period)) {
+                colorIndex++;
+            }
+
             if (Input.GetKeyDown(KeyCode.F2)) {
                 Vector3 pos = Player.transform.position;
                 Plugin.Logger.LogInfo($"Player Position {pos}");
