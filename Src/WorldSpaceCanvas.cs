@@ -20,7 +20,7 @@ namespace SilkenImpact {
                         return go.GetComponent<Canvas>();
                     }
                     go = new GameObject(name);
-                    //GameObject.DontDestroyOnLoad(go);
+                    GameObject.DontDestroyOnLoad(go);
 
                     _worldSpaceCanvas = go.AddComponent<Canvas>();
                     _worldSpaceCanvas.renderMode = RenderMode.WorldSpace;

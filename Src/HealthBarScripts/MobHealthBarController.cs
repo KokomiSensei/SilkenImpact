@@ -95,7 +95,12 @@ namespace SilkenImpact {
         private void OnMobHide(GameObject mobGO) {
             if (!guardExist(mobGO)) return;
             var go = healthBarGoOf[mobGO];
-            go.SetActive(false);
+            // TODO what? NRE here? how?
+            try {
+                go.SetActive(false);
+            } catch (Exception e) {
+                Plugin.Logger.LogError($"MobHealthBarController: OnMobHide failed for mobGO {mobGO.name} with exception {e}");
+            }
         }
 
         private void OnMobDie(GameObject mobGO) {

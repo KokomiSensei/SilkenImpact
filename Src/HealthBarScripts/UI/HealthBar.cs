@@ -103,5 +103,9 @@ namespace SilkenImpact {
             maxHealth = hp;
             OnStart();
         }
+
+        private void OnDestroy() {
+            Plugin.Logger.LogWarning($"HealthBar: OnDestroy called for {gameObject.name}");
+        }
     }
 }

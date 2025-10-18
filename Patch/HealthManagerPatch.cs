@@ -2,6 +2,7 @@
 using HutongGames.PlayMaker.Actions;
 using System.Reflection;
 using UnityEngine;
+using static HealthManager;
 
 namespace SilkenImpact.Patch {
     [HarmonyPatch]
@@ -15,6 +16,16 @@ namespace SilkenImpact.Patch {
         private static MethodInfo isImmuneToMethod = AccessTools.Method(typeof(HealthManager), "IsImmuneTo");
         private static bool IsImmune(HealthManager __instance, HitInstance hitInstance) {
             return (bool)isImmuneToMethod.Invoke(__instance, new object[] { hitInstance, true });
+        }
+        private static EnemySize GetEnemySize(HealthManager __instance) {
+            return Traverse.Create(__instance).Field<EnemySize>("enemySize").Value;
+        }
+        private static string LocalisedName(HealthManager __instance) {
+            var em = __instance.gameObject.GetComponent<EnemyDeathEffects>();
+            if (em == null) {
+                return $"Enemy Death Effects Not Found on {__instance.gameObject.name}";
+            }
+            return Traverse.Create(em).Field<EnemyJournalRecord>("journalRecord").Value.DisplayName;
         }
 
         [HarmonyPatch("Awake")]
@@ -88,7 +99,8 @@ namespace SilkenImpact.Patch {
         [HarmonyPatch("TakeDamage")]
         [HarmonyPrefix]
         public static void HealthManager_TakeDamage_Prefix(HitInstance hitInstance, HealthManager __instance) {
-            Plugin.Logger.LogInfo($"{__instance.gameObject.name} is hit, hp -> {__instance.hp}");
+            Plugin.Logger.LogInfo($"{__instance.gameObject.name} is hit, hp -> {__instance.hp} ⬇");
+            Plugin.Logger.LogWarning($"{__instance.gameObject.name}, Size={GetEnemySize(__instance)}, Tag={__instance.gameObject.tag}, DisplayName={LocalisedName(__instance)}");
         }
 
 
