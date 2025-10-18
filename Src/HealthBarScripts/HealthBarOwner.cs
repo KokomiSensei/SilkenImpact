@@ -1,9 +1,14 @@
 using UnityEngine;
 
 namespace SilkenImpact {
+
     public class HealthBarOwner : MonoBehaviour {
+        private HealthManager hm => gameObject.GetComponent<HealthManager>();
+        void Start() {
+
+        }
         void Update() {
-            //TODO maybe check if the health is correct?
+            EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.CheckHP, gameObject);
 
         }
         void OnDisable() {

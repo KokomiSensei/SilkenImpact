@@ -15,21 +15,15 @@ public class Plugin : BaseUnityPlugin {
     public static string PluginFolder { private set; get; }
     private static AssetBundle bundle;
     private Harmony _harmony;
-    //public static bool isAddressableUpdated = false; //TODO private dude
-
-    //public ConfigEntry<bool> configDamageOnTop;
-
-    //private void bindConfigs() {
-    //    configDamageOnTop = Config.Bind<bool>(
-    //       "General",
-    //       "DamageTextOnTopOfAll",
-    //       true,
-    //       "If true, damage texts will be rendered on top of all other UI elements."
-    //   );
-    //}
-
+    private static Plugin __instance;
+    public static Plugin Instance {
+        get {
+            return __instance;
+        }
+    }
 
     private void Awake() {
+        __instance = this;
         // Plugin startup logic
         Logger = base.Logger;
         Logger.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");

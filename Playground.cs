@@ -2,6 +2,7 @@ using HarmonyLib;
 using HutongGames.PlayMaker.Actions;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.UIElements.UIR.BestFitAllocator;
 namespace SilkenImpact {
 
     public class Playground : MonoBehaviour {
@@ -17,18 +18,33 @@ namespace SilkenImpact {
                 return _player;
             }
         }
+
+
         private List<Color> colors = ColourPalette.AllElementColors;
-        private int colorIndex = 0;
-
-        public Color DefaultColor() {
-            return colors[colorIndex % colors.Count];
-        }
-
-        public static Playground Instance { get; private set; }
 
         private GameObject _stubTemplate;
-        private void Awake() {
-            Instance = this;
+        private static Playground _instance;
+
+        public static Playground Instance {
+            get {
+                if (_instance == null) {
+                    _instance = FindFirstObjectByType<Playground>();
+                    if (_instance != null) return _instance;
+
+                    GameObject obj = new GameObject(typeof(Playground).Name);
+                    _instance = obj.AddComponent<Playground>();
+                }
+                return _instance;
+            }
+        }
+
+        protected virtual void Awake() {
+            if (_instance == null) {
+                _instance = this;
+                DontDestroyOnLoad(gameObject);
+            } else if (_instance != this) {
+                Destroy(gameObject);
+            }
         }
 
         private void makeCleanStubTemplate(GameObject go) {
@@ -44,7 +60,7 @@ namespace SilkenImpact {
                 DestroyImmediate(child);
             }
             // [Not Necessary?]
-            // Remove most of the components, except: Transform, MeshFilter, MeshRenderer, tk2dSprite, tk2dSpriteAnimator, Rigidbody2D, Collider2D, HealthManager, HealthBarOwner, DamageHero
+            // Remove most of the components
             // 需要保留的组件类型
             System.Type[] typesToKeep = new System.Type[] {
                 typeof(Transform),          // Transform必须保留
@@ -58,7 +74,10 @@ namespace SilkenImpact {
                 typeof(HealthBarOwner),
                 typeof(DamageHero),
                 typeof(EnemyDeathEffects),
+                typeof(EnemyHitEffectsRegular),
                 typeof(TagDamageTaker),
+                typeof(PlayMakerProxyBase),
+                typeof(PlayMakerFSM)
             };
             Component[] allComponents = go.GetComponents<Component>();
 
@@ -129,14 +148,6 @@ namespace SilkenImpact {
 
 
         private void Update() {
-
-            if (Input.GetKeyDown(KeyCode.Comma)) {
-                colorIndex--;
-            }
-            if (Input.GetKeyDown(KeyCode.Period)) {
-                colorIndex++;
-            }
-
             if (Input.GetKeyDown(KeyCode.F2)) {
                 Vector3 pos = Player.transform.position;
                 Plugin.Logger.LogInfo($"Player Position {pos}");

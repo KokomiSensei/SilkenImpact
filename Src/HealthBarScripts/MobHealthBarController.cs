@@ -8,8 +8,6 @@ namespace SilkenImpact {
     public class MobHealthBarController : MonoBehaviour {
         Dictionary<GameObject, GameObject> healthBarGoOf = new();
 
-
-
         void Awake() {
             EventHandle<MobOwnerEvent>.Register<GameObject, float>(HealthBarOwnerEventType.Spawn, OnMobSpawn);
             EventHandle<MobOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.Die, OnMobDie);
@@ -21,7 +19,20 @@ namespace SilkenImpact {
             EventHandle<MobOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.Show, OnMobShow);
 
             EventHandle<MobOwnerEvent>.Register<GameObject, float>(HealthBarOwnerEventType.SetHP, OnMobSetHP);
+            EventHandle<MobOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.CheckHP, OnCheckHP);
         }
+
+        private void OnCheckHP(GameObject mobGO) {
+            float realHp = mobGO.GetComponent<HealthManager>().hp;
+            if (!guardExist(mobGO)) return;
+            var go = healthBarGoOf[mobGO];
+            var bar = go.GetComponent<HealthBar>();
+            if (Mathf.Abs(bar.CurrentHealth - realHp) > 0.01f) {
+                Plugin.Logger.LogError("MobHealthBarController: OnCheckHP detected HP mismatch for mobGO " + mobGO.name +
+                    $", HealthBar has {bar.CurrentHealth}, but HealthManager has {realHp}");
+            }
+        }
+
 
         private bool guardExist(GameObject mobGO) {
             if (!healthBarGoOf.ContainsKey(mobGO)) {
@@ -75,7 +86,10 @@ namespace SilkenImpact {
             if (!mobGO.GetComponent<HealthBarOwner>())
                 mobGO.AddComponent<HealthBarOwner>();
 
-            //TODO set the size of the health bar based on mobGO's sprite size
+            //TODO set the size of the health bar based on mobGO's sprite size?
+            bool isBoss = mobGO.CompareTag("Boss");
+            float barWidth = Configs.Instance.GetHpBarWidth(maxHp, false); //TODO boss bar is not implemented yet
+            healthBarGO.GetComponent<HealthBar>().SetWidth(barWidth);
         }
 
         private void OnMobDamage(GameObject mobGO, float amount) {
@@ -83,6 +97,7 @@ namespace SilkenImpact {
             var go = healthBarGoOf[mobGO];
             var bar = go.GetComponent<HealthBar>();
             bar.TakeDamage(amount);
+            OnCheckHP(mobGO);
         }
 
         private void OnMobHeal(GameObject mobGO, float amount) {
@@ -90,17 +105,20 @@ namespace SilkenImpact {
             var go = healthBarGoOf[mobGO];
             var bar = go.GetComponent<HealthBar>();
             bar.Heal(amount);
+            OnCheckHP(mobGO);
         }
 
         private void OnMobHide(GameObject mobGO) {
             if (!guardExist(mobGO)) return;
             var go = healthBarGoOf[mobGO];
             // TODO what? NRE here? how?
-            try {
-                go.SetActive(false);
-            } catch (Exception e) {
-                Plugin.Logger.LogError($"MobHealthBarController: OnMobHide failed for mobGO {mobGO.name} with exception {e}");
-            }
+            //try {
+            go.SetActive(false);
+            //} catch (Exception e) {
+            //#if !(UNITY_EDITOR || UNITY_STANDALONE)
+            //Plugin.Logger.LogError($"MobHealthBarController: OnMobHide failed for mobGO {mobGO.name} with exception {e}");
+            //#endif
+            //}
         }
 
         private void OnMobDie(GameObject mobGO) {

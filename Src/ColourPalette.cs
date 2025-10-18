@@ -15,10 +15,10 @@ namespace SilkenImpact {
 
         public static Color Hydro => FromHexString("#1EC5E3");
         public static Color Cryo => FromHexString("#78FDFF");
-        public static Color Pyro => FromHexString("#FFBB28");
+        public static Color Pyro => FromHexString("#FF6400");
         public static Color Anemo => FromHexString("#24FFD3");
         public static Color Geo => FromHexString("#FFE064");
-        public static Color Electro => FromHexString("#E5AAFF");
+        public static Color Electro => FromHexString("#D272FF");
         public static Color Dendro => FromHexString("#00C94E");
         public static Color Physical => FromHexString("#FFFFFF");
         public static Color HornetDress => FromHexString("#A83448");
