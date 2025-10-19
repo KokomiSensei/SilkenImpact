@@ -26,6 +26,11 @@ namespace SilkenImpact {
         public ConfigEntry<float> minMediumBarHp;
         public ConfigEntry<float> minLongBarHp;
 
+
+        public ConfigEntry<float> maxZPosition;
+        public ConfigEntry<float> visibleCacheSeconds;
+        public ConfigEntry<float> invisibleCacheSeconds;
+
         #endregion
 
         #region Damage Text Configs
@@ -37,6 +42,8 @@ namespace SilkenImpact {
         public ConfigEntry<float> weightOfNewHit;
 
         #endregion
+
+
         private ConfigFile config => Plugin.Instance.Config;
 
         void Awake() {
@@ -55,6 +62,10 @@ namespace SilkenImpact {
             fireColor = config.Bind("Damage Text Colors", "Fire Color", ColourPalette.Pyro, "Color of fire damage text");
 
             weightOfNewHit = config.Bind("Damage Text Settings", "Weight Of New Hit", 0.2f, "Weight of new hit in exponential moving average calculation.");
+
+            maxZPosition = config.Bind("Developer Settings", "Max Z Position", 1f, "Minimum absolute Z position to be considered as shown");
+            visibleCacheSeconds = config.Bind("Developer Settings", "Visible Cache Seconds", 0.5f, "Time in seconds to cache visibility state");
+            invisibleCacheSeconds = config.Bind("Developer Settings", "Invisible Cache Seconds", 0.5f, "Time in seconds to cache visibility state");
         }
 
         public float GetHpBarWidth(float maxHp, bool isBoss) {
