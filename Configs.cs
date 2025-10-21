@@ -51,7 +51,7 @@ namespace SilkenImpact {
             shortBarWidth = config.Bind("Health Bar Sizes", "Short Bar Width", 2f, "Width of short mob health bars");
             mediumBarWidth = config.Bind("Health Bar Sizes", "Medium Bar Width", 4f, "Width of medium mob health bars");
             longBarWidth = config.Bind("Health Bar Sizes", "Long Bar Width", 6f, "Width of long mob health bars");
-            bossBarWidth = config.Bind("Health Bar Sizes", "Boss Bar Width", 11f, "Width of boss mob health bars");
+            bossBarWidth = config.Bind("Health Bar Sizes", "Boss Bar Width", 13f, "Width of boss mob health bars");
 
             minMobHp = config.Bind("Health Bar Sizes", "Min Mob HP", 5f, "Minimum HP for showing mob health bars(e.g. Some environment objects have HP too)");
             minMediumBarHp = config.Bind("Health Bar Sizes", "Min Medium Bar HP", 50f, "Minimum HP for switching to medium mob health bars");

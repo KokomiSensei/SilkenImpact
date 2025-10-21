@@ -71,7 +71,7 @@ namespace SilkenImpact.Patch {
         private static bool IsImmune(HealthManager __instance, HitInstance hitInstance) {
             return (bool)isImmuneToMethod.Invoke(__instance, new object[] { hitInstance, true });
         }
-        private static string LocalisedName(HealthManager __instance) {
+        public static string LocalisedName(HealthManager __instance) {
             var em = __instance.gameObject.GetComponent<EnemyDeathEffects>();
             if (em == null) {
                 return $"Enemy Death Effects Not Found on {__instance.gameObject.name}";
