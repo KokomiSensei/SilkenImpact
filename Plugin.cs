@@ -50,6 +50,9 @@ public class Plugin : BaseUnityPlugin {
         var go = new GameObject("MobHealthManager");
         go.AddComponent<MobHealthBarController>();
         DontDestroyOnLoad(go);
+        go = new GameObject("BossHealthManager");
+        go.AddComponent<BossHealthBarController>();
+        DontDestroyOnLoad(go);
     }
 
 

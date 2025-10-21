@@ -16,6 +16,7 @@ namespace SilkenImpact.Patch {
         public static float weightOfNew => Configs.Instance.weightOfNewHit.Value;
 
 
+
         private static void updateAvgDamagePerHit(float damage) {
             if (avgDamagePerHit <= 0) {
                 avgDamagePerHit = damage;
@@ -185,7 +186,7 @@ namespace SilkenImpact.Patch {
         #endregion
 
 
-        [HarmonyPatch("Awake")]
+        [HarmonyPatch("Start")]
         [HarmonyPostfix]
         public static void HealthManager_Awake_Postfix(HealthManager __instance) {
             Plugin.Logger.LogInfo($"{__instance.gameObject.name}.Health Manager Awoken, hp -> {__instance.hp}");
@@ -235,7 +236,7 @@ namespace SilkenImpact.Patch {
         public static void HealthManager_HealToMax_Postfix(HealthManager __instance) {
             Plugin.Logger.LogWarning($"{__instance.gameObject.name} HealToMax, hp -> {__instance.hp}");
             float maxHp = __instance.hp;
-            EventHandle<MobOwnerEvent>.SendEvent<GameObject, float>(HealthBarOwnerEventType.Heal, __instance.gameObject, maxHp);
+            __instance.GetComponent<IHealthBarOwner>()?.Heal(maxHp);
         }
 
         [HarmonyPatch("RefillHP")]
@@ -243,7 +244,7 @@ namespace SilkenImpact.Patch {
         public static void HealthManager_RefillHP_Postfix(HealthManager __instance) {
             Plugin.Logger.LogWarning($"{__instance.gameObject.name} RefillHP, hp -> {__instance.hp}");
             float maxHp = __instance.hp;
-            EventHandle<MobOwnerEvent>.SendEvent<GameObject, float>(HealthBarOwnerEventType.Heal, __instance.gameObject, maxHp);
+            __instance.GetComponent<IHealthBarOwner>()?.Heal(maxHp);
         }
 
         [HarmonyPatch("AddHP")]
@@ -251,7 +252,7 @@ namespace SilkenImpact.Patch {
         public static void HealthManager_AddHP_Postfix(HealthManager __instance, int hpAdd, int hpMax) {
             Plugin.Logger.LogWarning($"{__instance.gameObject.name} AddHP, hp -> {__instance.hp}");
             float maxHp = __instance.hp;
-            EventHandle<MobOwnerEvent>.SendEvent<GameObject, float>(HealthBarOwnerEventType.Heal, __instance.gameObject, maxHp);
+            __instance.GetComponent<IHealthBarOwner>()?.Heal(maxHp);
         }
         #endregion
 
@@ -276,7 +277,7 @@ namespace SilkenImpact.Patch {
             Plugin.Logger.LogInfo($"{__instance.gameObject.name} took {damage} damage, hp -> {__instance.hp}");
             SpawnDamageText(__instance, damage, hitInstance.CriticalHit, hitInstance.NailElement);
             Plugin.Logger.LogWarning($"Neil=[{hitInstance.NailElement}]");
-            EventHandle<MobOwnerEvent>.SendEvent<GameObject, float>(HealthBarOwnerEventType.Damage, __instance.gameObject, damage);
+            __instance.GetComponent<IHealthBarOwner>()?.TakeDamage(damage);
         }
 
 
@@ -287,7 +288,7 @@ namespace SilkenImpact.Patch {
             Plugin.Logger.LogInfo($"{__instance.gameObject.name} took {damage} tag damage, hp -> {__instance.hp}");
             Plugin.Logger.LogWarning($"Neil=[{hitInstance.NailElement}]");
             SpawnDamageText(__instance, damage, false, hitInstance.NailElement);
-            EventHandle<MobOwnerEvent>.SendEvent<GameObject, float>(HealthBarOwnerEventType.Damage, __instance.gameObject, damage);
+            __instance.GetComponent<IHealthBarOwner>()?.TakeDamage(damage);
         }
 
 
@@ -297,7 +298,7 @@ namespace SilkenImpact.Patch {
             int damage = damageAmount;
             Plugin.Logger.LogInfo($"{__instance.gameObject.name} took {damage} tag damage, hp -> {__instance.hp}");
             SpawnDamageText(__instance, damage, false);
-            EventHandle<MobOwnerEvent>.SendEvent<GameObject, float>(HealthBarOwnerEventType.Damage, __instance.gameObject, damage);
+            __instance.GetComponent<IHealthBarOwner>()?.TakeDamage(damage);
         }
 
         //TODO stun damage? -> take damage!

@@ -6,8 +6,15 @@ namespace SilkenImpact {
     public class BossHealthBarController : MonoBehaviour {
 
         Dictionary<GameObject, GameObject> healthBarGoOf = new();
+        BossHealthBarContainer container;
+
 
         void Awake() {
+            var containerGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/Container.prefab", "BossHealthBarContainer");
+            container = containerGO.GetComponent<BossHealthBarContainer>();
+            container.transform.SetParent(ScreenSpaceCanvas.GetScreenSpaceCanvas.transform);
+            container.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 1.3f);
+
             EventHandle<BossOwnerEvent>.Register<GameObject, float>(HealthBarOwnerEventType.Spawn, OnBossSpawn);
             EventHandle<BossOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.Die, OnBossDie);
 
@@ -53,42 +60,33 @@ namespace SilkenImpact {
 
         private void OnBossShow(GameObject bossGO) {
             if (!guardExist(bossGO)) return;
+            Plugin.Logger.LogWarning($"BossHealthBarController: OnBossShow called on {bossGO.name}");
             var bar = healthBarGoOf[bossGO];
+            container.AddBar(bar.GetComponent<HealthBar>());
             bar.SetActive(true);
         }
 
         private void OnBossSpawn(GameObject bossGO, float maxHp) {
             if (healthBarGoOf.ContainsKey(bossGO)) {
-#if !(UNITY_EDITOR || UNITY_STANDALONE)
+
                 Plugin.Logger.LogWarning($"BossHealthBarController: OnBossSpawn called but bossGO {bossGO.name} already has a health bar");
                 Plugin.Logger.LogWarning($"BossHealthBarController: Overwriting maxHp bossGO {bossGO.name} with [{maxHp}]");
-#endif
+
                 var go = healthBarGoOf[bossGO];
                 var bar = go.GetComponent<HealthBar>();
                 bar.SetMaxHealth(maxHp);
                 return;
             }
-
-            GameObject prefab;
+            Plugin.Logger.LogInfo($"BossHealthBarController: OnBossSpawn called for bossGO {bossGO.name} with maxHp {maxHp}");
             GameObject healthBarGO;
-#if UNITY_EDITOR || UNITY_STANDALONE
-            prefab = Addressables.LoadAssetAsync<GameObject>("Assets/Addressables/Prefabs/HealthBar.prefab").WaitForCompletion();
-            healthBarGO = Instantiate(prefab);
-#else
-            healthBarGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/HealthBarSmall.prefab", "BossHealthBar");
-#endif
 
+            healthBarGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/HealthBarBoss.prefab", "BossHealthBar");
             healthBarGoOf[bossGO] = healthBarGO;
-            healthBarGO.transform.SetParent(WorldSpaceCanvas.GetWorldSpaceCanvas.transform);
-            healthBarGO.GetComponent<SpriteTracker>().SetTarget(bossGO);
+            healthBarGO.transform.SetParent(ScreenSpaceCanvas.GetScreenSpaceCanvas.transform);
+            healthBarGO.transform.localScale = Vector3.one;
             healthBarGO.GetComponent<HealthBar>().SetMaxHealth(maxHp);
             if (!bossGO.GetComponent<BossHealthBarOwner>())
                 bossGO.AddComponent<BossHealthBarOwner>();
-
-            //TODO set the size of the health bar based on bossGO's sprite size?
-            bool isBoss = bossGO.CompareTag("Boss");
-            float barWidth = Configs.Instance.GetHpBarWidth(maxHp, false); //TODO boss bar is not implemented yet
-            healthBarGO.GetComponent<HealthBar>().SetWidth(barWidth);
         }
 
         private void OnBossDamage(GameObject bossGO, float amount) {
@@ -109,13 +107,16 @@ namespace SilkenImpact {
 
         private void OnBossHide(GameObject bossGO) {
             if (!guardExist(bossGO)) return;
+            //Plugin.Logger.LogWarning($"BossHealthBarController: Ignoring Hide event on {bossGO.name}");
             var go = healthBarGoOf[bossGO];
             go.SetActive(false);
+            container.RemoveBar(go.GetComponent<HealthBar>());
         }
 
         private void OnBossDie(GameObject bossGO) {
             if (!guardExist(bossGO)) return;
             var go = healthBarGoOf[bossGO];
+            container.RemoveBar(go.GetComponent<HealthBar>());
             Destroy(go);
             healthBarGoOf.Remove(bossGO);
         }

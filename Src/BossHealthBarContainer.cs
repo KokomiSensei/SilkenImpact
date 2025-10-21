@@ -8,8 +8,10 @@ using UnityEngine.Assertions.Must;
 public class BossHealthBarContainer : MonoBehaviour {
     [SerializeField] private List<HealthBar> bars = new();
     [SerializeField] private RectTransform rect;
-    [SerializeField] private GameObject prefab;
     public float interval = 0.3f;
+#if (UNITY_EDITOR)
+
+    [SerializeField] private GameObject prefab;
 
     public void AddBar() {
         var bar = Instantiate(prefab);
@@ -23,6 +25,19 @@ public class BossHealthBarContainer : MonoBehaviour {
         var b = bars[bars.Count - 1];
         Destroy(b.gameObject);
         bars.RemoveAt(bars.Count - 1);
+        OnUpdate();
+    }
+#endif
+
+    public void AddBar(HealthBar bar) {
+        if (bars.Find(b => b == bar)) return;
+        bars.Add(bar);
+        bar.transform.SetParent(transform, false);
+        OnUpdate();
+    }
+
+    public void RemoveBar(HealthBar bar) {
+        bars.Remove(bar);
         OnUpdate();
     }
 

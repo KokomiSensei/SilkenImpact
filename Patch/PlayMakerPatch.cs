@@ -16,7 +16,7 @@ namespace SilkenImpact.Patch {
             go.TryGetComponent<HealthManager>(out HealthManager hm);
             if (hm) {
                 float hp = hm.hp;
-                EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.SetHP, go, hp);
+                hm.GetComponent<IHealthBarOwner>()?.SetHP(hp);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, go);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
                 Plugin.Logger.LogWarning($"{go.name} AddHP hp:{hp}");
@@ -36,7 +36,7 @@ namespace SilkenImpact.Patch {
             go.TryGetComponent<HealthManager>(out HealthManager hm);
             if (hm) {
                 float hp = hm.hp;
-                EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.SetHP, go, hp);
+                hm.GetComponent<IHealthBarOwner>()?.SetHP(hp);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, go);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
                 Plugin.Logger.LogWarning($"{go.name} SetHP hp:{hp}");
@@ -52,7 +52,7 @@ namespace SilkenImpact.Patch {
             Plugin.Logger.LogWarning($"{go.name} SubtractHP");
             if (hm) {
                 float hp = hm.hp;
-                EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.SetHP, go, hp);
+                hm.GetComponent<IHealthBarOwner>()?.SetHP(hp);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, go);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
                 Plugin.Logger.LogWarning($"{go.name} SubtractHP hp:{hp}");

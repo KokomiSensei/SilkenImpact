@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace SilkenImpact {
 
-    public class MobHealthBarOwner : MonoBehaviour {
+    public class MobHealthBarOwner : MonoBehaviour, IHealthBarOwner {
         static private readonly int enemyLayer = LayerMask.NameToLayer("Enemies");
 
         static private readonly float maxZ = Configs.Instance.maxZPosition.Value;
@@ -35,6 +35,9 @@ namespace SilkenImpact {
 
         }
         private bool mobIsShowing() {
+            if (!hm.isActiveAndEnabled || hm.isDead)
+                return false;
+
             if (gameObject.layer != enemyLayer)
                 return false;
 
@@ -55,16 +58,41 @@ namespace SilkenImpact {
             return true;
         }
 
+
         void OnDisable() {
-            EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Hide, gameObject);
+            Hide();
         }
         void OnEnable() {
-            EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Show, gameObject);
+            Show();
         }
 
         void OnDestroy() {
+            Die();
+        }
+
+
+        public void Heal(float amount) {
+            EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Heal, gameObject, amount);
+        }
+
+        public void TakeDamage(float amount) {
+            EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Damage, gameObject, amount);
+        }
+
+        public void SetHP(float hp) {
+            EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Show, gameObject, hp);
+        }
+
+        public void Die() {
             EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, gameObject);
         }
 
+        public void Hide() {
+            EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Hide, gameObject);
+        }
+
+        public void Show() {
+            EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Show, gameObject);
+        }
     }
 }

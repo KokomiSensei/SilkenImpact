@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ContainerTest : MonoBehaviour {
     public BossHealthBarContainer container;
-
+#if (UNITY_EDITOR)
     // Update is called once per frame
     void Update() {
         if (Input.GetKeyDown(KeyCode.Comma)) {
@@ -22,4 +22,5 @@ public class ContainerTest : MonoBehaviour {
             container.Heal(0, 10);
         }
     }
+#endif
 }

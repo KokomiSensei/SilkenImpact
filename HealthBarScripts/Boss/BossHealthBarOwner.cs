@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace SilkenImpact {
 
-    public class BossHealthBarOwner : MonoBehaviour {
+    public class BossHealthBarOwner : MonoBehaviour, IHealthBarOwner {
 
         static private readonly int enemyLayer = LayerMask.NameToLayer("Enemies");
         static private readonly float maxZ = Configs.Instance.maxZPosition.Value;
@@ -19,21 +19,30 @@ namespace SilkenImpact {
             renderer = GetComponent<Renderer>();
             hm = GetComponent<HealthManager>();
         }
+
+
         void Update() {
             if (timeSinceLastCheck < (visibilityCache ? visibleCacheTime : invisibleCacheTime)) {
                 timeSinceLastCheck += Time.deltaTime;
                 return;
             }
             timeSinceLastCheck = 0f;
-            bool showHealthBar = mobIsShowing();
+            bool showHealthBar = bossIsShowing();
             if (showHealthBar == visibilityCache)
                 return;
             visibilityCache = showHealthBar;
-            EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.CheckHP, gameObject);
-            EventHandle<MobOwnerEvent>.SendEvent(showHealthBar ? HealthBarOwnerEventType.Show : HealthBarOwnerEventType.Hide, gameObject);
+            EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.CheckHP, gameObject);
+            if (showHealthBar) {
+                Show();
+            } else {
+                Hide();
+            }
 
         }
-        private bool mobIsShowing() {
+        private bool bossIsShowing() {
+            if (!hm.isActiveAndEnabled || hm.isDead)
+                return false;
+
             if (gameObject.layer != enemyLayer)
                 return false;
 
@@ -42,7 +51,7 @@ namespace SilkenImpact {
                 return false;
             }
             //Plugin.Logger.LogInfo("2. Z Pos Passed"); // 500 / 1600
-            // some mobs use a capsule collider on their 'physics pusher' instead
+            // some bosss use a capsule collider on their 'physics pusher' instead
             //if (collider && (!collider.enabled || !collider.isActiveAndEnabled)) 
             //return false;
 
@@ -55,15 +64,40 @@ namespace SilkenImpact {
         }
 
         void OnDisable() {
-            EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Hide, gameObject);
+            Hide();
         }
         void OnEnable() {
-            EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Show, gameObject);
+            Show();
         }
 
         void OnDestroy() {
-            EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, gameObject);
+            Die();
         }
 
+
+        public void Heal(float amount) {
+            EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Heal, gameObject, amount);
+        }
+
+        public void TakeDamage(float amount) {
+            EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Damage, gameObject, amount);
+        }
+
+        public void Die() {
+            EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, gameObject);
+        }
+
+        public void Hide() {
+            EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Hide, gameObject);
+        }
+
+        public void Show() {
+            Plugin.Logger.LogWarning($"BossHealthBarOwner: OnBossShow called on {gameObject.name}");
+            EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Show, gameObject);
+        }
+
+        public void SetHP(float hp) {
+            EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.SetHP, gameObject, hp);
+        }
     }
 }
