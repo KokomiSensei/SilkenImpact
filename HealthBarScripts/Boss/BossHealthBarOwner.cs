@@ -2,21 +2,22 @@ using UnityEngine;
 
 namespace SilkenImpact {
 
-    public class HealthBarOwner : MonoBehaviour {
+    public class BossHealthBarOwner : MonoBehaviour {
+
         static private readonly int enemyLayer = LayerMask.NameToLayer("Enemies");
         static private readonly float maxZ = Configs.Instance.maxZPosition.Value;
         static private readonly float visibleCacheTime = Configs.Instance.visibleCacheSeconds.Value;
         static private readonly float invisibleCacheTime = Configs.Instance.invisibleCacheSeconds.Value;
-        private Collider2D collider = null;
+        //private Collider2D collider = null;
         private Renderer renderer = null;
         private bool visibilityCache = false;
         private float timeSinceLastCheck = 0f;
 
-        private HealthManager hm => gameObject.GetComponent<HealthManager>();
+        private HealthManager hm;
         void Awake() {
-            collider = GetComponent<Collider2D>();
+            //collider = GetComponent<Collider2D>();
             renderer = GetComponent<Renderer>();
-
+            hm = GetComponent<HealthManager>();
         }
         void Update() {
             if (timeSinceLastCheck < (visibilityCache ? visibleCacheTime : invisibleCacheTime)) {
@@ -41,8 +42,9 @@ namespace SilkenImpact {
                 return false;
             }
             //Plugin.Logger.LogInfo("2. Z Pos Passed"); // 500 / 1600
-            if (collider && (!collider.enabled || !collider.isActiveAndEnabled))
-                return false;
+            // some mobs use a capsule collider on their 'physics pusher' instead
+            //if (collider && (!collider.enabled || !collider.isActiveAndEnabled)) 
+            //return false;
 
             //Plugin.Logger.LogInfo("3. Collider Passed"); 223 / 500
             if (renderer && (!renderer.enabled || !renderer.isVisible))
@@ -62,5 +64,6 @@ namespace SilkenImpact {
         void OnDestroy() {
             EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, gameObject);
         }
+
     }
 }

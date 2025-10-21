@@ -25,6 +25,7 @@ namespace SilkenImpact {
         public ConfigEntry<float> minMobHp;
         public ConfigEntry<float> minMediumBarHp;
         public ConfigEntry<float> minLongBarHp;
+        public ConfigEntry<float> minBossBarHp;
 
 
         public ConfigEntry<float> maxZPosition;
@@ -55,6 +56,7 @@ namespace SilkenImpact {
             minMobHp = config.Bind("Health Bar Sizes", "Min Mob HP", 5f, "Minimum HP for showing mob health bars(e.g. Some environment objects have HP too)");
             minMediumBarHp = config.Bind("Health Bar Sizes", "Min Medium Bar HP", 50f, "Minimum HP for switching to medium mob health bars");
             minLongBarHp = config.Bind("Health Bar Sizes", "Min Long Bar HP", 100f, "Minimum HP for switching to long mob health bars");
+            minBossBarHp = config.Bind("Health Bar Sizes", "Min Boss Bar HP", 120f, "Minimum HP for switching to boss mob health bars. (120 is the HP of Moss Mother)");
 
             defaultColor = config.Bind("Damage Text Colors", "Default Color", ColourPalette.HornetDress, "Color of default damage text");
             critHitColor = config.Bind("Damage Text Colors", "Crit Hit Color", ColourPalette.Geo, "Color of critical hit damage text");

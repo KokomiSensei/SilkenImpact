@@ -196,15 +196,13 @@ namespace SilkenImpact.Patch {
             }
 
             var go = __instance.gameObject;
-            bool isBoss = go.CompareTag("Boss");
+            bool isBoss = hp >= Configs.Instance.minBossBarHp.Value;
             if (!isBoss) {
                 EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
                 EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Hide, go);
             } else {
-                //TODO boss thingy
-                Plugin.Logger.LogWarning("Boss health bar is not implemented yet! Using Mob HP bar instead! ");
-                EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
-                EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Hide, go);
+                EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
+                EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Hide, go);
             }
         }
 
@@ -229,7 +227,7 @@ namespace SilkenImpact.Patch {
         [HarmonyPrefix]
         public static void HealthManager_SendDeathEvent_Prefix(HealthManager __instance) {
             Plugin.Logger.LogWarning($"{__instance.gameObject.name} Die, hp -> {__instance.hp}, isDead -> {__instance.isDead}");
-            Object.Destroy(__instance.gameObject.GetComponent<HealthBarOwner>());
+            Object.Destroy(__instance.gameObject.GetComponent<MobHealthBarOwner>());
         }
 
         [HarmonyPatch("HealToMax")]

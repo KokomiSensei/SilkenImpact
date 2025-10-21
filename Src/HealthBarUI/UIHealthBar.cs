@@ -5,5 +5,9 @@ namespace SilkenImpact {
             base.OnStart();
             GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
         }
+        protected override void Redraw() {
+            base.Redraw();
+            GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
+        }
     }
 }

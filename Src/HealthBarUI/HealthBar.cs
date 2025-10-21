@@ -34,17 +34,17 @@ namespace SilkenImpact {
 
         public void SetHeight(float height) {
             this.height = height;
-            OnStart();
+            Redraw();
         }
 
         public void SetWidth(float width) {
             this.width = width;
-            OnStart();
+            Redraw();
         }
 
         public void SetMargin(float margin) {
             this.margin = margin;
-            OnStart();
+            Redraw();
         }
 
         public void SetMaxHealth(float maxHealth) {
@@ -55,6 +55,12 @@ namespace SilkenImpact {
 
         protected void Start() {
             OnStart();
+        }
+
+        protected virtual void Redraw() {
+            hp.UpdateSize(height, width, margin);
+            delayedEffect.UpdateSize(height, width, margin);
+            background.UpdateSize(height, width, 0);
         }
 
         protected virtual void OnStart() {

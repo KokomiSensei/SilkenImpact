@@ -83,8 +83,8 @@ namespace SilkenImpact {
             healthBarGO.transform.SetParent(WorldSpaceCanvas.GetWorldSpaceCanvas.transform);
             healthBarGO.GetComponent<SpriteTracker>().SetTarget(mobGO);
             healthBarGO.GetComponent<HealthBar>().SetMaxHealth(maxHp);
-            if (!mobGO.GetComponent<HealthBarOwner>())
-                mobGO.AddComponent<HealthBarOwner>();
+            if (!mobGO.GetComponent<MobHealthBarOwner>())
+                mobGO.AddComponent<MobHealthBarOwner>();
 
             //TODO set the size of the health bar based on mobGO's sprite size?
             bool isBoss = mobGO.CompareTag("Boss");
@@ -133,11 +133,6 @@ namespace SilkenImpact {
             var go = healthBarGoOf[mobGO];
             var bar = go.GetComponent<HealthBar>();
             bar.ResetHealth(hp);
-        }
-
-        // Update is called once per frame
-        void Update() {
-
         }
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 namespace SilkenImpact {
     public class HealthBarController : MonoBehaviour {
-#if UNITY_EDITOR || UNITY_STANDALONE
+#if (UNITY_EDITOR || UNITY_STANDALONE)
         public float maxHealth = 100;
         public float currentHealth = 100;
         public GameObject healthBarPrefab;

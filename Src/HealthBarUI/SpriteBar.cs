@@ -7,12 +7,11 @@ namespace SilkenImpact {
         public override float CurrentPercentage =>
             (transform.localScale.x) / (maxWidth - 2 * margin);
 
-        public override void Init(float maxHeight, float maxWidth, float margin) {
+        public override void UpdateSize(float maxHeight, float maxWidth, float margin) {
             this.margin = margin;
             this.maxWidth = maxWidth;
             this.maxHeight = maxHeight;
             transform.localScale = new Vector3(maxWidth - 2 * margin, maxHeight - 2 * margin, 1);
-            MatchWithPercentage(1);
         }
 
         protected override void MatchWithPercentage(float percentage) {

@@ -6,11 +6,21 @@ namespace SilkenImpact {
         public float maxHeight;
         public float maxWidth;
 
+        //public float targetPercentage;
+
         public abstract float CurrentPercentage { get; }
         protected abstract void MatchWithPercentage(float percentage);
 
-        public abstract void Init(float maxHeight, float maxWidth, float margin);
 
+        /// <summary>
+        /// Update the size of the bar, while keeping its current percentage.
+        /// </summary>
+        public abstract void UpdateSize(float maxHeight, float maxWidth, float margin);
+
+        public void Init(float maxHeight, float maxWidth, float margin) {
+            UpdateSize(maxHeight, maxWidth, margin);
+            MatchWithPercentage(1);
+        }
 
         public void SetPercentage(float percentage, float animationDurationSeconds) {
             percentage = Mathf.Clamp01(percentage);

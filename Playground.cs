@@ -71,7 +71,7 @@ namespace SilkenImpact {
                 typeof(Rigidbody2D),
                 typeof(Collider2D),         // 包含所有2D碰撞体类型
                 typeof(HealthManager),
-                typeof(HealthBarOwner),
+                typeof(MobHealthBarOwner),
                 typeof(DamageHero),
                 typeof(EnemyDeathEffects),
                 typeof(EnemyHitEffectsRegular),
