@@ -109,14 +109,14 @@ namespace SilkenImpact {
             // 删除收集到的组件
             foreach (Component componentToRemove in componentsToRemove) {
                 try {
-                    Plugin.Logger.LogInfo($"移除组件: {componentToRemove.GetType().Name} 从 {go.name}");
+                    // Plugin.Logger.LogInfo($"移除组件: {componentToRemove.GetType().Name} 从 {go.name}");
                     DestroyImmediate(componentToRemove);
                 } catch (System.Exception e) {
-                    Plugin.Logger.LogError($"无法移除组件 {componentToRemove.GetType().Name}: {e.Message}");
+                    // Plugin.Logger.LogError($"无法移除组件 {componentToRemove.GetType().Name}: {e.Message}");
                 }
             }
 
-            Plugin.Logger.LogInfo($"已完成清理模板 {go.name}");
+            // Plugin.Logger.LogInfo($"已完成清理模板 {go.name}");
         }
         private GameObject Stub {
             get {
@@ -150,17 +150,17 @@ namespace SilkenImpact {
         private void Update() {
             if (Input.GetKeyDown(KeyCode.F2)) {
                 Vector3 pos = Player.transform.position;
-                Plugin.Logger.LogInfo($"Player Position {pos}");
+                // Plugin.Logger.LogInfo($"Player Position {pos}");
 
             }
             if (Input.GetKeyDown(KeyCode.F3)) {
                 Vector3 pos = Player.transform.position;
                 var copy = Stub;
                 if (copy == null) {
-                    Plugin.Logger.LogWarning("No Stub found to instantiate");
+                    // Plugin.Logger.LogWarning("No Stub found to instantiate");
                     return;
                 }
-                Plugin.Logger.LogInfo($"Instantiating Stub {copy.name} at Player Position {pos}");
+                // Plugin.Logger.LogInfo($"Instantiating Stub {copy.name} at Player Position {pos}");
                 Renderer renderer = copy.GetComponent<Renderer>();
                 if (renderer != null) {
                     float bottomOffset = renderer.bounds.min.y - copy.transform.position.y;
@@ -172,15 +172,15 @@ namespace SilkenImpact {
                 }
             }
             //if (Input.GetKeyDown(KeyCode.F9)) {
-            //    Plugin.Logger.LogInfo("F9 Pressed");
+            //    // Plugin.Logger.LogInfo("F9 Pressed");
             //    Vector3 mousePosition = Input.mousePosition;
             //    mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
             //    mousePosition.z = 1;
-            //    Plugin.Logger.LogInfo($"Mouse Position {mousePosition}");
+            //    // Plugin.Logger.LogInfo($"Mouse Position {mousePosition}");
 
             //    HealthManager hm = null;
             //    if (bean2 == null) {
-            //        Plugin.Logger.LogInfo("Instantiating Bean");
+            //        // Plugin.Logger.LogInfo("Instantiating Bean");
             //        bean2 = Plugin.InstantiateFromAddressable("Bean", "Bean");
             //        bean2.transform.position = mousePosition;
             //        hm = bean.AddComponent<HealthManager>();
@@ -199,7 +199,7 @@ namespace SilkenImpact {
         //private IEnumerator UpdateAddressableOnAwake() {
         //    // remote catalog at <PluginFolder>/catalog_1.0.json
         //    string path = Path.Combine(Plugin.PluginFolder, "catalog_1.0.json");
-        //    Plugin.Logger.LogInfo($"Loading Addressable Catalog from {path}");
+        //    // Plugin.Logger.LogInfo($"Loading Addressable Catalog from {path}");
         //    //AsyncOperationHandle<IResourceLocator> handle = Addressables.LoadContentCatalogAsync(path, true);
         //    //if (handle.Status != AsyncOperationStatus.Succeeded) {
         //    //    Logger.LogWarning($"Failed to load Addressable Catalog from {path}");
@@ -210,8 +210,8 @@ namespace SilkenImpact {
         //    yield return handle;
 
         //    if (handle.Status != AsyncOperationStatus.Succeeded) {
-        //        Plugin.Logger.LogWarning($"Failed to load Addressable Catalog from {path}, {handle.Status}");
-        //        Plugin.Logger.LogError(handle.OperationException);
+        //        // Plugin.Logger.LogWarning($"Failed to load Addressable Catalog from {path}, {handle.Status}");
+        //        // Plugin.Logger.LogError(handle.OperationException);
         //        handle.Release();
         //        yield break;
         //    }

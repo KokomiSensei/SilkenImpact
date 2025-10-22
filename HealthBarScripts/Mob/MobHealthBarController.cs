@@ -28,8 +28,8 @@ namespace SilkenImpact {
             var go = healthBarGoOf[mobGO];
             var bar = go.GetComponent<HealthBar>();
             if (Mathf.Abs(bar.CurrentHealth - realHp) > 0.01f) {
-                Plugin.Logger.LogError("MobHealthBarController: OnCheckHP detected HP mismatch for mobGO " + mobGO.name +
-                    $", HealthBar has {bar.CurrentHealth}, but HealthManager has {realHp}");
+                // Plugin.Logger.LogError("MobHealthBarController: OnCheckHP detected HP mismatch for mobGO " + mobGO.name +
+                // $", HealthBar has {bar.CurrentHealth}, but HealthManager has {realHp}");
             }
         }
 
@@ -37,7 +37,7 @@ namespace SilkenImpact {
         private bool guardExist(GameObject mobGO) {
             if (!healthBarGoOf.ContainsKey(mobGO)) {
 #if !(UNITY_EDITOR || UNITY_STANDALONE)
-                Plugin.Logger.LogWarning($"MobHealthBarController: GuardExist failed, mobGO {mobGO.name} not found in healthBarGoOf");
+                // Plugin.Logger.LogWarning($"MobHealthBarController: GuardExist failed, mobGO {mobGO.name} not found in healthBarGoOf");
 #endif
                 return false;
             }
@@ -61,8 +61,8 @@ namespace SilkenImpact {
         private void OnMobSpawn(GameObject mobGO, float maxHp) {
             if (healthBarGoOf.ContainsKey(mobGO)) {
 #if !(UNITY_EDITOR || UNITY_STANDALONE)
-                Plugin.Logger.LogWarning($"MobHealthBarController: OnMobSpawn called but mobGO {mobGO.name} already has a health bar");
-                Plugin.Logger.LogWarning($"MobHealthBarController: Overwriting maxHp mobGO {mobGO.name} with [{maxHp}]");
+                // Plugin.Logger.LogWarning($"MobHealthBarController: OnMobSpawn called but mobGO {mobGO.name} already has a health bar");
+                // Plugin.Logger.LogWarning($"MobHealthBarController: Overwriting maxHp mobGO {mobGO.name} with [{maxHp}]");
 #endif
                 var go = healthBarGoOf[mobGO];
                 var bar = go.GetComponent<HealthBar>();
@@ -116,7 +116,7 @@ namespace SilkenImpact {
             go.SetActive(false);
             //} catch (Exception e) {
             //#if !(UNITY_EDITOR || UNITY_STANDALONE)
-            //Plugin.Logger.LogError($"MobHealthBarController: OnMobHide failed for mobGO {mobGO.name} with exception {e}");
+            //// Plugin.Logger.LogError($"MobHealthBarController: OnMobHide failed for mobGO {mobGO.name} with exception {e}");
             //#endif
             //}
         }

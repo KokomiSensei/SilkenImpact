@@ -41,20 +41,20 @@ namespace SilkenImpact {
             if (gameObject.layer != enemyLayer)
                 return false;
 
-            //Plugin.Logger.LogInfo("1. Layer Passed"); // 1600 / 2600
+            //// Plugin.Logger.LogInfo("1. Layer Passed"); // 1600 / 2600
             if (Mathf.Abs(transform.position.z) > maxZ) {
                 return false;
             }
-            //Plugin.Logger.LogInfo("2. Z Pos Passed"); // 500 / 1600
+            //// Plugin.Logger.LogInfo("2. Z Pos Passed"); // 500 / 1600
             // some mobs use a capsule collider on their 'physics pusher' instead
             //if (collider && (!collider.enabled || !collider.isActiveAndEnabled)) 
             //return false;
 
-            //Plugin.Logger.LogInfo("3. Collider Passed"); 223 / 500
+            //// Plugin.Logger.LogInfo("3. Collider Passed"); 223 / 500
             if (renderer && (!renderer.enabled || !renderer.isVisible))
                 return false;
 
-            //Plugin.Logger.LogInfo("4. Renderer Passed"); 3 / 223
+            //// Plugin.Logger.LogInfo("4. Renderer Passed"); 3 / 223
             return true;
         }
 

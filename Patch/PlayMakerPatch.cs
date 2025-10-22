@@ -12,14 +12,14 @@ namespace SilkenImpact.Patch {
         [HarmonyPostfix]
         public static void AddHP_OnEnter_Postfix(AddHP __instance) {
             var go = __instance.target.GetSafe(__instance);
-            Plugin.Logger.LogWarning($"{go.name} AddHP");
+            // Plugin.Logger.LogWarning($"{go.name} AddHP");
             go.TryGetComponent<HealthManager>(out HealthManager hm);
             if (hm) {
                 float hp = hm.hp;
                 hm.GetComponent<IHealthBarOwner>()?.SetHP(hp);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, go);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
-                Plugin.Logger.LogWarning($"{go.name} AddHP hp:{hp}");
+                // Plugin.Logger.LogWarning($"{go.name} AddHP hp:{hp}");
             }
         }
 
@@ -32,14 +32,14 @@ namespace SilkenImpact.Patch {
         [HarmonyPostfix]
         public static void SetHP_OnEnter_Postfix(SetHP __instance) {
             var go = __instance.target.GetSafe(__instance);
-            Plugin.Logger.LogWarning($"{go.name} SetHP");
+            // Plugin.Logger.LogWarning($"{go.name} SetHP");
             go.TryGetComponent<HealthManager>(out HealthManager hm);
             if (hm) {
                 float hp = hm.hp;
                 hm.GetComponent<IHealthBarOwner>()?.SetHP(hp);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, go);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
-                Plugin.Logger.LogWarning($"{go.name} SetHP hp:{hp}");
+                // Plugin.Logger.LogWarning($"{go.name} SetHP hp:{hp}");
             }
         }
 
@@ -49,13 +49,13 @@ namespace SilkenImpact.Patch {
         public static void SubtractHP_OnEnter_Postfix(SubtractHP __instance) {
             var go = __instance.target.GetSafe(__instance);
             go.TryGetComponent<HealthManager>(out HealthManager hm);
-            Plugin.Logger.LogWarning($"{go.name} SubtractHP");
+            // Plugin.Logger.LogWarning($"{go.name} SubtractHP");
             if (hm) {
                 float hp = hm.hp;
                 hm.GetComponent<IHealthBarOwner>()?.SetHP(hp);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, go);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
-                Plugin.Logger.LogWarning($"{go.name} SubtractHP hp:{hp}");
+                // Plugin.Logger.LogWarning($"{go.name} SubtractHP hp:{hp}");
             }
         }
 
