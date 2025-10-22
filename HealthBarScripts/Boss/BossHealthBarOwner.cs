@@ -80,6 +80,11 @@ namespace SilkenImpact {
         }
 
         public void TakeDamage(float amount) {
+            if (!visibilityCache) {
+                Show();
+                visibilityCache = true;
+                timeSinceLastCheck = 0f;
+            }
             EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Damage, gameObject, amount);
         }
 

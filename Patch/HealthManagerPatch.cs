@@ -260,7 +260,7 @@ namespace SilkenImpact.Patch {
         [HarmonyPatch("TakeDamage")]
         [HarmonyPrefix]
         public static void HealthManager_TakeDamage_Prefix(HitInstance hitInstance, HealthManager __instance) {
-            Plugin.Logger.LogInfo($"{__instance.gameObject.name} is hit, hp -> {__instance.hp} ⬇");
+            Plugin.Logger.LogInfo($"{__instance.gameObject.name} is hit, hp -> {__instance.hp}");
             Plugin.Logger.LogWarning($"{__instance.gameObject.name}, Tag={__instance.gameObject.tag}, DisplayName={LocalisedName(__instance)}");
         }
 
@@ -282,9 +282,18 @@ namespace SilkenImpact.Patch {
 
 
         [HarmonyPatch("ApplyExtraDamage", new[] { typeof(HitInstance) })]
+        [HarmonyPrefix]
+        public static void ApplyExtraDamage1_Pre(HealthManager __instance, HitInstance hitInstance, ref int __state) {
+            hitInstance = applyDamageScaling(__instance, hitInstance);
+            int newHp = Mathf.Max(__instance.hp - hitInstance.DamageDealt, -1000);
+            int damage = __instance.hp - newHp;
+            __state = damage;
+        }
+
+        [HarmonyPatch("ApplyExtraDamage", new[] { typeof(HitInstance) })]
         [HarmonyPostfix]
-        public static void ApplyExtraDamage1(HealthManager __instance, HitInstance hitInstance) {
-            int damage = applyDamageScaling(__instance, hitInstance).DamageDealt;
+        public static void ApplyExtraDamage1_Post(HealthManager __instance, HitInstance hitInstance, ref int __state) {
+            int damage = __state;
             Plugin.Logger.LogInfo($"{__instance.gameObject.name} took {damage} tag damage, hp -> {__instance.hp}");
             Plugin.Logger.LogWarning($"Neil=[{hitInstance.NailElement}]");
             SpawnDamageText(__instance, damage, false, hitInstance.NailElement);
