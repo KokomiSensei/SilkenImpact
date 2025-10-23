@@ -1,0 +1,10 @@
+{
+  "name": "Silken_Impact",
+  "version_number": "1.0.2",
+  "website_url": "https://github.com/KokomiSensei/SilkenImpact",
+  "description": "Animated Health Bar and Hit Indicator. A mod that elevates combat feedback to a whole new level. Inspired by the art and hit animations of Genshin Impact.",
+  "dependencies": [
+    "BepInEx-BepInExPack_Silksong-5.4.2304",
+    "jakobhellermann-BepInExConfigurationManager-18.4.1"
+  ]
+}
