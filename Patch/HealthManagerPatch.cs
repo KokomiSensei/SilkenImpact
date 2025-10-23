@@ -73,13 +73,21 @@ namespace SilkenImpact.Patch {
         }
         public static string LocalisedName(HealthManager __instance) {
             var em = __instance.gameObject.GetComponent<EnemyDeathEffects>();
-            if (em == null) {
-                return $"Enemy Death Effects Not Found on {__instance.gameObject.name}";
+            // Approach 1: __instance.GetComponent<EnemyDeathEffects>().journalRecord.DisplayName
+            if (em != null) {
+                var journalRecord = Traverse.Create(em).Field<EnemyJournalRecord>("journalRecord").Value;
+                if (journalRecord) {
+                    Plugin.Logger.LogWarning("Approach 1 Succeeded. Using: [__instance.GetComponent<EnemyDeathEffects>().journalRecord.DisplayName]");
+                    Plugin.Logger.LogWarning("Found EnemyDeathEffects on " + __instance.gameObject.name + ", Boss Name: " + journalRecord.DisplayName);
+                    return journalRecord.DisplayName;
+                }
+                Plugin.Logger.LogWarning("Approach 1 Failed. journalRecord not found on " + __instance.gameObject.name);
             }
-            var journalRecord = Traverse.Create(em).Field<EnemyJournalRecord>("journalRecord").Value;
-            if (journalRecord) {
-                return journalRecord.DisplayName;
-            }
+
+            // Approach 2:
+            Plugin.Logger.LogWarning("Approach 1 Failed. EnemyDeathEffects or journalRecord not found on " + __instance.gameObject.name);
+
+            //return $"Enemy Death Effects Not Found on {__instance.gameObject.name}";
 
             // Great thanks to 小海 for developing the following fallback methods in (https://github.com/jcx515250418qq/Silksong_HealthBar)
             /*  Author | 作者
@@ -195,9 +203,23 @@ namespace SilkenImpact.Patch {
             if (hp < Configs.Instance.minMobHp.Value) {
                 return;
             }
+            if (__instance.SendDamageTo != null) {
+                Plugin.Logger.LogWarning($"{__instance.gameObject.name}.HealthManager.SendDamageTo is {__instance.SendDamageTo.name}, skipping health bar spawn.");
+                return;
+            }
 
             var go = __instance.gameObject;
-            bool isBoss = hp >= Configs.Instance.minBossBarHp.Value;
+            bool isBoss = false;
+
+            if (__instance.CompareTag("Boss")) {
+                // This only works for some of the bosses in Act 1.
+                // I would guess that Team Cherry forgot to tag some of the later bosses?
+                isBoss = true;
+            }
+            if (hp >= Configs.Instance.minBossBarHp.Value) {
+                // So sadly we need this heurisitic approach as fallback.
+                isBoss = true;
+            }
             if (!isBoss) {
                 EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
                 EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Hide, go);
@@ -228,7 +250,7 @@ namespace SilkenImpact.Patch {
         [HarmonyPrefix]
         public static void HealthManager_SendDeathEvent_Prefix(HealthManager __instance) {
             Plugin.Logger.LogWarning($"{__instance.gameObject.name} Die, hp -> {__instance.hp}, isDead -> {__instance.isDead}");
-            Object.Destroy(__instance.gameObject.GetComponent<MobHealthBarOwner>());
+            __instance.GetComponent<IHealthBarOwner>()?.Die();
         }
 
         [HarmonyPatch("HealToMax")]

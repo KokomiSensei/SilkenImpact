@@ -7,6 +7,7 @@ namespace SilkenImpact.Patch {
 
     [HarmonyPatch]
     public class PlayMakerPatch {
+        // I have seen it called on Grand Silk Mother.
         [HarmonyPatch(typeof(AddHP))] // HealToMax or =+ AddHp.Value
         [HarmonyPatch("OnEnter")]
         [HarmonyPostfix]
