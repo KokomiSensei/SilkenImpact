@@ -1,82 +1,65 @@
 using UnityEngine;
 
-namespace SilkenImpact
-{
+namespace SilkenImpact {
 
-    public class MobHealthBarOwner : MonoBehaviour, IHealthBarOwner
-    {
+    public class MobHealthBarOwner : MonoBehaviour, IHealthBarOwner {
 
         private VisibilityController visibilityController;
 
-        void Awake()
-        {
+        void Awake() {
             HealthManager hm = GetComponent<HealthManager>();
             visibilityController = new VisibilityController(hm);
         }
 
-        void Update()
-        {
+        void Update() {
             if (!visibilityController.Update())
                 return;
             EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.CheckHP, gameObject);
-            if (visibilityController.IsVisible)
-            {
+            if (visibilityController.IsVisible) {
                 Show();
-            }
-            else
-            {
+            } else {
                 Hide();
             }
         }
 
 
-        void OnDisable()
-        {
+        void OnDisable() {
             Hide();
         }
-        void OnEnable()
-        {
+        void OnEnable() {
             Show();
         }
 
-        void OnDestroy()
-        {
+        void OnDestroy() {
             Die();
         }
 
 
-        public void Heal(float amount)
-        {
+        public void Heal(float amount) {
             EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Heal, gameObject, amount);
         }
 
-        public void TakeDamage(float amount)
-        {
-            if (!visibilityController.IsVisible)
-            {
+        public void TakeDamage(float amount) {
+            if (!visibilityController.IsVisible) {
                 Show();
                 visibilityController.IsVisible = true;
             }
             EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Damage, gameObject, amount);
         }
 
-        public void SetHP(float hp)
-        {
+        public void SetHP(float hp) {
             EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.SetHP, gameObject, hp);
         }
 
-        public void Die()
-        {
+        public void Die() {
             EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, gameObject);
         }
 
-        public void Hide()
-        {
+        public void Hide() {
             EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Hide, gameObject);
         }
 
-        public void Show()
-        {
+        public void Show() {
             EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Show, gameObject);
         }
     }

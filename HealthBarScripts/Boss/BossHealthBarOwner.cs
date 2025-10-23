@@ -1,82 +1,65 @@
 using UnityEngine;
 
-namespace SilkenImpact
-{
+namespace SilkenImpact {
 
-    public class BossHealthBarOwner : MonoBehaviour, IHealthBarOwner
-    {
+    public class BossHealthBarOwner : MonoBehaviour, IHealthBarOwner {
 
         private VisibilityController visibilityController;
 
-        void Awake()
-        {
+        void Awake() {
             HealthManager hm = GetComponent<HealthManager>();
             visibilityController = new VisibilityController(hm);
         }
 
 
-        void Update()
-        {
+        void Update() {
             if (!visibilityController.Update())
                 return;
             EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.CheckHP, gameObject);
-            if (visibilityController.IsVisible)
-            {
+            if (visibilityController.IsVisible) {
                 Show();
-            }
-            else
-            {
+            } else {
                 Hide();
             }
         }
 
-        void OnDisable()
-        {
+        void OnDisable() {
             Hide();
         }
-        void OnEnable()
-        {
+        void OnEnable() {
             Show();
         }
 
-        void OnDestroy()
-        {
+        void OnDestroy() {
             Die();
         }
 
 
-        public void Heal(float amount)
-        {
+        public void Heal(float amount) {
             EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Heal, gameObject, amount);
         }
 
-        public void TakeDamage(float amount)
-        {
-            if (!visibilityController.IsVisible)
-            {
+        public void TakeDamage(float amount) {
+            if (!visibilityController.IsVisible) {
                 Show();
                 visibilityController.IsVisible = true;
             }
             EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Damage, gameObject, amount);
         }
 
-        public void Die()
-        {
+        public void Die() {
             EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, gameObject);
         }
 
-        public void Hide()
-        {
+        public void Hide() {
             EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Hide, gameObject);
         }
 
-        public void Show()
-        {
+        public void Show() {
             EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Show, gameObject);
         }
 
-        public void SetHP(float hp)
-        {
+        public void SetHP(float hp) {
             EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.SetHP, gameObject, hp);
         }
     }
