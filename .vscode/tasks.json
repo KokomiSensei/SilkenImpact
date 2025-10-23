@@ -1,0 +1,54 @@
+{
+    "version": "2.0.0",
+    "inputs": [
+        {
+            "id": "buildConfiguration",
+            "type": "pickString",
+            "options": [
+                "Debug",
+                "Release"
+            ],
+            "default": "Debug",
+            "description": "Choose build configuration"
+        },
+    ],
+    "tasks": [
+        {
+            "label": "dotnet: build (Debug)",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "${workspaceFolder}/SilkenImpact.csproj",
+                "-c",
+                "Debug"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "dotnet: build (Release)",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "${workspaceFolder}/SilkenImpact.csproj",
+                "-c",
+                "Release"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}
