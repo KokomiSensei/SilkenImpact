@@ -5,10 +5,17 @@ namespace SilkenImpact {
     public class MobHealthBarOwner : MonoBehaviour, IHealthBarOwner {
 
         private VisibilityController visibilityController;
+#if DEBUG
+        private string originalName;
+#endif
 
-        void Start() {
+
+        void Awake() {
             HealthManager hm = GetComponent<HealthManager>();
             visibilityController = new VisibilityController(hm);
+#if DEBUG
+            originalName = gameObject.name;
+#endif
         }
 
         void Update() {
@@ -20,6 +27,10 @@ namespace SilkenImpact {
             } else {
                 Hide();
             }
+#if DEBUG
+            var hm = GetComponent<HealthManager>();
+            hm.name = originalName + $" visible={visibilityController.IsVisible} hp={hm.hp}";
+#endif
         }
 
 
@@ -34,9 +45,19 @@ namespace SilkenImpact {
             Die();
         }
 
+        void updateVisibilityImmediate() {
+            if (visibilityController.Update(forceCheck: true)) {
+                if (visibilityController.IsVisible) {
+                    Show();
+                } else {
+                    Hide();
+                }
+            }
+        }
 
         public void Heal(float amount) {
             EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Heal, gameObject, amount);
+            updateVisibilityImmediate();
         }
 
         public void TakeDamage(float amount) {
@@ -45,14 +66,17 @@ namespace SilkenImpact {
                 visibilityController.IsVisible = true;
             }
             EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Damage, gameObject, amount);
+            updateVisibilityImmediate();
         }
 
         public void SetHP(float hp) {
             EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.SetHP, gameObject, hp);
+            updateVisibilityImmediate();
         }
 
         public void Die() {
             EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, gameObject);
+            updateVisibilityImmediate();
         }
 
         public void Hide() {

@@ -3,9 +3,17 @@
 using UnityEngine;
 namespace SilkenImpact {
     public class SpriteBar : Bar {
+        private SpriteRenderer spriteRenderer;
+        private void Awake() {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
 
         public override float CurrentPercentage =>
             (transform.localScale.x) / (maxWidth - 2 * margin);
+
+        public override void SetVisibility(bool visible) {
+            spriteRenderer.enabled = visible;
+        }
 
         public override void UpdateSize(float maxHeight, float maxWidth, float margin) {
             this.margin = margin;

@@ -43,8 +43,8 @@ namespace SilkenImpact.Patch {
         /// Uses renderer.bounds.size as the base size, multiplies by offsetScale / 2 to compute the offset,
         /// and positions the text in world space at the target position plus that offset.
         /// </summary>
-        private static void spawnTextOn(HealthManager __instance, string content, float horizontalOffsetScale, float verticalOffsetScale, float sizeScale, Color color) {
-            var damageTextGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/DamageOldText.prefab", $"{__instance}.DamageText = {content}");
+        private static void spawnTextOn(HealthManager __instance, GameObject textGO, string content, float horizontalOffsetScale, float verticalOffsetScale, float sizeScale, Color color) {
+            textGO.name = $"{content} -> {__instance.gameObject.name}";
             var renderer = __instance.gameObject.GetComponent<Renderer>();
             Vector3 spriteSize = renderer ? renderer.bounds.size : new Vector3(1, 1, 0);
 
@@ -52,10 +52,10 @@ namespace SilkenImpact.Patch {
             randomOffset.x *= horizontalOffsetScale / 2;
             randomOffset.y *= verticalOffsetScale / 2;
 
-            damageTextGO.transform.position = __instance.gameObject.transform.position + randomOffset;
-            damageTextGO.transform.SetParent(WorldSpaceCanvas.GetWorldSpaceCanvas.transform, true);
+            textGO.transform.position = __instance.gameObject.transform.position + randomOffset;
+            textGO.transform.SetParent(WorldSpaceCanvas.GetWorldSpaceCanvas.transform, true);
 
-            var text = damageTextGO.GetComponent<DamageText>();
+            var text = textGO.GetComponent<DamageText>();
             text.DamageString = content;
             text.TextColor = color;
             text.maxHeight *= sizeScale;
@@ -69,10 +69,11 @@ namespace SilkenImpact.Patch {
             float horizontalOffsetScale = Random.Range(-1f, 1f);
             float verticalOffsetScale = Random.Range(-0.4f, 1f);
 
+            // scale /= transform.lossyScale.x; ?
             float randomSizeScale = Random.Range(0.8f, 1.2f) * (isCritHit ? Mathf.Clamp(damageScale(damage), 2, 2.5f) : Mathf.Clamp(damageScale(damage), 0.5f, 1.5f));
             updateAvgDamagePerHit(damage);
-
-            spawnTextOn(__instance, ((int)damage).ToString(), horizontalOffsetScale, verticalOffsetScale, randomSizeScale, color ?? textColor(element, isCritHit));
+            var textGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/DamageOldText.prefab", "DamageText");
+            spawnTextOn(__instance, textGO, ((int)damage).ToString(), horizontalOffsetScale, verticalOffsetScale, randomSizeScale, color ?? textColor(element, isCritHit));
         }
 
         public static void SpawnHealText(HealthManager __instance, float amount, Color? color = null) {
@@ -81,10 +82,11 @@ namespace SilkenImpact.Patch {
                 return;
             }
             float horizontalOffsetScale = Random.Range(-0.5f, 0.5f);
-            float verticalOffsetScale = Random.Range(0.8f, 1.2f);
+            float verticalOffsetScale = Random.Range(1.0f, 1.4f);
 
             float randomSizeScale = Random.Range(0.8f, 1.2f);
-            spawnTextOn(__instance, $"+{(int)amount}", horizontalOffsetScale, verticalOffsetScale, randomSizeScale, color ?? Configs.Instance.healTextColor.Value);
+            var textGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/HealOldText.prefab", "HealText");
+            spawnTextOn(__instance, textGO, $"+{(int)amount}", horizontalOffsetScale, verticalOffsetScale, randomSizeScale, color ?? Configs.Instance.healTextColor.Value);
         }
 
         #endregion
@@ -273,7 +275,7 @@ namespace SilkenImpact.Patch {
             Plugin.Logger.LogWarning($"{__instance.gameObject.name} Die, hp -> {__instance.hp}, isDead -> {__instance.isDead}");
             __instance.GetComponent<IHealthBarOwner>()?.Die();
         }
-
+        /*
         [HarmonyPatch("HealToMax")]
         [HarmonyPrefix]
         public static void HealthManager_HealToMax_Prefix(HealthManager __instance, ref int __state) {
@@ -289,12 +291,12 @@ namespace SilkenImpact.Patch {
             SpawnHealText(__instance, healAmount);
             __instance.GetComponent<IHealthBarOwner>()?.Heal(healAmount);
         }
-
+        */
         [HarmonyPatch("RefillHP")]
         [HarmonyPrefix]
         public static void HealthManager_RefillHP_Prefix(HealthManager __instance, ref int __state) {
             Plugin.Logger.LogWarning($"{__instance.gameObject.name} RefillHP, hp -> {__instance.hp}");
-            __state = __instance.hp;
+            __state = Mathf.Max(__instance.hp, 0);
         }
 
         [HarmonyPatch("RefillHP")]
@@ -310,7 +312,7 @@ namespace SilkenImpact.Patch {
         [HarmonyPrefix]
         public static void HealthManager_AddHP_Prefix(HealthManager __instance, int hpAdd, int hpMax, ref int __state) {
             Plugin.Logger.LogWarning($"{__instance.gameObject.name} AddHP, hp -> {__instance.hp}");
-            __state = __instance.hp;
+            __state = Mathf.Max(__instance.hp, 0);
         }
 
         [HarmonyPatch("AddHP")]
@@ -353,6 +355,7 @@ namespace SilkenImpact.Patch {
             if (IsImmune(__instance, hitInstance)) {
                 return;
             }
+            Plugin.Logger.LogWarning($"TakeDamagePostfix: {__instance.gameObject.name}.isDead = {__instance.isDead}");
             __instance.GetComponent<IHealthBarOwner>()?.CheckHP();
         }
 

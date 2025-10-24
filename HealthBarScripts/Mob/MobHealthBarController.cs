@@ -21,7 +21,19 @@ namespace SilkenImpact {
             EventHandle<MobOwnerEvent>.Register<GameObject, float>(HealthBarOwnerEventType.SetHP, OnMobSetHP);
             EventHandle<MobOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.CheckHP, OnCheckHP);
         }
+#if DEBUG
+        void Update() {
+            foreach (var kvp in healthBarGoOf) {
+                var hm = kvp.Key.GetComponent<HealthManager>();
+                var barGO = kvp.Value;
+                var bar = barGO.GetComponent<HealthBar>();
+                if (hm == null || barGO == null) continue;
+                barGO.name = hm.name + "_HealthBar";
+                if (bar) bar.name = hm.name + "_HealthBar_Component";
+            }
+        }
 
+#endif
         private void OnCheckHP(GameObject mobGO) {
             float realHp = mobGO.GetComponent<HealthManager>().hp;
             if (!guardExist(mobGO)) return;
@@ -54,8 +66,9 @@ namespace SilkenImpact {
 
         private void OnMobShow(GameObject mobGO) {
             if (!guardExist(mobGO)) return;
-            var bar = healthBarGoOf[mobGO];
-            bar.SetActive(true);
+            var go = healthBarGoOf[mobGO];
+            var bar = go.GetComponent<HealthBar>();
+            bar.SetVisibility(true);
         }
 
         private void OnMobSpawn(GameObject mobGO, float maxHp) {
@@ -113,7 +126,8 @@ namespace SilkenImpact {
             var go = healthBarGoOf[mobGO];
             // TODO what? NRE here? how?
             //try {
-            go.SetActive(false);
+            var bar = go.GetComponent<HealthBar>();
+            bar.SetVisibility(false);
             //} catch (Exception e) {
             //#if !(UNITY_EDITOR || UNITY_STANDALONE)
             //Plugin.Logger.LogError($"MobHealthBarController: OnMobHide failed for mobGO {mobGO.name} with exception {e}");

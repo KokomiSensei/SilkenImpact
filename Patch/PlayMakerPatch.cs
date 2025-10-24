@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
+using UnityEngine;
 
 
 namespace SilkenImpact.Patch {
@@ -16,7 +17,8 @@ namespace SilkenImpact.Patch {
             Plugin.Logger.LogWarning($"{go.name} AddHP");
             go.TryGetComponent<HealthManager>(out HealthManager hm);
             if (hm) {
-                __state = hm.hp;
+                __state = Mathf.Max(hm.hp, 0);
+                Plugin.Logger.LogWarning($"AddHP Prefix: {hm.gameObject.name}.isDead = {hm.isDead}");
             }
         }
 
@@ -35,6 +37,7 @@ namespace SilkenImpact.Patch {
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, go);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
                 Plugin.Logger.LogWarning($"{go.name} AddHP hp:{hp}");
+                Plugin.Logger.LogWarning($"AddHP Postfix: {hm.gameObject.name}.isDead = {hm.isDead}");
             }
         }
 
@@ -51,7 +54,8 @@ namespace SilkenImpact.Patch {
             Plugin.Logger.LogWarning($"{go.name} SetHP");
             go.TryGetComponent<HealthManager>(out HealthManager hm);
             if (hm) {
-                __state = hm.hp;
+                __state = Mathf.Max(hm.hp, 0);
+                Plugin.Logger.LogWarning($"SetHP Prefix: {hm.gameObject.name}.isDead = {hm.isDead}");
             }
         }
 
@@ -74,6 +78,7 @@ namespace SilkenImpact.Patch {
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, go);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
                 Plugin.Logger.LogWarning($"{go.name} SetHP hp:{__state}");
+                Plugin.Logger.LogWarning($"SetHP Postfix: {hm.gameObject.name}.isDead = {hm.isDead}");
             }
         }
 

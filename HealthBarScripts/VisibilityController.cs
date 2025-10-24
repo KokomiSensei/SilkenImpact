@@ -35,8 +35,8 @@ namespace SilkenImpact {
             renderer = hm.GetComponent<Renderer>();
             physicalPusherCollider = hm.GetPhysicalPusher()?.GetComponent<Collider2D>();
         }
-        public bool Update() {
-            if (timeSinceLastCheck < (visibilityCache ? visibleCacheTime : invisibleCacheTime)) {
+        public bool Update(bool forceCheck = false) {
+            if (!forceCheck && timeSinceLastCheck < (visibilityCache ? visibleCacheTime : invisibleCacheTime)) {
                 timeSinceLastCheck += Time.deltaTime;
                 return false;
             }

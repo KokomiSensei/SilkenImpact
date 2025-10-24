@@ -70,9 +70,10 @@ namespace SilkenImpact {
         private void OnBossShow(GameObject bossGO) {
             if (!guardExist(bossGO)) return;
             Plugin.Logger.LogWarning($"BossHealthBarController: OnBossShow called on {bossGO.name}");
-            var bar = healthBarGoOf[bossGO];
-            container.AddBar(bar.GetComponent<HealthBar>());
-            bar.SetActive(true);
+            var barGO = healthBarGoOf[bossGO];
+            container.AddBar(barGO.GetComponent<HealthBar>());
+            barGO.GetComponent<HealthBar>().SetVisibility(true);
+            // barGO.GetComponent<Text>().enabled = false;
         }
 
         private void OnBossSpawn(GameObject bossGO, float maxHp) {
@@ -124,7 +125,8 @@ namespace SilkenImpact {
             if (!guardExist(bossGO)) return;
             //Plugin.Logger.LogWarning($"BossHealthBarController: Ignoring Hide event on {bossGO.name}");
             var go = healthBarGoOf[bossGO];
-            go.SetActive(false);
+            go.GetComponent<HealthBar>().SetVisibility(false);
+            // go.GetComponent<Text>().enabled = false;
             container.RemoveBar(go.GetComponent<HealthBar>());
         }
 
