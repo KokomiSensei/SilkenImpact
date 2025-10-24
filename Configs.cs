@@ -26,6 +26,8 @@ namespace SilkenImpact {
         public ConfigEntry<float> minMediumBarHp;
         public ConfigEntry<float> minLongBarHp;
         public ConfigEntry<float> minBossBarHp;
+        public ConfigEntry<float> infHp;
+
 
 
         public ConfigEntry<float> maxZPosition;
@@ -39,6 +41,7 @@ namespace SilkenImpact {
         public ConfigEntry<Color> poisonColor;
         public ConfigEntry<Color> fireColor;
         public ConfigEntry<Color> critHitColor;
+        public ConfigEntry<Color> healTextColor;
 
         public ConfigEntry<float> weightOfNewHit;
 
@@ -62,12 +65,14 @@ namespace SilkenImpact {
             critHitColor = config.Bind("Damage Text Colors", "Crit Hit Color", ColourPalette.Geo, "Color of critical hit damage text");
             poisonColor = config.Bind("Damage Text Colors", "Poison Color", ColourPalette.Electro, "Color of poison damage text");
             fireColor = config.Bind("Damage Text Colors", "Fire Color", ColourPalette.Pyro, "Color of fire damage text");
+            healTextColor = config.Bind("Damage Text Colors", "Heal Color", ColourPalette.HealTextColor, "Color of healing text");
 
             weightOfNewHit = config.Bind("Damage Text Settings", "Weight Of New Hit", 0.2f, "Weight of new hit in exponential moving average calculation.");
 
             maxZPosition = config.Bind("Developer Settings", "Max Z Position", 1f, "Minimum absolute Z position to be considered as shown");
             visibleCacheSeconds = config.Bind("Developer Settings", "Visible Cache Seconds", 0.5f, "Time in seconds to cache visibility state");
             invisibleCacheSeconds = config.Bind("Developer Settings", "Invisible Cache Seconds", 0.5f, "Time in seconds to cache visibility state");
+            infHp = config.Bind("Developer Settings", "Infinite HP Threshold", 10000f, "HP value considered as infinite HP");
         }
 
         public float GetHpBarWidth(float maxHp, bool isBoss) {

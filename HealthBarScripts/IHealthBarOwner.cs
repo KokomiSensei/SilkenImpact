@@ -11,5 +11,6 @@ namespace SilkenImpact {
         public void Die();
         public void Hide();
         public void Show();
+        public void CheckHP();
     }
 }

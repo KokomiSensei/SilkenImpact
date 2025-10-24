@@ -85,6 +85,8 @@ namespace SilkenImpact {
         }
 
         public void TakeDamage(float amount) {
+            if (amount <= 0)
+                return;
             if (decayTimer > 0) {
                 decayTimer -= config.timerReductionPercentageOnDamage * config.decayThresholdSeconds;
             }
@@ -95,6 +97,8 @@ namespace SilkenImpact {
         }
 
         public void Heal(float amount) {
+            if (amount <= 0)
+                return;
             float newHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
             currentHealth = newHealth;
             //if (currentHealth > DecayingHealth) {

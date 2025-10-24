@@ -6,7 +6,7 @@ namespace SilkenImpact {
 
         private VisibilityController visibilityController;
 
-        void Awake() {
+        void Start() {
             HealthManager hm = GetComponent<HealthManager>();
             visibilityController = new VisibilityController(hm);
         }
@@ -15,7 +15,7 @@ namespace SilkenImpact {
         void Update() {
             if (!visibilityController.Update())
                 return;
-            EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.CheckHP, gameObject);
+            CheckHP();
             if (visibilityController.IsVisible) {
                 Show();
             } else {
@@ -61,6 +61,10 @@ namespace SilkenImpact {
 
         public void SetHP(float hp) {
             EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.SetHP, gameObject, hp);
+        }
+
+        public void CheckHP() {
+            EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.CheckHP, gameObject);
         }
     }
 }

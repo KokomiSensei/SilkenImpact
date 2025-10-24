@@ -109,7 +109,7 @@ namespace SilkenImpact {
             var go = healthBarGoOf[bossGO];
             var bar = go.GetComponent<HealthBar>();
             bar.TakeDamage(amount);
-            OnCheckHP(bossGO);
+            // OnCheckHP(bossGO);
         }
 
         private void OnBossHeal(GameObject bossGO, float amount) {
