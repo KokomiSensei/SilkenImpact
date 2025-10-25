@@ -73,7 +73,7 @@ namespace SilkenImpact {
             var barGO = healthBarGoOf[bossGO];
             container.AddBar(barGO.GetComponent<HealthBar>());
             barGO.GetComponent<HealthBar>().SetVisibility(true);
-            // barGO.GetComponent<Text>().enabled = false;
+            barGO.GetComponentInChildren<Text>().enabled = true;
         }
 
         private void OnBossSpawn(GameObject bossGO, float maxHp) {
@@ -126,7 +126,7 @@ namespace SilkenImpact {
             //Plugin.Logger.LogWarning($"BossHealthBarController: Ignoring Hide event on {bossGO.name}");
             var go = healthBarGoOf[bossGO];
             go.GetComponent<HealthBar>().SetVisibility(false);
-            // go.GetComponent<Text>().enabled = false;
+            go.GetComponentInChildren<Text>().enabled = false;
             container.RemoveBar(go.GetComponent<HealthBar>());
         }
 
