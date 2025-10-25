@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 
 namespace SilkenImpact {
-    interface IHealthBarOwner {
+    public interface IHealthBarOwner {
         public void Heal(float amount);
         public void TakeDamage(float amount);
         public void SetHP(float hp);
