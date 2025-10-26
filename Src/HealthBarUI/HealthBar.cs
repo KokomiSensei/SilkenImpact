@@ -124,7 +124,7 @@ namespace SilkenImpact {
 
 #if !(UNITY_EDITOR || UNITY_STANDALONE)
         private void OnDestroy() {
-            Plugin.Logger.LogWarning($"HealthBar: OnDestroy called for {gameObject.name}");
+            PluginLogger.LogWarning($"HealthBar: OnDestroy called for {gameObject.name}");
         }
 #endif
     }

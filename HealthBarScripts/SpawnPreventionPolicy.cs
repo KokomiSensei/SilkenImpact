@@ -10,7 +10,7 @@ namespace SilkenImpact {
                 return true;
             }
             if (hm.SendDamageTo != null) {
-                Plugin.Logger.LogWarning($"{hm.gameObject.name}.HealthManager.SendDamageTo is {hm.SendDamageTo.name}, skipping health bar spawn.");
+                PluginLogger.LogWarning($"{hm.gameObject.name}.HealthManager.SendDamageTo is {hm.SendDamageTo.name}, skipping health bar spawn.");
                 return true;
             }
 

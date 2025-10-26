@@ -37,7 +37,7 @@ namespace SilkenImpact {
                 if (!entry.ready) break;
 
                 if (handlers.TryGetValue(entry.args.type, out var handler)) {
-                    Plugin.Logger.LogInfo($"Dispatcher: Dispatched event of type {entry.args.type}");
+                    PluginLogger.LogInfo($"Dispatcher: Dispatched event of type {entry.args.type}");
                     handler(entry.args);
                 }
                 queue.RemoveFirst();

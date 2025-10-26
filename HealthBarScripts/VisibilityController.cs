@@ -66,12 +66,12 @@ namespace SilkenImpact {
             if (gameObject.layer != enemyLayer)
                 return false;
 
-            //Plugin.Logger.LogInfo("1. Layer Passed"); // 1600 / 2600
+            PluginLogger.LogInfo("1. Layer Passed"); // 1600 / 2600
             if (Mathf.Abs(gameObject.transform.position.z) > maxZ)
                 return false;
 
 
-            //Plugin.Logger.LogInfo("2. Z Pos Passed"); // 500 / 1600
+            PluginLogger.LogInfo("2. Z Pos Passed"); // 500 / 1600
             if (physicalPusherCollider && defaultCollider) {
                 // TODO && or || ?
                 if (!physicalPusherCollider.isActiveAndEnabled && !defaultCollider.isActiveAndEnabled) {
@@ -88,11 +88,11 @@ namespace SilkenImpact {
 
 
 
-            //Plugin.Logger.LogInfo("3. Collider Passed"); 223 / 500
+            PluginLogger.LogInfo("3. Collider Passed"); // 223 / 500
             if (renderer && (!renderer.enabled || !renderer.isVisible))
                 return false;
 
-            //Plugin.Logger.LogInfo("4. Renderer Passed"); 3 / 223
+            PluginLogger.LogInfo("4. Renderer Passed"); // 3 / 223
             return true;
         }
 
