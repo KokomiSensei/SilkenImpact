@@ -94,19 +94,33 @@ namespace SilkenImpact.Patch {
 
         [HarmonyPatch(typeof(SubtractHP))] // hp -= amount.Value;
         [HarmonyPatch("OnEnter")]
-        [HarmonyPostfix]
-        public static void SubtractHP_OnEnter_Postfix(SubtractHP __instance) {
+        [HarmonyPrefix]
+        public static void SubtractHP_OnEnter_Prefix(SubtractHP __instance) {
             var go = __instance.target.GetSafe(__instance);
             go.TryGetComponent<HealthManager>(out HealthManager hm);
             Plugin.Logger.LogWarning($"{go.name} PlayMaker SubtractHP");
             if (hm) {
-                float hp = hm.hp;
-                hm.GetComponent<IHealthBarOwner>()?.SetHP(hp);
-                //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, go);
-                //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
-                Plugin.Logger.LogWarning($"{go.name} PlayMaker SubtractHP hp:{hp}");
+                int damage = __instance.amount.Value;
+                hm.GetComponent<IHealthBarOwner>()?.Dispatcher.EnqueueReady(new DamageEventArgs(damage));
             }
         }
+
+
+        // [HarmonyPatch(typeof(SubtractHP))] // hp -= amount.Value;
+        // [HarmonyPatch("OnEnter")]
+        // [HarmonyPostfix]
+        // public static void SubtractHP_OnEnter_Postfix(SubtractHP __instance) {
+        //     var go = __instance.target.GetSafe(__instance);
+        //     go.TryGetComponent<HealthManager>(out HealthManager hm);
+        //     Plugin.Logger.LogWarning($"{go.name} PlayMaker SubtractHP");
+        //     if (hm) {
+        //         float hp = hm.hp;
+        //         hm.GetComponent<IHealthBarOwner>()?.SetHP(hp);
+        //         //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, go);
+        //         //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
+        //         Plugin.Logger.LogWarning($"{go.name} PlayMaker SubtractHP hp:{hp}");
+        //     }
+        // }
 
 
     }
