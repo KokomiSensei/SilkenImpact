@@ -1,7 +1,7 @@
 ﻿BEPINEX_FOLDER = "D:\\Apps\\Steam\\steamapps\\common\\Hollow Knight Silksong\\BepInEx\\plugins\\SilkenImpact"
 OUTPUT_FOLDER = "C:\\Users\\Steven\\Desktop\\silksong"
 THUNDERSTORE_ASSET_FOLDER = ".\\thunder store assets"
-
+CHANGE_LOG_PATH = ".\\CHANGELOG.md"
 import json
 import os
 import zipfile
@@ -21,6 +21,31 @@ def zip_folder(folder_path, output_path):
 
 def make_nexus_output():
     zip_folder(BEPINEX_FOLDER, OUTPUT_FOLDER + "\\SilkenImpact_Nexus.zip")
+
+
+def get_version_from_changlog():
+    # open CHANGELOG, to see the latest version.
+    # The version number is in heading-3 (### x.x.x)
+    try:
+        with open(CHANGE_LOG_PATH, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+
+        latest_version = None
+        # Find the first heading-3 line (### x.x.x)
+        for line in lines:
+            line = line.strip()
+            if line.startswith("### "):
+                # Extract version number after "### "
+                latest_version = line[4:].strip()
+
+        if latest_version is not None:
+            return latest_version
+        # If no version found, return None or raise exception
+        raise ValueError("No version number found in CHANGELOG.md")
+    except FileNotFoundError:
+        raise FileNotFoundError(f"CHANGELOG.md not found at: {CHANGE_LOG_PATH}")
+    except Exception as e:
+        raise Exception(f"Error reading CHANGELOG.md: {e}")
 
 
 def make_thunderstore_output(version: str):
@@ -52,6 +77,12 @@ def make_thunderstore_output(version: str):
                 shutil.copytree(src, dst)
             else:
                 shutil.copy2(src, dst)
+
+        # copy CHANGELOG.md into the temp folder
+        log_latest_version = get_version_from_changlog()
+        if log_latest_version != version:
+            print(f"Warning: The version in CHANGELOG.md ({log_latest_version}) does not match the specified version ({version}).")
+        shutil.copy2(CHANGE_LOG_PATH, os.path.join(temp_dir, "CHANGELOG.md"))
 
         # copy the content of BEPINEX_FOLDER into the temp folder
         for entry in os.listdir(BEPINEX_FOLDER):
