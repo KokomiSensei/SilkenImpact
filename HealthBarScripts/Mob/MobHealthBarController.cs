@@ -108,8 +108,8 @@ namespace SilkenImpact {
                 mobGO.AddComponent<MobHealthBarOwner>();
 
 
-            bool isBoss = mobGO.CompareTag("Boss");
             float barWidth = Configs.Instance.GetHpBarWidth(maxHp, false);
+            healthBarGO.GetComponent<HealthBar>().SetWidth(barWidth);
         }
 
         private void OnMobDamage(GameObject mobGO, float amount) {
