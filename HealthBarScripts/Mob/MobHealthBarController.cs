@@ -19,7 +19,7 @@ namespace SilkenImpact {
             EventHandle<MobOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.Show, OnMobShow);
 
             EventHandle<MobOwnerEvent>.Register<GameObject, float>(HealthBarOwnerEventType.SetHP, OnMobSetHP);
-            EventHandle<MobOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.CheckHP, OnCheckHP);
+            EventHandle<MobOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.CheckHP, (GameObject go) => OnCheckHP(go));
         }
 #if DEBUG
         void Update() {
@@ -34,7 +34,7 @@ namespace SilkenImpact {
         }
 
 #endif
-        private void OnCheckHP(GameObject mobGO) {
+        private void OnCheckHP(GameObject mobGO, bool fixMismatch = false) {
             float realHp = mobGO.GetComponent<HealthManager>().hp;
             if (!guardExist(mobGO)) return;
             var go = healthBarGoOf[mobGO];
@@ -42,6 +42,14 @@ namespace SilkenImpact {
             if (Mathf.Abs(bar.CurrentHealth - realHp) > 0.01f) {
                 Plugin.Logger.LogError("MobHealthBarController: OnCheckHP detected HP mismatch for mobGO " + mobGO.name +
                     $", HealthBar has {bar.CurrentHealth}, but HealthManager has {realHp}");
+                float damage = bar.CurrentHealth - realHp;
+                if (fixMismatch) {
+                    if (damage > 0) {
+                        bar.TakeDamage(damage);
+                    } else {
+                        bar.Heal(-damage);
+                    }
+                }
             }
         }
 
@@ -99,10 +107,9 @@ namespace SilkenImpact {
             if (!mobGO.GetComponent<MobHealthBarOwner>())
                 mobGO.AddComponent<MobHealthBarOwner>();
 
-            //TODO set the size of the health bar based on mobGO's sprite size?
+
             bool isBoss = mobGO.CompareTag("Boss");
-            float barWidth = Configs.Instance.GetHpBarWidth(maxHp, false); //TODO boss bar is not implemented yet
-            healthBarGO.GetComponent<HealthBar>().SetWidth(barWidth);
+            float barWidth = Configs.Instance.GetHpBarWidth(maxHp, false);
         }
 
         private void OnMobDamage(GameObject mobGO, float amount) {
@@ -110,7 +117,8 @@ namespace SilkenImpact {
             var go = healthBarGoOf[mobGO];
             var bar = go.GetComponent<HealthBar>();
             bar.TakeDamage(amount);
-            // OnCheckHP(mobGO);
+            // OnCheckHP(mobGO, true);
+            OnCheckHP(mobGO);
         }
 
         private void OnMobHeal(GameObject mobGO, float amount) {
@@ -147,6 +155,7 @@ namespace SilkenImpact {
             var go = healthBarGoOf[mobGO];
             var bar = go.GetComponent<HealthBar>();
             bar.ResetHealth(hp);
+            OnCheckHP(mobGO, true);
         }
     }
 }

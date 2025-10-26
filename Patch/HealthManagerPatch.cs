@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using HutongGames.PlayMaker.Actions;
+using System;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
@@ -66,11 +67,11 @@ namespace SilkenImpact.Patch {
                 Plugin.Logger.LogWarning($"SpawnDamageText called with non-positive damage: {damage}");
                 return;
             }
-            float horizontalOffsetScale = Random.Range(-1f, 1f);
-            float verticalOffsetScale = Random.Range(-0.4f, 1f);
+            float horizontalOffsetScale = UnityEngine.Random.Range(-1f, 1f);
+            float verticalOffsetScale = UnityEngine.Random.Range(-0.4f, 1f);
 
             // scale /= transform.lossyScale.x; ?
-            float randomSizeScale = Random.Range(0.8f, 1.2f) * (isCritHit ? Mathf.Clamp(damageScale(damage), 2, 2.5f) : Mathf.Clamp(damageScale(damage), 0.5f, 1.5f));
+            float randomSizeScale = UnityEngine.Random.Range(0.8f, 1.2f) * (isCritHit ? Mathf.Clamp(damageScale(damage), 2, 2.5f) : Mathf.Clamp(damageScale(damage), 0.5f, 1.5f));
             updateAvgDamagePerHit(damage);
             var textGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/DamageOldText.prefab", "DamageText");
             spawnTextOn(__instance, textGO, ((int)damage).ToString(), horizontalOffsetScale, verticalOffsetScale, randomSizeScale, color ?? textColor(element, isCritHit));
@@ -81,10 +82,10 @@ namespace SilkenImpact.Patch {
                 Plugin.Logger.LogWarning($"SpawnHealText called with non-positive amount: {amount}");
                 return;
             }
-            float horizontalOffsetScale = Random.Range(-0.5f, 0.5f);
-            float verticalOffsetScale = Random.Range(1.0f, 1.4f);
+            float horizontalOffsetScale = UnityEngine.Random.Range(-0.5f, 0.5f);
+            float verticalOffsetScale = UnityEngine.Random.Range(1.0f, 1.4f);
 
-            float randomSizeScale = Random.Range(0.8f, 1.2f);
+            float randomSizeScale = UnityEngine.Random.Range(0.8f, 1.2f);
             var textGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/HealOldText.prefab", "HealText");
             spawnTextOn(__instance, textGO, $"+{(int)amount}", horizontalOffsetScale, verticalOffsetScale, randomSizeScale, color ?? Configs.Instance.healTextColor.Value);
         }
@@ -294,89 +295,95 @@ namespace SilkenImpact.Patch {
         */
         [HarmonyPatch("RefillHP")]
         [HarmonyPrefix]
-        public static void HealthManager_RefillHP_Prefix(HealthManager __instance, ref int __state) {
+        public static void HealthManager_RefillHP_Prefix(HealthManager __instance, ref Tuple<int, int> __state) {
             Plugin.Logger.LogWarning($"{__instance.gameObject.name} RefillHP, hp -> {__instance.hp}");
-            __state = Mathf.Max(__instance.hp, 0);
+            int currentHP = Mathf.Max(__instance.hp, 0);
+            int? handle = __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.Enqueue<HealEventArgs>();
+            __state = new Tuple<int, int>(currentHP, handle ?? -1);
         }
 
         [HarmonyPatch("RefillHP")]
         [HarmonyPostfix]
-        public static void HealthManager_RefillHP_Postfix(HealthManager __instance, int __state) {
+        public static void HealthManager_RefillHP_Postfix(HealthManager __instance, Tuple<int, int> __state) {
             Plugin.Logger.LogWarning($"{__instance.gameObject.name} RefillHP, hp -> {__instance.hp}");
-            int healAmount = __instance.hp - __state;
+            int healAmount = __instance.hp - __state.Item1;
             SpawnHealText(__instance, healAmount);
-            __instance.GetComponent<IHealthBarOwner>()?.Heal(healAmount);
+            __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.Submit(__state.Item2, new HealEventArgs(healAmount));
         }
 
         [HarmonyPatch("AddHP")]
         [HarmonyPrefix]
-        public static void HealthManager_AddHP_Prefix(HealthManager __instance, int hpAdd, int hpMax, ref int __state) {
+        public static void HealthManager_AddHP_Prefix(HealthManager __instance, int hpAdd, int hpMax, ref Tuple<int, int> __state) {
             Plugin.Logger.LogWarning($"{__instance.gameObject.name} AddHP, hp -> {__instance.hp}");
-            __state = Mathf.Max(__instance.hp, 0);
+            int currentHP = Mathf.Max(__instance.hp, 0);
+            int? handle = __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.Enqueue<HealEventArgs>();
+            __state = new Tuple<int, int>(currentHP, handle ?? -1);
         }
 
         [HarmonyPatch("AddHP")]
         [HarmonyPostfix]
-        public static void HealthManager_AddHP_Postfix(HealthManager __instance, int hpAdd, int hpMax, ref int __state) {
+        public static void HealthManager_AddHP_Postfix(HealthManager __instance, int hpAdd, int hpMax, ref Tuple<int, int> __state) {
             Plugin.Logger.LogWarning($"{__instance.gameObject.name} AddHP, hp -> {__instance.hp}");
-            int healAmount = __instance.hp - __state;
+            int healAmount = __instance.hp - __state.Item1;
             // TODO: if hp > bar.hpMax? bruh there is no backward reference...
             SpawnHealText(__instance, healAmount);
-            __instance.GetComponent<IHealthBarOwner>()?.Heal(healAmount);
+            __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.Submit(__state.Item2, new HealEventArgs(healAmount));
         }
         #endregion
 
         #region Damage Patches
         [HarmonyPatch("TakeDamage")]
         [HarmonyPrefix]
-        public static void HealthManager_TakeDamage_Prefix(HitInstance hitInstance, HealthManager __instance) {
+        public static void HealthManager_TakeDamage_Prefix(HitInstance hitInstance, HealthManager __instance, ref int __state) {
             Plugin.Logger.LogInfo($"{__instance.gameObject.name} is hit, hp -> {__instance.hp}");
             Plugin.Logger.LogWarning($"{__instance.gameObject.name}, Tag={__instance.gameObject.tag}, DisplayName={LocalisedName(__instance)}");
-
             if (IsImmune(__instance, hitInstance)) {
                 return;
             }
-
-            // this is how the damage is calculated in HealthManager.TakeDamage
-            // #TODO BUT, there may be more than one damage source, so be cautious
-            int damage = Mathf.RoundToInt((float)hitInstance.DamageDealt * hitInstance.Multiplier);
-
-            Plugin.Logger.LogInfo($"{__instance.gameObject.name} took {damage} damage, hp -> {__instance.hp}");
-            SpawnDamageText(__instance, damage, hitInstance.CriticalHit, hitInstance.NailElement);
-            // Must call TakeDamage in prefix, because HealToMax and RefillHP may be called in the original TakeDamage function.
-            __instance.GetComponent<IHealthBarOwner>()?.TakeDamage(damage);
-            Plugin.Logger.LogWarning($"Neil=[{hitInstance.NailElement}]");
+            int? handle = __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.Enqueue<DamageEventArgs>();
+            __state = handle ?? -1;
         }
 
 
         [HarmonyPatch("TakeDamage")]
         [HarmonyPostfix]
-        public static void HealthManager_TakeDamage_Postfix(HitInstance hitInstance, HealthManager __instance) {
+        public static void HealthManager_TakeDamage_Postfix(HitInstance hitInstance, HealthManager __instance, ref int __state) {
             if (IsImmune(__instance, hitInstance)) {
                 return;
             }
-            Plugin.Logger.LogWarning($"TakeDamagePostfix: {__instance.gameObject.name}.isDead = {__instance.isDead}");
+            // this is how the damage is calculated in HealthManager.TakeDamage
+            // #TODO BUT, there may be more than one damage source, so be cautious
+            // must calculate damage in Postfix, as hitInstance may be modified in TakeDamage() due to critical hit 
+            int damage = Mathf.RoundToInt((float)hitInstance.DamageDealt * hitInstance.Multiplier);
+            SpawnDamageText(__instance, damage, hitInstance.CriticalHit, hitInstance.NailElement);
+            __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.Submit(__state, new DamageEventArgs(damage));
             __instance.GetComponent<IHealthBarOwner>()?.CheckHP();
+
+            Plugin.Logger.LogWarning($"TakeDamagePostfix: {__instance.gameObject.name}.isDead = {__instance.isDead}");
+            Plugin.Logger.LogInfo($"{__instance.gameObject.name} took {damage} damage, hp -> {__instance.hp}");
+            Plugin.Logger.LogWarning($"Neil=[{hitInstance.NailElement}]");
         }
 
 
         [HarmonyPatch("ApplyExtraDamage", new[] { typeof(HitInstance) })]
         [HarmonyPrefix]
-        public static void ApplyExtraDamage1_Pre(HealthManager __instance, HitInstance hitInstance, ref int __state) {
+        public static void ApplyExtraDamage1_Pre(HealthManager __instance, HitInstance hitInstance, ref Tuple<int, int> __state) {
             hitInstance = applyDamageScaling(__instance, hitInstance);
             int newHp = Mathf.Max(__instance.hp - hitInstance.DamageDealt, -1000);
             int damage = __instance.hp - newHp;
-            __state = damage;
+            int? handle = __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.Enqueue<DamageEventArgs>();
+            __state = new Tuple<int, int>(damage, handle ?? -1);
         }
 
         [HarmonyPatch("ApplyExtraDamage", new[] { typeof(HitInstance) })]
         [HarmonyPostfix]
-        public static void ApplyExtraDamage1_Post(HealthManager __instance, HitInstance hitInstance, ref int __state) {
-            int damage = __state;
+        public static void ApplyExtraDamage1_Post(HealthManager __instance, HitInstance hitInstance, ref Tuple<int, int> __state) {
+            int damage = __state.Item1;
+            int handle = __state.Item2;
             Plugin.Logger.LogInfo($"{__instance.gameObject.name} took {damage} tag damage, hp -> {__instance.hp}");
             Plugin.Logger.LogWarning($"Neil=[{hitInstance.NailElement}]");
             SpawnDamageText(__instance, damage, false, hitInstance.NailElement);
-            __instance.GetComponent<IHealthBarOwner>()?.TakeDamage(damage);
+            __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.Submit(handle, new DamageEventArgs(damage));
         }
 
 
@@ -386,7 +393,7 @@ namespace SilkenImpact.Patch {
             int damage = damageAmount;
             Plugin.Logger.LogInfo($"{__instance.gameObject.name} took {damage} tag damage, hp -> {__instance.hp}");
             SpawnDamageText(__instance, damage, false);
-            __instance.GetComponent<IHealthBarOwner>()?.TakeDamage(damage);
+            __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.EnqueueReady(new DamageEventArgs(damage));
         }
 
         //TODO stun damage? -> take damage!

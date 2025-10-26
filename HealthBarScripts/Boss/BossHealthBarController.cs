@@ -34,10 +34,10 @@ namespace SilkenImpact {
             EventHandle<BossOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.Show, OnBossShow);
 
             EventHandle<BossOwnerEvent>.Register<GameObject, float>(HealthBarOwnerEventType.SetHP, OnBossSetHP);
-            EventHandle<BossOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.CheckHP, OnCheckHP);
+            EventHandle<BossOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.CheckHP, (GameObject go) => OnCheckHP(go));
         }
 
-        private void OnCheckHP(GameObject bossGO) {
+        private void OnCheckHP(GameObject bossGO, bool fixMismatch = false) {
             float realHp = bossGO.GetComponent<HealthManager>().hp;
             if (!guardExist(bossGO)) return;
             var go = healthBarGoOf[bossGO];
@@ -45,6 +45,14 @@ namespace SilkenImpact {
             if (Mathf.Abs(bar.CurrentHealth - realHp) > 0.01f) {
                 Plugin.Logger.LogError("BossHealthBarController: OnCheckHP detected HP mismatch for bossGO " + bossGO.name +
                     $", HealthBar has {bar.CurrentHealth}, but HealthManager has {realHp}");
+                float damage = bar.CurrentHealth - realHp;
+                if (fixMismatch) {
+                    if (damage > 0) {
+                        bar.TakeDamage(damage);
+                    } else {
+                        bar.Heal(-damage);
+                    }
+                }
             }
         }
 
@@ -110,7 +118,8 @@ namespace SilkenImpact {
             var go = healthBarGoOf[bossGO];
             var bar = go.GetComponent<HealthBar>();
             bar.TakeDamage(amount);
-            // OnCheckHP(bossGO);
+            // OnCheckHP(bossGO, true);
+            OnCheckHP(bossGO);
         }
 
         private void OnBossHeal(GameObject bossGO, float amount) {
@@ -143,6 +152,7 @@ namespace SilkenImpact {
             var go = healthBarGoOf[bossGO];
             var bar = go.GetComponent<HealthBar>();
             bar.ResetHealth(hp);
+            OnCheckHP(bossGO, true);
         }
     }
 }

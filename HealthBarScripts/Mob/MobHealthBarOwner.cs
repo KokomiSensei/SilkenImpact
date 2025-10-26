@@ -5,6 +5,7 @@ namespace SilkenImpact {
     public class MobHealthBarOwner : MonoBehaviour, IHealthBarOwner {
 
         private VisibilityController visibilityController;
+        public Dispatcher Dispatcher { get; private set; }
 #if DEBUG
         private string originalName;
 #endif
@@ -13,6 +14,7 @@ namespace SilkenImpact {
         void Awake() {
             HealthManager hm = GetComponent<HealthManager>();
             visibilityController = new VisibilityController(hm);
+            Dispatcher = new Dispatcher(this);
 #if DEBUG
             originalName = gameObject.name;
 #endif

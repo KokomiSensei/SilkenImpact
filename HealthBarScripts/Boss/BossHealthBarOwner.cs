@@ -5,10 +5,12 @@ namespace SilkenImpact {
     public class BossHealthBarOwner : MonoBehaviour, IHealthBarOwner {
 
         private VisibilityController visibilityController;
+        public Dispatcher Dispatcher { get; private set; }
 
         void Awake() {
             HealthManager hm = GetComponent<HealthManager>();
             visibilityController = new VisibilityController(hm);
+            Dispatcher = new Dispatcher(this);
         }
 
 
