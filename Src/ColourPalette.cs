@@ -7,10 +7,15 @@ namespace SilkenImpact {
                 throw new System.ArgumentException("Invalid hex color format. Expected format: #RRGGBB");
             }
 
+            float alpha = 1;
+            if (hex.Length == 9) {
+                alpha = int.Parse(hex.Substring(7, 2), System.Globalization.NumberStyles.HexNumber) / 255.0f;
+            }
             return new Color(
             int.Parse(hex.Substring(1, 2), System.Globalization.NumberStyles.HexNumber) / 255.0f,
             int.Parse(hex.Substring(3, 2), System.Globalization.NumberStyles.HexNumber) / 255.0f,
-            int.Parse(hex.Substring(5, 2), System.Globalization.NumberStyles.HexNumber) / 255.0f);
+            int.Parse(hex.Substring(5, 2), System.Globalization.NumberStyles.HexNumber) / 255.0f,
+            alpha);
         }
 
         public static Color Hydro => FromHexString("#1EC5E3");
@@ -23,6 +28,10 @@ namespace SilkenImpact {
         public static Color Physical => FromHexString("#FFFFFF");
         public static Color HornetDress => FromHexString("#A83448");
         public static Color HealTextColor => FromHexString("#BDFF37");
+
+        public static Color HP => FromHexString("#FC5A49 ");
+        public static Color DelayedEffect => FromHexString("#FFCE89");
+        public static Color HpBarBackground => FromHexString("#00000059");
 
         public static List<Color> AllElementColors => new List<Color> {
             Hydro,

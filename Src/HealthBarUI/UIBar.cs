@@ -45,5 +45,12 @@ namespace SilkenImpact {
         public override void SetVisibility(bool visible) {
             canvasGroup.alpha = visible ? 1 : 0;
         }
+
+        public override void SetColor(Color color) {
+            var image = GetComponent<UnityEngine.UI.Image>();
+            if (image != null) {
+                image.color = color;
+            }
+        }
     }
 }
