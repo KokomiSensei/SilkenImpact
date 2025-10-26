@@ -69,7 +69,7 @@ namespace SilkenImpact.Patch {
             }
             // TODO scale up the text
             float horizontalOffsetScale = UnityEngine.Random.Range(-1f, 1f);
-            float verticalOffsetScale = UnityEngine.Random.Range(-0.4f, 1f);
+            float verticalOffsetScale = UnityEngine.Random.Range(-0.4f, 0.7f);
 
             // scale /= transform.lossyScale.x; ?
             float randomSizeScale = UnityEngine.Random.Range(0.8f, 1.2f) * (isCritHit ? Mathf.Clamp(damageScale(damage), 2, 2.5f) : Mathf.Clamp(damageScale(damage), 0.5f, 1.5f));

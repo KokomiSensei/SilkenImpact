@@ -16,5 +16,9 @@ namespace SilkenImpact {
         public static void LogDebug(string message) {
             Plugin.Logger.LogDebug(message);
         }
+
+        public static void LogFatal(string message) {
+            Plugin.Logger.LogFatal(message);
+        }
     }
 }
