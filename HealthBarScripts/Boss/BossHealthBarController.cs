@@ -34,10 +34,10 @@ namespace SilkenImpact {
             EventHandle<BossOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.Show, OnBossShow);
 
             EventHandle<BossOwnerEvent>.Register<GameObject, float>(HealthBarOwnerEventType.SetHP, OnBossSetHP);
-            EventHandle<BossOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.CheckHP, OnCheckHP);
+            EventHandle<BossOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.CheckHP, (GameObject go) => OnCheckHP(go));
         }
 
-        private void OnCheckHP(GameObject bossGO) {
+        private void OnCheckHP(GameObject bossGO, bool fixMismatch = false) {
             float realHp = bossGO.GetComponent<HealthManager>().hp;
             if (!guardExist(bossGO)) return;
             var go = healthBarGoOf[bossGO];
@@ -45,6 +45,14 @@ namespace SilkenImpact {
             if (Mathf.Abs(bar.CurrentHealth - realHp) > 0.01f) {
                 Plugin.Logger.LogError("BossHealthBarController: OnCheckHP detected HP mismatch for bossGO " + bossGO.name +
                     $", HealthBar has {bar.CurrentHealth}, but HealthManager has {realHp}");
+                float damage = bar.CurrentHealth - realHp;
+                if (fixMismatch) {
+                    if (damage > 0) {
+                        bar.TakeDamage(damage);
+                    } else {
+                        bar.Heal(-damage);
+                    }
+                }
             }
         }
 
@@ -70,9 +78,10 @@ namespace SilkenImpact {
         private void OnBossShow(GameObject bossGO) {
             if (!guardExist(bossGO)) return;
             Plugin.Logger.LogWarning($"BossHealthBarController: OnBossShow called on {bossGO.name}");
-            var bar = healthBarGoOf[bossGO];
-            container.AddBar(bar.GetComponent<HealthBar>());
-            bar.SetActive(true);
+            var barGO = healthBarGoOf[bossGO];
+            container.AddBar(barGO.GetComponent<HealthBar>());
+            barGO.GetComponent<HealthBar>().SetVisibility(true);
+            barGO.GetComponentInChildren<Text>().enabled = true;
         }
 
         private void OnBossSpawn(GameObject bossGO, float maxHp) {
@@ -109,6 +118,7 @@ namespace SilkenImpact {
             var go = healthBarGoOf[bossGO];
             var bar = go.GetComponent<HealthBar>();
             bar.TakeDamage(amount);
+            // OnCheckHP(bossGO, true);
             OnCheckHP(bossGO);
         }
 
@@ -124,7 +134,8 @@ namespace SilkenImpact {
             if (!guardExist(bossGO)) return;
             //Plugin.Logger.LogWarning($"BossHealthBarController: Ignoring Hide event on {bossGO.name}");
             var go = healthBarGoOf[bossGO];
-            go.SetActive(false);
+            go.GetComponent<HealthBar>().SetVisibility(false);
+            go.GetComponentInChildren<Text>().enabled = false;
             container.RemoveBar(go.GetComponent<HealthBar>());
         }
 
@@ -141,6 +152,7 @@ namespace SilkenImpact {
             var go = healthBarGoOf[bossGO];
             var bar = go.GetComponent<HealthBar>();
             bar.ResetHealth(hp);
+            OnCheckHP(bossGO, true);
         }
     }
 }

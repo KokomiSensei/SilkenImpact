@@ -3,9 +3,11 @@ using UnityEngine.UIElements;
 namespace SilkenImpact {
     public class UIBar : Bar {
         private RectTransform rectTransform;
+        private CanvasGroup canvasGroup;
 
         private void Awake() {
             rectTransform = GetComponent<RectTransform>();
+            canvasGroup = GetComponent<CanvasGroup>() ?? gameObject.AddComponent<CanvasGroup>();
         }
 
         public override float CurrentPercentage =>
@@ -38,6 +40,10 @@ namespace SilkenImpact {
         protected override void MatchWithPercentage(float percentage) {
             float newWidth = maxWidth * percentage;
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, newWidth);
+        }
+
+        public override void SetVisibility(bool visible) {
+            canvasGroup.alpha = visible ? 1 : 0;
         }
     }
 }

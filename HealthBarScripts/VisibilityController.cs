@@ -15,29 +15,33 @@ namespace SilkenImpact {
         private HealthManager hm;
         private Collider2D defaultCollider = null;
         private Renderer renderer = null;
-
-        private GameObject physicalPusher = null;
         private Collider2D physicalPusherCollider = null;
 
         private bool visibilityCache = false;
         private float timeSinceLastCheck = 0f;
+        void tryGetColliders() {
+            if (!defaultCollider) {
+                defaultCollider = hm.GetComponent<Collider2D>();
+            }
+            if (!physicalPusherCollider) {
+                physicalPusherCollider = hm.GetPhysicalPusher()?.GetComponent<Collider2D>();
+            }
+        }
 
         public VisibilityController(HealthManager healthManager) {
             hm = healthManager;
             gameObject = hm.gameObject;
             defaultCollider = hm.GetComponent<Collider2D>();
             renderer = hm.GetComponent<Renderer>();
-            physicalPusher = hm.GetPhysicalPusher();
-            if (physicalPusher) {
-                physicalPusherCollider = physicalPusher.GetComponent<Collider2D>();
-            }
+            physicalPusherCollider = hm.GetPhysicalPusher()?.GetComponent<Collider2D>();
         }
-        public bool Update() {
-            if (timeSinceLastCheck < (visibilityCache ? visibleCacheTime : invisibleCacheTime)) {
+        public bool Update(bool forceCheck = false) {
+            if (!forceCheck && timeSinceLastCheck < (visibilityCache ? visibleCacheTime : invisibleCacheTime)) {
                 timeSinceLastCheck += Time.deltaTime;
                 return false;
             }
             timeSinceLastCheck = 0f;
+            tryGetColliders();
             bool showHealthBar = mobIsShowing();
             if (showHealthBar == visibilityCache)
                 return false;
