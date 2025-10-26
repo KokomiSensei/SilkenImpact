@@ -38,7 +38,8 @@ namespace SilkenImpact.Patch {
                 float hp = hm.hp;
                 float amount = hp - __state.Item1;
                 hm.GetComponent<IHealthBarOwner>()?.Dispatcher.Submit(__state.Item2, new SetHpEventArgs(hp));
-                HealthManagerPatch.SpawnHealText(hm, amount);
+                if (!hm.isDead)
+                    HealthManagerPatch.SpawnHealText(hm, amount);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, go);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
                 Plugin.Logger.LogWarning($"{go.name} PlayMaker AddHP hp:{hp}");
@@ -82,7 +83,8 @@ namespace SilkenImpact.Patch {
                 float hp = hm.hp;
                 float amount = hp - __state.Item1;
                 hm.GetComponent<IHealthBarOwner>()?.Dispatcher.Submit(__state.Item2, new SetHpEventArgs(hp));
-                HealthManagerPatch.SpawnHealText(hm, amount);
+                if (!hm.isDead)
+                    HealthManagerPatch.SpawnHealText(hm, amount);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, go);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
                 Plugin.Logger.LogWarning($"{go.name} PlayMaker SetHP hp:{__state}");

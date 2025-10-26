@@ -67,6 +67,7 @@ namespace SilkenImpact.Patch {
                 Plugin.Logger.LogWarning($"SpawnDamageText called with non-positive damage: {damage}");
                 return;
             }
+            // TODO scale up the text
             float horizontalOffsetScale = UnityEngine.Random.Range(-1f, 1f);
             float verticalOffsetScale = UnityEngine.Random.Range(-0.4f, 1f);
 
@@ -83,9 +84,9 @@ namespace SilkenImpact.Patch {
                 return;
             }
             float horizontalOffsetScale = UnityEngine.Random.Range(-0.5f, 0.5f);
-            float verticalOffsetScale = UnityEngine.Random.Range(1.0f, 1.4f);
+            float verticalOffsetScale = UnityEngine.Random.Range(0, 0.8f);
 
-            float randomSizeScale = UnityEngine.Random.Range(0.8f, 1.2f);
+            float randomSizeScale = UnityEngine.Random.Range(1.5f, 1.8f);
             var textGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/HealOldText.prefab", "HealText");
             spawnTextOn(__instance, textGO, $"+{(int)amount}", horizontalOffsetScale, verticalOffsetScale, randomSizeScale, color ?? Configs.Instance.healTextColor.Value);
         }
@@ -307,7 +308,8 @@ namespace SilkenImpact.Patch {
         public static void HealthManager_RefillHP_Postfix(HealthManager __instance, Tuple<int, int> __state) {
             Plugin.Logger.LogWarning($"{__instance.gameObject.name} RefillHP, hp -> {__instance.hp}");
             int healAmount = __instance.hp - __state.Item1;
-            SpawnHealText(__instance, healAmount);
+            if (!__instance.isDead)
+                SpawnHealText(__instance, healAmount);
             __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.Submit(__state.Item2, new HealEventArgs(healAmount));
         }
 
@@ -326,7 +328,8 @@ namespace SilkenImpact.Patch {
             Plugin.Logger.LogWarning($"{__instance.gameObject.name} AddHP, hp -> {__instance.hp}");
             int healAmount = __instance.hp - __state.Item1;
             // TODO: if hp > bar.hpMax? bruh there is no backward reference...
-            SpawnHealText(__instance, healAmount);
+            if (!__instance.isDead)
+                SpawnHealText(__instance, healAmount);
             __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.Submit(__state.Item2, new HealEventArgs(healAmount));
         }
         #endregion
