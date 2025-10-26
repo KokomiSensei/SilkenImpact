@@ -89,12 +89,12 @@ public class Plugin : BaseUnityPlugin {
     }
 
     public static GameObject InstantiateFromAssetsBundle(string path, string name) {
-        Logger.LogInfo($"Instantiating {name} from AssetBundle at path {path}");
+        PluginLogger.LogInfo($"Instantiating {name} from AssetBundle at path {path}");
         var prefab = bundle.LoadAsset<GameObject>(path);
-        Logger.LogInfo($"Loaded prefab: {prefab}");
+        PluginLogger.LogInfo($"Loaded prefab: {prefab}");
         if (prefab == null)
             return null;
-        Logger.LogInfo($"Instantiating prefab {prefab.name}");
+        PluginLogger.LogInfo($"Instantiating prefab {prefab.name}");
         GameObject go = null;
         try {
             go = Instantiate(prefab);
@@ -103,18 +103,18 @@ public class Plugin : BaseUnityPlugin {
             return null;
         }
         go.name = name;
-        Logger.LogInfo($"Instantiated GameObject <{path}> as <{go.name}>");
+        PluginLogger.LogInfo($"Instantiated GameObject <{path}> as <{go.name}>");
         return go;
     }
 
     //private IEnumerator UpdateAddressableOnAwake() {
     //    // remote catalog at <PluginFolder>/catalog_1.0.json
     //    string path = Path.Combine(PluginFolder, "catalog_1.0.bin");
-    //    Logger.LogInfo($"Loading Addressable Catalog from {path}");
+    //    PluginLogger.LogInfo($"Loading Addressable Catalog from {path}");
     //    //AsyncOperationHandle<IResourceLocator> handle = Addressables.LoadContentCatalogAsync(path, true);
     //    //if (handle.Status != AsyncOperationStatus.Succeeded) {
-    //    //    Logger.LogWarning($"Failed to load Addressable Catalog from {path}");
-    //    //    Logger.LogError(handle.OperationException);
+    //    //    PluginLogger.LogWarning($"Failed to load Addressable Catalog from {path}");
+    //    //    PluginLogger.LogError(handle.OperationException);
     //    //    yield break;
     //    //}
     //    AsyncOperationHandle<IResourceLocator> handle = Addressables.LoadContentCatalogAsync(path);
@@ -135,10 +135,10 @@ public class Plugin : BaseUnityPlugin {
     //        Logger.LogWarning("Addressables not initialized yet");
     //        return null;
     //    }
-    //    Logger.LogInfo($"Instantiating {name} from Addressable with key {key}");
+    //    PluginLogger.LogInfo($"Instantiating {name} from Addressable with key {key}");
     //    var go = Addressables.InstantiateAsync(key).WaitForCompletion();
     //    if (go == null) {
-    //        Logger.LogWarning($"Failed to load Addressable with key {key}");
+    //        PluginLogger.LogWarning($"Failed to load Addressable with key {key}");
     //    }
     //    go.name = name;
     //    return go;

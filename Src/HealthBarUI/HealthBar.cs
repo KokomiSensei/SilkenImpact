@@ -71,6 +71,7 @@ namespace SilkenImpact {
         }
 
         protected void Update() {
+            //TODO bro why did i decide to do it like this?? that seems stupid and expensive
             if (DecayingHealth > currentHealth) {
                 if (decayTimer < config.decayThresholdSeconds) {
                     decayTimer += Time.deltaTime;
@@ -85,6 +86,8 @@ namespace SilkenImpact {
         }
 
         public void TakeDamage(float amount) {
+            if (amount <= 0)
+                return;
             if (decayTimer > 0) {
                 decayTimer -= config.timerReductionPercentageOnDamage * config.decayThresholdSeconds;
             }
@@ -95,6 +98,8 @@ namespace SilkenImpact {
         }
 
         public void Heal(float amount) {
+            if (amount <= 0)
+                return;
             float newHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
             currentHealth = newHealth;
             //if (currentHealth > DecayingHealth) {
@@ -107,11 +112,19 @@ namespace SilkenImpact {
         public void ResetHealth(float hp) {
             currentHealth = hp;
             maxHealth = hp;
-            OnStart();
+            delayedEffect.SetPercentage(currentHealth / maxHealth, config.healthChangeDuration);
+            this.hp.SetPercentage(currentHealth / maxHealth, config.healthChangeDuration);
         }
+
+        public void SetVisibility(bool visible) {
+            hp.SetVisibility(visible);
+            delayedEffect.SetVisibility(visible);
+            background.SetVisibility(visible);
+        }
+
 #if !(UNITY_EDITOR || UNITY_STANDALONE)
         private void OnDestroy() {
-            // Plugin.Logger.LogWarning($"HealthBar: OnDestroy called for {gameObject.name}");
+            PluginLogger.LogWarning($"HealthBar: OnDestroy called for {gameObject.name}");
         }
 #endif
     }

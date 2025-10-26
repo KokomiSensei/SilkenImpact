@@ -22,6 +22,7 @@ namespace SilkenImpact {
         public static Color Dendro => FromHexString("#00C94E");
         public static Color Physical => FromHexString("#FFFFFF");
         public static Color HornetDress => FromHexString("#A83448");
+        public static Color HealTextColor => FromHexString("#BDFF37");
 
         public static List<Color> AllElementColors => new List<Color> {
             Hydro,

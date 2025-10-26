@@ -5,17 +5,19 @@ namespace SilkenImpact {
     public class BossHealthBarOwner : MonoBehaviour, IHealthBarOwner {
 
         private VisibilityController visibilityController;
+        public Dispatcher Dispatcher { get; private set; }
 
         void Awake() {
             HealthManager hm = GetComponent<HealthManager>();
             visibilityController = new VisibilityController(hm);
+            Dispatcher = new Dispatcher(this);
         }
 
 
         void Update() {
             if (!visibilityController.Update())
                 return;
-            EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.CheckHP, gameObject);
+            CheckHP();
             if (visibilityController.IsVisible) {
                 Show();
             } else {
@@ -34,9 +36,19 @@ namespace SilkenImpact {
             Die();
         }
 
+        void updateVisibilityImmediate() {
+            if (visibilityController.Update(forceCheck: true)) {
+                if (visibilityController.IsVisible) {
+                    Show();
+                } else {
+                    Hide();
+                }
+            }
+        }
 
         public void Heal(float amount) {
             EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Heal, gameObject, amount);
+            updateVisibilityImmediate();
         }
 
         public void TakeDamage(float amount) {
@@ -45,10 +57,12 @@ namespace SilkenImpact {
                 visibilityController.IsVisible = true;
             }
             EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Damage, gameObject, amount);
+            updateVisibilityImmediate();
         }
 
         public void Die() {
             EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, gameObject);
+            updateVisibilityImmediate();
         }
 
         public void Hide() {
@@ -61,6 +75,11 @@ namespace SilkenImpact {
 
         public void SetHP(float hp) {
             EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.SetHP, gameObject, hp);
+            updateVisibilityImmediate();
+        }
+
+        public void CheckHP() {
+            EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.CheckHP, gameObject);
         }
     }
 }

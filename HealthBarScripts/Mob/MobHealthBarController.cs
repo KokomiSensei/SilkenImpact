@@ -19,17 +19,37 @@ namespace SilkenImpact {
             EventHandle<MobOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.Show, OnMobShow);
 
             EventHandle<MobOwnerEvent>.Register<GameObject, float>(HealthBarOwnerEventType.SetHP, OnMobSetHP);
-            EventHandle<MobOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.CheckHP, OnCheckHP);
+            EventHandle<MobOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.CheckHP, (GameObject go) => OnCheckHP(go));
+        }
+#if DEBUG
+        void Update() {
+            foreach (var kvp in healthBarGoOf) {
+                var hm = kvp.Key.GetComponent<HealthManager>();
+                var barGO = kvp.Value;
+                var bar = barGO.GetComponent<HealthBar>();
+                if (hm == null || barGO == null) continue;
+                barGO.name = hm.name + "_HealthBar";
+                if (bar) bar.name = hm.name + "_HealthBar_Component";
+            }
         }
 
-        private void OnCheckHP(GameObject mobGO) {
+#endif
+        private void OnCheckHP(GameObject mobGO, bool fixMismatch = false) {
             float realHp = mobGO.GetComponent<HealthManager>().hp;
             if (!guardExist(mobGO)) return;
             var go = healthBarGoOf[mobGO];
             var bar = go.GetComponent<HealthBar>();
             if (Mathf.Abs(bar.CurrentHealth - realHp) > 0.01f) {
-                // Plugin.Logger.LogError("MobHealthBarController: OnCheckHP detected HP mismatch for mobGO " + mobGO.name +
-                // $", HealthBar has {bar.CurrentHealth}, but HealthManager has {realHp}");
+                PluginLogger.LogError("MobHealthBarController: OnCheckHP detected HP mismatch for mobGO " + mobGO.name +
+                    $", HealthBar has {bar.CurrentHealth}, but HealthManager has {realHp}");
+                float damage = bar.CurrentHealth - realHp;
+                if (fixMismatch) {
+                    if (damage > 0) {
+                        bar.TakeDamage(damage);
+                    } else {
+                        bar.Heal(-damage);
+                    }
+                }
             }
         }
 
@@ -37,7 +57,7 @@ namespace SilkenImpact {
         private bool guardExist(GameObject mobGO) {
             if (!healthBarGoOf.ContainsKey(mobGO)) {
 #if !(UNITY_EDITOR || UNITY_STANDALONE)
-                // Plugin.Logger.LogWarning($"MobHealthBarController: GuardExist failed, mobGO {mobGO.name} not found in healthBarGoOf");
+                PluginLogger.LogWarning($"MobHealthBarController: GuardExist failed, mobGO {mobGO.name} not found in healthBarGoOf");
 #endif
                 return false;
             }
@@ -54,15 +74,16 @@ namespace SilkenImpact {
 
         private void OnMobShow(GameObject mobGO) {
             if (!guardExist(mobGO)) return;
-            var bar = healthBarGoOf[mobGO];
-            bar.SetActive(true);
+            var go = healthBarGoOf[mobGO];
+            var bar = go.GetComponent<HealthBar>();
+            bar.SetVisibility(true);
         }
 
         private void OnMobSpawn(GameObject mobGO, float maxHp) {
             if (healthBarGoOf.ContainsKey(mobGO)) {
 #if !(UNITY_EDITOR || UNITY_STANDALONE)
-                // Plugin.Logger.LogWarning($"MobHealthBarController: OnMobSpawn called but mobGO {mobGO.name} already has a health bar");
-                // Plugin.Logger.LogWarning($"MobHealthBarController: Overwriting maxHp mobGO {mobGO.name} with [{maxHp}]");
+                PluginLogger.LogWarning($"MobHealthBarController: OnMobSpawn called but mobGO {mobGO.name} already has a health bar");
+                PluginLogger.LogWarning($"MobHealthBarController: Overwriting maxHp mobGO {mobGO.name} with [{maxHp}]");
 #endif
                 var go = healthBarGoOf[mobGO];
                 var bar = go.GetComponent<HealthBar>();
@@ -86,9 +107,8 @@ namespace SilkenImpact {
             if (!mobGO.GetComponent<MobHealthBarOwner>())
                 mobGO.AddComponent<MobHealthBarOwner>();
 
-            //TODO set the size of the health bar based on mobGO's sprite size?
-            bool isBoss = mobGO.CompareTag("Boss");
-            float barWidth = Configs.Instance.GetHpBarWidth(maxHp, false); //TODO boss bar is not implemented yet
+
+            float barWidth = Configs.Instance.GetHpBarWidth(maxHp, false);
             healthBarGO.GetComponent<HealthBar>().SetWidth(barWidth);
         }
 
@@ -97,6 +117,7 @@ namespace SilkenImpact {
             var go = healthBarGoOf[mobGO];
             var bar = go.GetComponent<HealthBar>();
             bar.TakeDamage(amount);
+            // OnCheckHP(mobGO, true);
             OnCheckHP(mobGO);
         }
 
@@ -113,10 +134,11 @@ namespace SilkenImpact {
             var go = healthBarGoOf[mobGO];
             // TODO what? NRE here? how?
             //try {
-            go.SetActive(false);
+            var bar = go.GetComponent<HealthBar>();
+            bar.SetVisibility(false);
             //} catch (Exception e) {
             //#if !(UNITY_EDITOR || UNITY_STANDALONE)
-            //// Plugin.Logger.LogError($"MobHealthBarController: OnMobHide failed for mobGO {mobGO.name} with exception {e}");
+            //PluginLogger.LogError($"MobHealthBarController: OnMobHide failed for mobGO {mobGO.name} with exception {e}");
             //#endif
             //}
         }
@@ -133,6 +155,7 @@ namespace SilkenImpact {
             var go = healthBarGoOf[mobGO];
             var bar = go.GetComponent<HealthBar>();
             bar.ResetHealth(hp);
+            OnCheckHP(mobGO, true);
         }
     }
 }

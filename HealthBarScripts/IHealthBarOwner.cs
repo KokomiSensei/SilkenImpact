@@ -4,12 +4,14 @@ using System.Text;
 using UnityEngine;
 
 namespace SilkenImpact {
-    interface IHealthBarOwner {
+    public interface IHealthBarOwner {
+        public Dispatcher Dispatcher { get; }
         public void Heal(float amount);
         public void TakeDamage(float amount);
         public void SetHP(float hp);
         public void Die();
         public void Hide();
         public void Show();
+        public void CheckHP();
     }
 }

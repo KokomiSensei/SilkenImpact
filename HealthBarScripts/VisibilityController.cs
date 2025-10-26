@@ -15,29 +15,33 @@ namespace SilkenImpact {
         private HealthManager hm;
         private Collider2D defaultCollider = null;
         private Renderer renderer = null;
-
-        private GameObject physicalPusher = null;
         private Collider2D physicalPusherCollider = null;
 
         private bool visibilityCache = false;
         private float timeSinceLastCheck = 0f;
+        void tryGetColliders() {
+            if (!defaultCollider) {
+                defaultCollider = hm.GetComponent<Collider2D>();
+            }
+            if (!physicalPusherCollider) {
+                physicalPusherCollider = hm.GetPhysicalPusher()?.GetComponent<Collider2D>();
+            }
+        }
 
         public VisibilityController(HealthManager healthManager) {
             hm = healthManager;
             gameObject = hm.gameObject;
             defaultCollider = hm.GetComponent<Collider2D>();
             renderer = hm.GetComponent<Renderer>();
-            physicalPusher = hm.GetPhysicalPusher();
-            if (physicalPusher) {
-                physicalPusherCollider = physicalPusher.GetComponent<Collider2D>();
-            }
+            physicalPusherCollider = hm.GetPhysicalPusher()?.GetComponent<Collider2D>();
         }
-        public bool Update() {
-            if (timeSinceLastCheck < (visibilityCache ? visibleCacheTime : invisibleCacheTime)) {
+        public bool Update(bool forceCheck = false) {
+            if (!forceCheck && timeSinceLastCheck < (visibilityCache ? visibleCacheTime : invisibleCacheTime)) {
                 timeSinceLastCheck += Time.deltaTime;
                 return false;
             }
             timeSinceLastCheck = 0f;
+            tryGetColliders();
             bool showHealthBar = mobIsShowing();
             if (showHealthBar == visibilityCache)
                 return false;
@@ -62,12 +66,12 @@ namespace SilkenImpact {
             if (gameObject.layer != enemyLayer)
                 return false;
 
-            //Plugin.Logger.LogInfo("1. Layer Passed"); // 1600 / 2600
+            PluginLogger.LogInfo("1. Layer Passed"); // 1600 / 2600
             if (Mathf.Abs(gameObject.transform.position.z) > maxZ)
                 return false;
 
 
-            //Plugin.Logger.LogInfo("2. Z Pos Passed"); // 500 / 1600
+            PluginLogger.LogInfo("2. Z Pos Passed"); // 500 / 1600
             if (physicalPusherCollider && defaultCollider) {
                 // TODO && or || ?
                 if (!physicalPusherCollider.isActiveAndEnabled && !defaultCollider.isActiveAndEnabled) {
@@ -84,11 +88,11 @@ namespace SilkenImpact {
 
 
 
-            //Plugin.Logger.LogInfo("3. Collider Passed"); 223 / 500
+            PluginLogger.LogInfo("3. Collider Passed"); // 223 / 500
             if (renderer && (!renderer.enabled || !renderer.isVisible))
                 return false;
 
-            //Plugin.Logger.LogInfo("4. Renderer Passed"); 3 / 223
+            PluginLogger.LogInfo("4. Renderer Passed"); // 3 / 223
             return true;
         }
 
