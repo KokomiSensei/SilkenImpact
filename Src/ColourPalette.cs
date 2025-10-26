@@ -3,8 +3,8 @@ using UnityEngine;
 namespace SilkenImpact {
     public static class ColourPalette {
         public static Color FromHexString(string hex) {
-            if (hex.Length != 7 || hex[0] != '#') {
-                throw new System.ArgumentException("Invalid hex color format. Expected format: #RRGGBB");
+            if ((hex.Length != 7 && hex.Length != 9) || hex[0] != '#') {
+                throw new System.ArgumentException("Invalid hex color format. Expected format: #RRGGBB or #RRGGBBAA");
             }
 
             float alpha = 1;
@@ -29,7 +29,7 @@ namespace SilkenImpact {
         public static Color HornetDress => FromHexString("#A83448");
         public static Color HealTextColor => FromHexString("#BDFF37");
 
-        public static Color HP => FromHexString("#FC5A49 ");
+        public static Color HP => FromHexString("#FC5A49");
         public static Color DelayedEffect => FromHexString("#FFCE89");
         public static Color HpBarBackground => FromHexString("#00000059");
 
