@@ -146,7 +146,7 @@ namespace SilkenImpact {
             }
         }
 
-
+# if DEBUG
         private void Update() {
             if (Input.GetKeyDown(KeyCode.F2)) {
                 Vector3 pos = Player.transform.position;
@@ -219,5 +219,5 @@ namespace SilkenImpact {
         //    Plugin.isAddressableUpdated = true;
         //}
     }
-
+# endif
 }
