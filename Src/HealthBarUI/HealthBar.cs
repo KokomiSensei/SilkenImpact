@@ -32,6 +32,18 @@ namespace SilkenImpact {
         public float MaxHealth => maxHealth;
         public float CurrentHealth => currentHealth;
 
+        public void SetHpColor(Color color) {
+            hp.SetColor(color);
+        }
+
+        public void SetDelayedEffectColor(Color color) {
+            delayedEffect.SetColor(color);
+        }
+
+        public void SetBackgroundColor(Color color) {
+            background.SetColor(color);
+        }
+
         public void SetHeight(float height) {
             this.height = height;
             Redraw();

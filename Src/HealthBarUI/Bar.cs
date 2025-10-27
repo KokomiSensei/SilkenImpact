@@ -19,6 +19,8 @@ namespace SilkenImpact {
 
         public abstract void SetVisibility(bool visible);
 
+        public abstract void SetColor(Color color);
+
         public void Init(float maxHeight, float maxWidth, float margin) {
             UpdateSize(maxHeight, maxWidth, margin);
             MatchWithPercentage(1);

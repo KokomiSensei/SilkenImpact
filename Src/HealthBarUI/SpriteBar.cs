@@ -32,5 +32,9 @@ namespace SilkenImpact {
             transform.localScale = newScale;
             transform.localPosition = newPosition;
         }
+
+        public override void SetColor(Color color) {
+            spriteRenderer.color = color;
+        }
     }
 }

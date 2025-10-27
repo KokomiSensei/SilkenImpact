@@ -81,5 +81,13 @@ namespace SilkenImpact {
                 Dispatch();
             }
         }
+
+        public void Cancel(int id) {
+            if (pendingEntries.TryGetValue(id, out var entry)) {
+                queue.Remove(entry);
+                pendingEntries.Remove(id);
+                Dispatch();
+            }
+        }
     }
 }

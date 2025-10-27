@@ -5,12 +5,17 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace SilkenImpact {
-    public class BossHealthBarController : MonoBehaviour {
+    public class BossHealthBarController : BaseHealthBarController<BossOwnerEvent, BossHealthBarOwner> {
 
-        Dictionary<GameObject, GameObject> healthBarGoOf = new();
         BossHealthBarContainer container;
+        protected string healthBarPrefabPath = "Assets/Addressables/Prefabs/HealthBarBossWithName.prefab";
+        protected string containerPrefabPath = "Assets/Addressables/Prefabs/Container.prefab";
+        public override GameObject GetNewHealthBar => Plugin.InstantiateFromAssetsBundle(healthBarPrefabPath, "BossHealthBar");
+
+        public override Canvas BarCanvas => ScreenSpaceCanvas.GetScreenSpaceCanvas;
+
         void prepareContainer() {
-            var containerGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/Container.prefab", "BossHealthBarContainer");
+            var containerGO = Plugin.InstantiateFromAssetsBundle(containerPrefabPath, "BossHealthBarContainer");
             container = containerGO.GetComponent<BossHealthBarContainer>();
             container.transform.SetParent(ScreenSpaceCanvas.GetScreenSpaceCanvas.transform);
             var rect = container.GetComponent<RectTransform>();
@@ -21,86 +26,26 @@ namespace SilkenImpact {
                 image.color = new Color(1, 1, 1, 0);
         }
 
-        void Awake() {
+        protected override void Awake() {
+            base.Awake();
+
             prepareContainer();
-
-            EventHandle<BossOwnerEvent>.Register<GameObject, float>(HealthBarOwnerEventType.Spawn, OnBossSpawn);
-            EventHandle<BossOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.Die, OnBossDie);
-
-            EventHandle<BossOwnerEvent>.Register<GameObject, float>(HealthBarOwnerEventType.Heal, OnBossHeal);
-            EventHandle<BossOwnerEvent>.Register<GameObject, float>(HealthBarOwnerEventType.Damage, OnBossDamage);
-
-            EventHandle<BossOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.Hide, OnBossHide);
-            EventHandle<BossOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.Show, OnBossShow);
-
-            EventHandle<BossOwnerEvent>.Register<GameObject, float>(HealthBarOwnerEventType.SetHP, OnBossSetHP);
-            EventHandle<BossOwnerEvent>.Register<GameObject>(HealthBarOwnerEventType.CheckHP, (GameObject go) => OnCheckHP(go));
-        }
-
-        private void OnCheckHP(GameObject bossGO, bool fixMismatch = false) {
-            float realHp = bossGO.GetComponent<HealthManager>().hp;
-            if (!guardExist(bossGO)) return;
-            var go = healthBarGoOf[bossGO];
-            var bar = go.GetComponent<HealthBar>();
-            if (Mathf.Abs(bar.CurrentHealth - realHp) > 0.01f) {
-                PluginLogger.LogError("BossHealthBarController: OnCheckHP detected HP mismatch for bossGO " + bossGO.name +
-                    $", HealthBar has {bar.CurrentHealth}, but HealthManager has {realHp}");
-                float damage = bar.CurrentHealth - realHp;
-                if (fixMismatch) {
-                    if (damage > 0) {
-                        bar.TakeDamage(damage);
-                    } else {
-                        bar.Heal(-damage);
-                    }
-                }
-            }
         }
 
 
-        private bool guardExist(GameObject bossGO) {
-            if (!healthBarGoOf.ContainsKey(bossGO)) {
-#if !(UNITY_EDITOR || UNITY_STANDALONE)
-                PluginLogger.LogWarning($"BossHealthBarController: GuardExist failed, bossGO {bossGO.name} not found in healthBarGoOf");
-#endif
-                return false;
-            }
-            return true;
-        }
+        protected override void OnEnemyShow(GameObject enemyGO) {
+            if (!guardExist(enemyGO)) return;
+            base.OnEnemyShow(enemyGO);
 
-        public GameObject GetRandomBossGO() {
-            foreach (var kvp in healthBarGoOf) {
-                if (kvp.Key != null)
-                    return kvp.Key;
-            }
-            return null;
-        }
-
-        private void OnBossShow(GameObject bossGO) {
-            if (!guardExist(bossGO)) return;
-            PluginLogger.LogWarning($"BossHealthBarController: OnBossShow called on {bossGO.name}");
-            var barGO = healthBarGoOf[bossGO];
+            var barGO = healthBarGoOf[enemyGO];
             container.AddBar(barGO.GetComponent<HealthBar>());
-            barGO.GetComponent<HealthBar>().SetVisibility(true);
             barGO.GetComponentInChildren<Text>().enabled = true;
         }
 
-        private void OnBossSpawn(GameObject bossGO, float maxHp) {
-            if (healthBarGoOf.ContainsKey(bossGO)) {
+        protected override void OnEnemySpawn(GameObject bossGO, float maxHp) {
+            base.OnEnemySpawn(bossGO, maxHp);
 
-                PluginLogger.LogWarning($"BossHealthBarController: OnBossSpawn called but bossGO {bossGO.name} already has a health bar");
-                PluginLogger.LogWarning($"BossHealthBarController: Overwriting maxHp bossGO {bossGO.name} with [{maxHp}]");
-
-                var go = healthBarGoOf[bossGO];
-                var bar = go.GetComponent<HealthBar>();
-                bar.SetMaxHealth(maxHp);
-                return;
-            }
-            PluginLogger.LogInfo($"BossHealthBarController: OnBossSpawn called for bossGO {bossGO.name} with maxHp {maxHp}");
-            GameObject healthBarGO;
-
-            healthBarGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/HealthBarBossWithName.prefab", "BossHealthBar");
-            healthBarGoOf[bossGO] = healthBarGO;
-            healthBarGO.transform.SetParent(ScreenSpaceCanvas.GetScreenSpaceCanvas.transform);
+            var healthBarGO = healthBarGoOf[bossGO];
             healthBarGO.transform.localScale = Vector3.one;
             var text = healthBarGO.GetComponentInChildren<Text>();
             if (text) {
@@ -108,51 +53,27 @@ namespace SilkenImpact {
                 PluginLogger.LogInfo($"BossHealthBarController: Localised name for bossGO {bossGO.name} is {locolisedName}");
                 text.text = locolisedName;
             }
-            healthBarGO.GetComponent<HealthBar>().SetMaxHealth(maxHp);
-            if (!bossGO.GetComponent<BossHealthBarOwner>())
-                bossGO.AddComponent<BossHealthBarOwner>();
         }
 
-        private void OnBossDamage(GameObject bossGO, float amount) {
+        protected override void OnEnemyHide(GameObject bossGO) {
             if (!guardExist(bossGO)) return;
-            var go = healthBarGoOf[bossGO];
-            var bar = go.GetComponent<HealthBar>();
-            bar.TakeDamage(amount);
-            // OnCheckHP(bossGO, true);
-            OnCheckHP(bossGO);
-        }
+            base.OnEnemyHide(bossGO);
 
-        private void OnBossHeal(GameObject bossGO, float amount) {
-            if (!guardExist(bossGO)) return;
             var go = healthBarGoOf[bossGO];
-            var bar = go.GetComponent<HealthBar>();
-            bar.Heal(amount);
-            OnCheckHP(bossGO);
-        }
-
-        private void OnBossHide(GameObject bossGO) {
-            if (!guardExist(bossGO)) return;
-            PluginLogger.LogWarning($"BossHealthBarController: Ignoring Hide event on {bossGO.name}");
-            var go = healthBarGoOf[bossGO];
-            go.GetComponent<HealthBar>().SetVisibility(false);
             go.GetComponentInChildren<Text>().enabled = false;
             container.RemoveBar(go.GetComponent<HealthBar>());
         }
 
-        private void OnBossDie(GameObject bossGO) {
+        protected override void OnEnemyDie(GameObject bossGO) {
             if (!guardExist(bossGO)) return;
             var go = healthBarGoOf[bossGO];
             container.RemoveBar(go.GetComponent<HealthBar>());
-            Destroy(go);
-            healthBarGoOf.Remove(bossGO);
+
+            base.OnEnemyDie(bossGO);
         }
 
-        private void OnBossSetHP(GameObject bossGO, float hp) {
-            if (!guardExist(bossGO)) return;
-            var go = healthBarGoOf[bossGO];
-            var bar = go.GetComponent<HealthBar>();
-            bar.ResetHealth(hp);
-            OnCheckHP(bossGO, true);
+        protected override float BarWidth(float maxHp) {
+            return Configs.Instance.bossBarWidth.Value;
         }
     }
 }

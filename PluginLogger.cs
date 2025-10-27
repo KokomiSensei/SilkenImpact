@@ -1,3 +1,5 @@
+using System;
+
 namespace SilkenImpact {
     public static class PluginLogger {
         [System.Diagnostics.Conditional("DEBUG")]
@@ -19,6 +21,11 @@ namespace SilkenImpact {
 
         public static void LogFatal(string message) {
             Plugin.Logger.LogFatal(message);
+        }
+
+        [System.Diagnostics.Conditional("DETAIL")]
+        public static void LogDetail(string message) {
+            Plugin.Logger.LogInfo(message);
         }
     }
 }
