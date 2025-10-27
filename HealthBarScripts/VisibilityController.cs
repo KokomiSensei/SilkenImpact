@@ -28,6 +28,22 @@ namespace SilkenImpact {
             }
         }
 
+        void tryGetRenderer() {
+            if (!renderer) {
+                renderer = hm.GetComponent<Renderer>();
+            }
+            if (!renderer) {
+                var renderers = hm.GetComponentsInChildren<Renderer>();
+                // Pick the one that's enabled
+                foreach (var r in renderers) {
+                    if (r.enabled) {
+                        renderer = r;
+                        break;
+                    }
+                }
+            }
+        }
+
         public VisibilityController(HealthManager healthManager) {
             hm = healthManager;
             gameObject = hm.gameObject;
@@ -42,6 +58,7 @@ namespace SilkenImpact {
             }
             timeSinceLastCheck = 0f;
             tryGetColliders();
+            tryGetRenderer();
             bool showHealthBar = mobIsShowing();
             if (showHealthBar == visibilityCache)
                 return false;
