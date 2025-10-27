@@ -43,7 +43,6 @@ namespace SilkenImpact {
         }
 
         protected override void OnEnemySpawn(GameObject bossGO, float maxHp) {
-            if (!guardExist(bossGO)) return;
             base.OnEnemySpawn(bossGO, maxHp);
 
             var healthBarGO = healthBarGoOf[bossGO];
