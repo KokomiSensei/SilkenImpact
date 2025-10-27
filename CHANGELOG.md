@@ -64,3 +64,31 @@
 - Fix `SubtractHP` related issues.
 
 - Remove debug logging from release builds using conditional compilation.
+
+
+
+### 1.1.2
+
+> [!important]
+>
+> Major changes in this update include:
+
+**Bug Fixes**
+
+- Lifeblood State Patch
+  - Patched `LifebloodState.Update()`. 
+  - Now  healing of enemies with lifeblood is correctly handled.
+- Black Thread State Patch
+  - Patched `LifebloodState.SetUpThreaded()`.
+  - Fixed the problem where "void enemy" (aka enemy in black-thread state)'s health is set incorrectly.
+- Fix the visibility control and health bar tracking problem on enemies without a directly attached `Renderer`.
+
+**New Features**
+
+- Add unique healing popup for enemy with lifeblood.
+- Allow user to modify the color of health bars.
+
+**Refactor**
+
+- Extracted `BaseHealthBarController` from `MobHealthBarController` and `BossHealthBarController`.
+
