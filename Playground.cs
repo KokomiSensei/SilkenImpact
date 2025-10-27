@@ -218,6 +218,6 @@ namespace SilkenImpact {
         //    handle.Release();
         //    Plugin.isAddressableUpdated = true;
         //}
-    }
 # endif
+    }
 }
