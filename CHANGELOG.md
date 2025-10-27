@@ -48,11 +48,11 @@
   >
   > To avoid chaos and conflicts, a `Dispatcher` middleware is used. It records the entry order of HP-modifying functions and applies health changes to the enemy's health bar in that sequence.
   >
-  > This approach handles most cases, as events triggered by `TakeDamage()` typically modify HP before `TakeDamage()` itself, and the middleware preserves this order. However, in exceptions like Silk Mother, `SetHP` is called before `TakeDamage()` modifies the HP. To handle such cases, `OnCheckHP(fixMismatch: true)` is called after `OnSetHP` to correct any potential mismatches.
+  > This approach handles most cases, as events triggered by `TakeDamage()` typically modify HP after `TakeDamage()` itself, and the middleware preserves this order. However, in exceptions like Silk Mother, `SetHP` is called before `TakeDamage()` modifies the HP. To handle such cases, `OnCheckHP(fixMismatch: true)` is called after `OnSetHP` to correct any potential mismatches.
 
   > [!warning]
   >
-  > `OnCheckHP(fixMismatch: true)` should be used with caution. Misuse may cause health changes to be applied in the wrong order. While this won't cause the health bar to be noticeably out of sync with the enemy's actual health, it may result in quirky animation effects or other misbehavior.
+  > `OnCheckHP(fixMismatch: true)` should be used with caution. Misuse may cause health changes to be applied in the wrong order. While this won't cause the health bar to be noticeably out of sync with the enemy's actual health, it may result in quirky visual effects or other misbehavior.
   >
   > Theoretically, `OnSetHP` is the only place where it should be used.
 
@@ -64,3 +64,31 @@
 - Fix `SubtractHP` related issues.
 
 - Remove debug logging from release builds using conditional compilation.
+
+
+
+### 1.1.2
+
+> [!important]
+>
+> Major changes in this update include:
+
+**Bug Fixes**
+
+- Lifeblood State Patch
+  - Patched `LifebloodState.Update()`. 
+  - Now  healing of enemies with lifeblood is correctly handled.
+- Black Thread State Patch
+  - Patched `LifebloodState.SetUpThreaded()`.
+  - Fixed the problem where "void enemy" (aka enemy in black-thread state)'s health is set incorrectly.
+- Fix the visibility control and health bar tracking problem on enemies without a directly attached `Renderer`.
+
+**New Features**
+
+- Add unique healing popup for enemy with lifeblood.
+- Allow user to modify the color of health bars.
+
+**Refactor**
+
+- Extracted `BaseHealthBarController` from `MobHealthBarController` and `BossHealthBarController`.
+

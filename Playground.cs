@@ -122,7 +122,7 @@ namespace SilkenImpact {
             get {
                 if (_stubTemplate == null) {
                     GameObject original = null;
-                    original = GameObject.FindFirstObjectByType<MobHealthBarController>()?.GetRandomMobGO();
+                    original = GameObject.FindFirstObjectByType<MobHealthBarController>()?.GetRandomEnemyGO();
                     if (!original)
                         return null;
                     _stubTemplate = Instantiate(original);
@@ -146,7 +146,7 @@ namespace SilkenImpact {
             }
         }
 
-
+# if DEBUG
         private void Update() {
 #if DEBUG
             if (Input.GetKeyDown(KeyCode.F2)) {
@@ -220,6 +220,6 @@ namespace SilkenImpact {
         //    handle.Release();
         //    Plugin.isAddressableUpdated = true;
         //}
+# endif
     }
-
 }

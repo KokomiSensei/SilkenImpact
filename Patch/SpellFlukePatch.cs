@@ -9,6 +9,8 @@ namespace SilkenImpact.Patch {
     public class SpellFlukePatch {
         // TODO Memo
 
+        // SpellFluke.Start() -> SpellFluke.DoDamage(): (hp -= this.damage)
+
         //[HarmonyPatch("DoDamage")]
         //[HarmonyPostfix]
         //public static void SpellFluke_DoDamage_Postfix(SpellFluke __instance) {

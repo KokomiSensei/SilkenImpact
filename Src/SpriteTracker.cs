@@ -11,12 +11,32 @@ namespace SilkenImpact {
             SetTarget(target);
         }
 
+        private Renderer GetEnabledRendererInChildren(GameObject target) {
+            var renderers = target.GetComponentsInChildren<Renderer>();
+            Renderer renderer = null;
+            foreach (var r in renderers) {
+                if (r.enabled) {
+                    renderer = r;
+                    break;
+                }
+            }
+            return renderer;
+        }
+
         public void SetTarget(GameObject target) {
             this.target = target;
             basicOffset = Vector3.zero;
-            if (target != null && target.TryGetComponent<Renderer>(out var s)) {
-                float halfHeight = s.bounds.extents.y; // extents = size/2
-                basicOffset = new Vector3(0, halfHeight, 0);
+            if (target != null) {
+                Renderer renderer;
+                if (target.TryGetComponent<Renderer>(out var s)) {
+                    renderer = s;
+                } else {
+                    renderer = GetEnabledRendererInChildren(target);
+                }
+                if (renderer != null) {
+                    float halfHeight = renderer.bounds.extents.y; // extents = size/2
+                    basicOffset = new Vector3(0, halfHeight, 0);
+                }
             }
         }
 
