@@ -34,6 +34,7 @@ namespace SilkenImpact {
 
 
         protected override void OnEnemyShow(GameObject enemyGO) {
+            if (!guardExist(enemyGO)) return;
             base.OnEnemyShow(enemyGO);
 
             var barGO = healthBarGoOf[enemyGO];
@@ -42,9 +43,11 @@ namespace SilkenImpact {
         }
 
         protected override void OnEnemySpawn(GameObject bossGO, float maxHp) {
+            if (!guardExist(bossGO)) return;
             base.OnEnemySpawn(bossGO, maxHp);
 
             var healthBarGO = healthBarGoOf[bossGO];
+            healthBarGO.transform.localScale = Vector3.one;
             var text = healthBarGO.GetComponentInChildren<Text>();
             if (text) {
                 string locolisedName = HealthManagerPatch.LocalisedName(__instance: bossGO.GetComponent<HealthManager>());
@@ -54,6 +57,7 @@ namespace SilkenImpact {
         }
 
         protected override void OnEnemyHide(GameObject bossGO) {
+            if (!guardExist(bossGO)) return;
             base.OnEnemyHide(bossGO);
 
             var go = healthBarGoOf[bossGO];

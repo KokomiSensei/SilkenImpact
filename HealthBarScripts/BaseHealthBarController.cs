@@ -98,6 +98,8 @@ namespace SilkenImpact {
             bar.SetDelayedEffectColor(Configs.Instance.delayedEffectColor.Value);
             bar.SetBackgroundColor(Configs.Instance.hpBarBackgroundColor.Value);
             bar.SetWidth(BarWidth(maxHp));
+            bar.SetMaxHealth(maxHp);
+
             if (!enemyGO.GetComponent<OwnerType>())
                 enemyGO.AddComponent<OwnerType>();
         }
