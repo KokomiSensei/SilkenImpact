@@ -148,7 +148,6 @@ namespace SilkenImpact {
 
 # if DEBUG
         private void Update() {
-#if DEBUG
             if (Input.GetKeyDown(KeyCode.F2)) {
                 Vector3 pos = Player.transform.position;
                 PluginLogger.LogInfo($"Player Position {pos}");
@@ -172,7 +171,6 @@ namespace SilkenImpact {
                     copy.transform.position = pos;
                 }
             }
-#endif
             //if (Input.GetKeyDown(KeyCode.F9)) {
             //    PluginLogger.LogInfo("F9 Pressed");
             //    Vector3 mousePosition = Input.mousePosition;
