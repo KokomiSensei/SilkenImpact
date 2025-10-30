@@ -16,6 +16,7 @@ namespace SilkenImpact {
         private Collider2D defaultCollider = null;
         private Renderer renderer = null;
         private Collider2D physicalPusherCollider = null;
+        // private DamageHero damageHero = null;
 
         private bool visibilityCache = false;
         private float timeSinceLastCheck = 0f;
@@ -43,6 +44,7 @@ namespace SilkenImpact {
                 }
             }
         }
+
 
         public VisibilityController(HealthManager healthManager) {
             hm = healthManager;
@@ -110,8 +112,13 @@ namespace SilkenImpact {
                 return false;
 
             PluginLogger.LogDetail("4. Renderer Passed"); // 3 / 223
+
+            // Garmond & Zaza (GameObject name: Garmond fighter)
+            // NOTICE: Should use DamageHero as a predicate, as DamageHero is disabled when boss is stunned.
+            // if (damageHero && !damageHero.isActiveAndEnabled)
+            //     return false; 
+
             return true;
         }
-
     }
 }

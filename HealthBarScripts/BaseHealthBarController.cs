@@ -100,8 +100,15 @@ namespace SilkenImpact {
             bar.SetWidth(BarWidth(maxHp));
             bar.SetMaxHealth(maxHp);
 
-            if (!enemyGO.GetComponent<OwnerType>())
+            if (!enemyGO.GetComponent<OwnerType>()) {
                 enemyGO.AddComponent<OwnerType>();
+            }
+
+            if (enemyGO.name.ToLower() == GarmondAndZaza.IngameGameObjectName && !enemyGO.GetComponent<GarmondAndZaza>()) {
+                var garmondPatch = enemyGO.AddComponent<GarmondAndZaza>();
+                // CAUTION: Init() needs to be called after enemyGO.AddComponent<OwnerType>();
+                garmondPatch.Init(enemyGO);
+            }
         }
 
         protected void OnEnemyDamage(GameObject enemyGO, float amount) {
