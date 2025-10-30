@@ -25,7 +25,7 @@ namespace SilkenImpact.Patch {
         private static float damageScale(float damage) {
             if (avgDamagePerHit <= 0) return 1;
             float p = damage / avgDamagePerHit;
-            return Mathf.Pow(p, 0.5f);
+            return 0.5f + 0.5f * Mathf.Pow(p, 0.5f);
         }
         private static Color textColor(NailElements element, bool isCritHit) {
             return element switch {
@@ -73,7 +73,7 @@ namespace SilkenImpact.Patch {
             float verticalOffsetScale = UnityEngine.Random.Range(-0.4f, 0.7f);
 
             // scale /= transform.lossyScale.x; ?
-            float randomSizeScale = UnityEngine.Random.Range(0.9f, 1.2f) * (isCritHit ? Mathf.Clamp(damageScale(damage), 2, 2.5f) : Mathf.Clamp(damageScale(damage), 0.5f, 1.5f));
+            float randomSizeScale = UnityEngine.Random.Range(1f, 1.1f) * (isCritHit ? Mathf.Clamp(damageScale(damage), 2, 2.5f) : Mathf.Clamp(damageScale(damage), 0.5f, 1.5f));
             updateAvgDamagePerHit(damage);
             var textGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/DamageOldText.prefab", "DamageText");
             spawnTextOn(__instance, textGO, ((int)damage).ToString(), horizontalOffsetScale, verticalOffsetScale, randomSizeScale, color ?? textColor(element, isCritHit));
