@@ -104,8 +104,8 @@ namespace SilkenImpact {
                 enemyGO.AddComponent<OwnerType>();
             }
 
-            if (enemyGO.name.ToLower() == GarmondAndZaza.IngameGameObjectName && !enemyGO.GetComponent<GarmondAndZaza>()) {
-                var garmondPatch = enemyGO.AddComponent<GarmondAndZaza>();
+            if (DeathWatcher.IngameGameObjectNames.Contains(enemyGO.name.ToLower()) && !enemyGO.GetComponent<DeathWatcher>()) {
+                var garmondPatch = enemyGO.AddComponent<DeathWatcher>();
                 // CAUTION: Init() needs to be called after enemyGO.AddComponent<OwnerType>();
                 garmondPatch.Init(enemyGO);
             }

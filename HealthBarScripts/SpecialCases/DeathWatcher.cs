@@ -1,10 +1,12 @@
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SilkenImpact {
 
-    class GarmondAndZaza : MonoBehaviour {
-        public static string IngameGameObjectName = "garmond fighter";
+    class DeathWatcher : MonoBehaviour {
+        public static HashSet<string> IngameGameObjectNames = new HashSet<string> {
+            "garmond fighter" // TODO The map guy?
+        };
         private HealthManager hm;
         private IHealthBarOwner hpBarOwner;
 
