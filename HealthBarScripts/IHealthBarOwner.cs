@@ -13,5 +13,7 @@ namespace SilkenImpact {
         public void Hide();
         public void Show();
         public void CheckHP();
+        public void RemoveVisibilityController();
+        public void LinkVisibilityControl(GameObject go);
     }
 }

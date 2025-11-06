@@ -1,6 +1,7 @@
 namespace SilkenImpact {
     public enum HealthBarOwnerEventType {
         Spawn,
+        Link,
         Show,
         Hide,
         Die,

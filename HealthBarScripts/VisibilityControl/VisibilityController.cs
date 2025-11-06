@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 
 namespace SilkenImpact {
-    class VisibilityController {
+    class VisibilityController : IVisibilityController {
         static private readonly int enemyLayer = LayerMask.NameToLayer("Enemies");
 
         static private readonly float maxZ = Configs.Instance.maxZPosition.Value;
@@ -47,11 +47,7 @@ namespace SilkenImpact {
 
 
         public VisibilityController(HealthManager healthManager) {
-            hm = healthManager;
-            gameObject = hm.gameObject;
-            defaultCollider = hm.GetComponent<Collider2D>();
-            renderer = hm.GetComponent<Renderer>();
-            physicalPusherCollider = hm.GetPhysicalPusher()?.GetComponent<Collider2D>();
+            Inspect(healthManager);
         }
         public bool Update(bool forceCheck = false) {
             if (!forceCheck && timeSinceLastCheck < (visibilityCache ? visibleCacheTime : invisibleCacheTime)) {
@@ -119,6 +115,14 @@ namespace SilkenImpact {
             //     return false; 
 
             return true;
+        }
+
+        public void Inspect(HealthManager healthManager) {
+            hm = healthManager;
+            gameObject = hm.gameObject;
+            defaultCollider = hm.GetComponent<Collider2D>();
+            renderer = hm.GetComponent<Renderer>();
+            physicalPusherCollider = hm.GetPhysicalPusher()?.GetComponent<Collider2D>();
         }
     }
 }

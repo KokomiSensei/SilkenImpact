@@ -15,6 +15,9 @@ namespace SilkenImpact.Patch {
         public static float avgDamagePerHit = -1;
         public static float weightOfNew => Configs.Instance.weightOfNewHit.Value;
         private static void updateAvgDamagePerHit(float damage) {
+            if (damage <= 0 || damage >= 9999) {
+                return;
+            }
             if (avgDamagePerHit <= 0) {
                 avgDamagePerHit = damage;
                 return;
@@ -232,27 +235,7 @@ namespace SilkenImpact.Patch {
                 PluginLogger.LogInfo($"Preventing health bar spawn for {__instance.gameObject.name} with hp {__instance.hp}");
                 return;
             }
-
-            float hp = __instance.hp;
-            var go = __instance.gameObject;
-            bool isBoss = false;
-
-            if (__instance.CompareTag("Boss")) {
-                // This only works for some of the bosses in Act 1.
-                // I would guess that Team Cherry forgot to tag some of the later bosses?
-                isBoss = true;
-            }
-            if (hp >= Configs.Instance.minBossBarHp.Value) {
-                // So sadly we need this heurisitic approach as fallback.
-                isBoss = true;
-            }
-            if (!isBoss) {
-                EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
-                EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Hide, go);
-            } else {
-                EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
-                EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Hide, go);
-            }
+            SpawnManager.instance.SpawnHealthBar(__instance);
         }
 
 

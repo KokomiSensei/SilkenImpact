@@ -12,8 +12,11 @@ namespace SilkenImpact {
         public abstract GameObject GetNewHealthBar { get; }
         public abstract Canvas BarCanvas { get; }
 
+        protected LinkBuffer linkBuffer = null;
+
         protected void RegisterEventHandlers() {
             EventHandle<EventType>.Register<GameObject, float>(HealthBarOwnerEventType.Spawn, OnEnemySpawn);
+            EventHandle<EventType>.Register<GameObject, GameObject>(HealthBarOwnerEventType.Link, LinkEnemy);
             EventHandle<EventType>.Register<GameObject>(HealthBarOwnerEventType.Die, OnEnemyDie);
 
             EventHandle<EventType>.Register<GameObject, float>(HealthBarOwnerEventType.Heal, OnEnemyHeal);
@@ -27,6 +30,7 @@ namespace SilkenImpact {
 
         protected virtual void Awake() {
             RegisterEventHandlers();
+            linkBuffer = new LinkBuffer(TryLinkEnemy);
         }
 
         protected void OnCheckHP(GameObject enemyGO, bool fixMismatch = false) {
@@ -74,6 +78,32 @@ namespace SilkenImpact {
 
         protected abstract float BarWidth(float maxHp);
 
+        protected bool TryLinkEnemy(GameObject originGO, GameObject relayGO) {
+            if (!guardExist(originGO)) return false;
+            if (healthBarGoOf.ContainsKey(relayGO)) {
+                PluginLogger.LogInfo($"{GetType().Name}: LinkEnemy called on {relayGO.name}. Destroying existing health bar");
+                var withBarGO = healthBarGoOf[relayGO];
+                Destroy(withBarGO);
+            }
+            var sourceBarGO = healthBarGoOf[originGO];
+            healthBarGoOf[relayGO] = sourceBarGO;
+            if (relayGO.TryGetComponent<IHealthBarOwner>(out var relayOwner)) {
+                relayOwner.RemoveVisibilityController();
+            }
+            if (originGO.TryGetComponent<IHealthBarOwner>(out var originOwner)) {
+                originOwner.LinkVisibilityControl(relayGO);
+            }
+            return true;
+        }
+
+        protected void LinkEnemy(GameObject sourceGO, GameObject withGO) {
+            if (!withGO.GetComponent<OwnerType>()) {
+                var owner = withGO.AddComponent<OwnerType>();
+                owner.RemoveVisibilityController();
+            }
+            linkBuffer.RegisterRelay(sourceGO, withGO);
+        }
+
         protected virtual void OnEnemySpawn(GameObject enemyGO, float maxHp) {
             GameObject healthBarGO;
             HealthBar bar;
@@ -105,10 +135,12 @@ namespace SilkenImpact {
             }
 
             if (DeathWatcher.IngameGameObjectNames.Contains(enemyGO.name.ToLower()) && !enemyGO.GetComponent<DeathWatcher>()) {
-                var garmondPatch = enemyGO.AddComponent<DeathWatcher>();
+                var deathWatcher = enemyGO.AddComponent<DeathWatcher>();
                 // CAUTION: Init() needs to be called after enemyGO.AddComponent<OwnerType>();
-                garmondPatch.Init(enemyGO);
+                deathWatcher.Init(enemyGO);
             }
+
+            linkBuffer.RegisterOrigin(enemyGO);
         }
 
         protected void OnEnemyDamage(GameObject enemyGO, float amount) {
