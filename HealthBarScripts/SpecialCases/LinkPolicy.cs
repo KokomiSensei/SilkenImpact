@@ -73,12 +73,15 @@ namespace SilkenImpact {
         # endregion
 
         public bool TryGetOriginHealthManager(HealthManager relayHm, out HealthManager originHm) {
+            originHm = null;
             if (relayHm.SendDamageTo != null) {
                 originHm = relayHm.SendDamageTo;
                 return true;
             }
-
             endpointOfName.TryGetValue(relayHm.gameObject.name, out var relayEndpoint);
+            if (relayEndpoint == null) {
+                return false;
+            }
             var originEndpoint = originOfRelayEndpoint.GetValueOrDefault(relayEndpoint, null);
             originHm = originEndpoint?.FindHealthManager() ?? null;
             return originHm != null;
