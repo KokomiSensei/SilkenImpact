@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 
 namespace SilkenImpact {
-    class VisibilityController {
+    class VisibilityController : IVisibilityController {
         static private readonly int enemyLayer = LayerMask.NameToLayer("Enemies");
 
         static private readonly float maxZ = Configs.Instance.maxZPosition.Value;
@@ -16,6 +16,7 @@ namespace SilkenImpact {
         private Collider2D defaultCollider = null;
         private Renderer renderer = null;
         private Collider2D physicalPusherCollider = null;
+        // private DamageHero damageHero = null;
 
         private bool visibilityCache = false;
         private float timeSinceLastCheck = 0f;
@@ -44,12 +45,9 @@ namespace SilkenImpact {
             }
         }
 
+
         public VisibilityController(HealthManager healthManager) {
-            hm = healthManager;
-            gameObject = hm.gameObject;
-            defaultCollider = hm.GetComponent<Collider2D>();
-            renderer = hm.GetComponent<Renderer>();
-            physicalPusherCollider = hm.GetPhysicalPusher()?.GetComponent<Collider2D>();
+            Inspect(healthManager);
         }
         public bool Update(bool forceCheck = false) {
             if (!forceCheck && timeSinceLastCheck < (visibilityCache ? visibleCacheTime : invisibleCacheTime)) {
@@ -110,8 +108,21 @@ namespace SilkenImpact {
                 return false;
 
             PluginLogger.LogDetail("4. Renderer Passed"); // 3 / 223
+
+            // Garmond & Zaza (GameObject name: Garmond fighter)
+            // NOTICE: Should use DamageHero as a predicate, as DamageHero is disabled when boss is stunned.
+            // if (damageHero && !damageHero.isActiveAndEnabled)
+            //     return false; 
+
             return true;
         }
 
+        public void Inspect(HealthManager healthManager) {
+            hm = healthManager;
+            gameObject = hm.gameObject;
+            defaultCollider = hm.GetComponent<Collider2D>();
+            renderer = hm.GetComponent<Renderer>();
+            physicalPusherCollider = hm.GetPhysicalPusher()?.GetComponent<Collider2D>();
+        }
     }
 }

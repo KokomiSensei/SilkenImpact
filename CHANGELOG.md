@@ -92,3 +92,36 @@
 
 - Extracted `BaseHealthBarController` from `MobHealthBarController` and `BossHealthBarController`.
 
+
+
+
+
+### 1.1.3
+
+> [!important]
+>
+> Major changes in this update include:
+
+**Bug Fixes**
+
+- Bell Eater
+
+  - Merge the two sperate health bars (one for its head and one for its butt) into one.
+
+  > [!warning]
+  >
+  > The mod shows the health of bell eater as 850, which is more than its actual health 800.
+  >
+  > This is because the bell eater needs to take additional damage after its hp hits 0. So in reality, the damage it requires for you to kill it may vary between 800 and 833 (based on my testing).
+  >
+  > As a result, additional health is added to its health bar. This also aligns better with the animation, where it's killed by the bell beast, and not the player.
+
+- Damage Number Popups
+
+  - Prevent damage texts from being scaled too small after a single hit damage with extremely large value is dealt.
+
+**Refactor**
+
+- Extracted `BaseHealthBarOwner` from `MobHealthBarOwner` and `BossHealthBarOwner`.
+- Extracted health bar spawning logic into `SpawnManager`.
+- Support linked health bar with `LinkBuffer` and `LinkedVisibilityController`.

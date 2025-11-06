@@ -15,6 +15,9 @@ namespace SilkenImpact.Patch {
         public static float avgDamagePerHit = -1;
         public static float weightOfNew => Configs.Instance.weightOfNewHit.Value;
         private static void updateAvgDamagePerHit(float damage) {
+            if (damage <= 0 || damage >= 9999) {
+                return;
+            }
             if (avgDamagePerHit <= 0) {
                 avgDamagePerHit = damage;
                 return;
@@ -25,7 +28,7 @@ namespace SilkenImpact.Patch {
         private static float damageScale(float damage) {
             if (avgDamagePerHit <= 0) return 1;
             float p = damage / avgDamagePerHit;
-            return Mathf.Pow(p, 0.5f);
+            return 0.5f + 0.5f * Mathf.Pow(p, 0.5f);
         }
         private static Color textColor(NailElements element, bool isCritHit) {
             return element switch {
@@ -73,7 +76,7 @@ namespace SilkenImpact.Patch {
             float verticalOffsetScale = UnityEngine.Random.Range(-0.4f, 0.7f);
 
             // scale /= transform.lossyScale.x; ?
-            float randomSizeScale = UnityEngine.Random.Range(0.9f, 1.2f) * (isCritHit ? Mathf.Clamp(damageScale(damage), 2, 2.5f) : Mathf.Clamp(damageScale(damage), 0.5f, 1.5f));
+            float randomSizeScale = UnityEngine.Random.Range(1f, 1.1f) * (isCritHit ? Mathf.Clamp(damageScale(damage), 2, 2.5f) : Mathf.Clamp(damageScale(damage), 0.5f, 1.5f));
             updateAvgDamagePerHit(damage);
             var textGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/DamageOldText.prefab", "DamageText");
             spawnTextOn(__instance, textGO, ((int)damage).ToString(), horizontalOffsetScale, verticalOffsetScale, randomSizeScale, color ?? textColor(element, isCritHit));
@@ -232,27 +235,7 @@ namespace SilkenImpact.Patch {
                 PluginLogger.LogInfo($"Preventing health bar spawn for {__instance.gameObject.name} with hp {__instance.hp}");
                 return;
             }
-
-            float hp = __instance.hp;
-            var go = __instance.gameObject;
-            bool isBoss = false;
-
-            if (__instance.CompareTag("Boss")) {
-                // This only works for some of the bosses in Act 1.
-                // I would guess that Team Cherry forgot to tag some of the later bosses?
-                isBoss = true;
-            }
-            if (hp >= Configs.Instance.minBossBarHp.Value) {
-                // So sadly we need this heurisitic approach as fallback.
-                isBoss = true;
-            }
-            if (!isBoss) {
-                EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
-                EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Hide, go);
-            } else {
-                EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
-                EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Hide, go);
-            }
+            SpawnManager.instance.SpawnHealthBar(__instance);
         }
 
 
