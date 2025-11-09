@@ -39,7 +39,6 @@ namespace SilkenImpact {
 
             var barGO = healthBarGoOf[enemyGO];
             container.AddBar(barGO.GetComponent<HealthBar>());
-            barGO.GetComponentInChildren<Text>().enabled = true;
         }
 
         protected override void OnEnemySpawn(GameObject bossGO, float maxHp) {
@@ -47,11 +46,13 @@ namespace SilkenImpact {
 
             var healthBarGO = healthBarGoOf[bossGO];
             healthBarGO.transform.localScale = Vector3.one;
-            var text = healthBarGO.GetComponentInChildren<Text>();
-            if (text) {
+            UIHealthBar uIHealthBar = healthBarGO.GetComponent<UIHealthBar>();
+            if (uIHealthBar) {
                 string locolisedName = HealthManagerPatch.LocalisedName(__instance: bossGO.GetComponent<HealthManager>());
                 PluginLogger.LogInfo($"BossHealthBarController: Localised name for bossGO {bossGO.name} is {locolisedName}");
-                text.text = locolisedName;
+                uIHealthBar.SetNameText(locolisedName);
+            } else {
+                PluginLogger.LogWarning($"BossHealthBarController: OnEnemySpawn could not find UIHealthBar component on healthBarGO for bossGO {bossGO.name}");
             }
         }
 
@@ -60,7 +61,6 @@ namespace SilkenImpact {
             base.OnEnemyHide(bossGO);
 
             var go = healthBarGoOf[bossGO];
-            go.GetComponentInChildren<Text>().enabled = false;
             container.RemoveBar(go.GetComponent<HealthBar>());
         }
 

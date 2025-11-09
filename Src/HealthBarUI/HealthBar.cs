@@ -82,6 +82,9 @@ namespace SilkenImpact {
             currentHealth = maxHealth;
         }
 
+        protected virtual void OnHealthChanged() {
+        }
+
         protected void Update() {
             //TODO bro why did i decide to do it like this?? that seems stupid and expensive
             if (DecayingHealth > currentHealth) {
@@ -107,6 +110,7 @@ namespace SilkenImpact {
             float newHealth = Mathf.Clamp(currentHealth - amount, 0, maxHealth);
             currentHealth = newHealth;
             hp.SetPercentage(currentHealth / maxHealth, config.healthChangeDuration);
+            OnHealthChanged();
         }
 
         public void Heal(float amount) {
@@ -119,6 +123,7 @@ namespace SilkenImpact {
             //}
             delayedEffect.SetPercentage(currentHealth / maxHealth, config.healthChangeDuration);
             hp.SetPercentage(currentHealth / maxHealth, config.healthChangeDuration);
+            OnHealthChanged();
         }
 
         public void ResetHealth(float hp) {
@@ -126,9 +131,10 @@ namespace SilkenImpact {
             maxHealth = hp;
             delayedEffect.SetPercentage(currentHealth / maxHealth, config.healthChangeDuration);
             this.hp.SetPercentage(currentHealth / maxHealth, config.healthChangeDuration);
+            OnHealthChanged();
         }
 
-        public void SetVisibility(bool visible) {
+        public virtual void SetVisibility(bool visible) {
             hp.SetVisibility(visible);
             delayedEffect.SetVisibility(visible);
             background.SetVisibility(visible);

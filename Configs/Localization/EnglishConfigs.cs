@@ -15,7 +15,8 @@ namespace SilkenImpact {
                 .AddEntry(ref configs.displayMobHpBar, true, "Display Mob HP Bar", "Whether to display health bars for regular mobs")
                 .AddEntry(ref configs.displayBossHpBar, true, "Display Boss HP Bar", "Whether to display health bars for boss mobs")
                 .AddEntry(ref configs.displayDamageText, true, "Display Damage Text", "Whether to display damage text upon hit")
-                .AddEntry(ref configs.displayHealText, true, "Display Heal Text", "Whether to display healing text");
+                .AddEntry(ref configs.displayHealText, true, "Display Heal Text", "Whether to display healing text")
+                .AddEntry(ref configs.displayHpNumbers, false, "Display Health Numbers", "Whether to display health numbers on health bars");
 
             new MyConfigSection("User: Health Bar Thresholds", configFile)
                 .AddAdvancedEntry(ref configs.minMobHp, 5f, "Min Mob HP", "Minimum HP for showing mob health bars(e.g. Some environment objects have HP too)")
@@ -27,7 +28,8 @@ namespace SilkenImpact {
             new MyConfigSection("User: Health Bar Colors", configFile)
                 .AddEntry(ref configs.hpColor, ColourPalette.HP, "HP Color", "Color of the health portion of the health bar")
                 .AddEntry(ref configs.delayedEffectColor, ColourPalette.DelayedEffect, "Delayed Effect Color", "Color of the delayed effect portion of the health bar")
-                .AddEntry(ref configs.hpBarBackgroundColor, ColourPalette.HpBarBackground, "HP Bar Background Color", "Color of the health bar background");
+                .AddEntry(ref configs.hpBarBackgroundColor, ColourPalette.HpBarBackground, "HP Bar Background Color", "Color of the health bar background")
+                .AddEntry(ref configs.hpNumberColor, ColourPalette.HpNumber, "HP Number Color", "Color of the health numbers on the health bar");
 
             // Damage Text Colors
             new MyConfigSection("User: Damage Text Colors", configFile)

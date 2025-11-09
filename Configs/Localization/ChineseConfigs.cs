@@ -16,7 +16,8 @@ namespace SilkenImpact {
                 .AddEntry(ref configs.displayMobHpBar, true, "显示普通怪血条", "是否显示普通怪物的血条")
                 .AddEntry(ref configs.displayBossHpBar, true, "显示Boss血条", "是否显示Boss的血条")
                 .AddEntry(ref configs.displayDamageText, true, "显示伤害数字", "是否显示伤害数字")
-                .AddEntry(ref configs.displayHealText, true, "显示治疗数字", "是否显示治疗数字");
+                .AddEntry(ref configs.displayHealText, true, "显示治疗数字", "是否显示治疗数字")
+                .AddEntry(ref configs.displayHpNumbers, false, "显示血量数字", "是否在血条上显示血量数字");
 
             // 血条阈值设置
             new MyConfigSection("用户: 血条阈值设置", configFile)
@@ -29,7 +30,8 @@ namespace SilkenImpact {
             new MyConfigSection("用户: 血条颜色设置", configFile)
                 .AddEntry(ref configs.hpColor, ColourPalette.HP, "生命值颜色", "血条中生命值部分的颜色")
                 .AddEntry(ref configs.delayedEffectColor, ColourPalette.DelayedEffect, "延迟效果颜色", "血条中延迟效果部分的颜色")
-                .AddEntry(ref configs.hpBarBackgroundColor, ColourPalette.HpBarBackground, "血条背景颜色", "血条背景的颜色");
+                .AddEntry(ref configs.hpBarBackgroundColor, ColourPalette.HpBarBackground, "血条背景颜色", "血条背景的颜色")
+                .AddEntry(ref configs.hpNumberColor, ColourPalette.HpNumber, "血量数字颜色", "血条上血量数字的颜色");
 
             // 伤害数字颜色设置
             new MyConfigSection("用户: 伤害数字颜色设置", configFile)

@@ -40,6 +40,9 @@ namespace SilkenImpact {
         public ConfigEntry<Color> hpColor;
         public ConfigEntry<Color> delayedEffectColor;
         public ConfigEntry<Color> hpBarBackgroundColor;
+        public ConfigEntry<Color> hpNumberColor;
+        public ConfigEntry<bool> displayHpNumbers;
+
         #endregion
 
         #region Damage Text Configs
