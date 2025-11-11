@@ -168,3 +168,12 @@
   > Currently, **Changing into a new language will RESET all the configs to default**. Moreover, you need to close the Configuration Manager window and reopen it for its GUI to update. 
   >
   > Due to these limitations, this option is currently placed in the "Advanced" tab. Please use this feature at your own discretion.
+
+
+
+### 1.3.0
+
+**Mod Compatibility**
+
+- Added compatibility with [Pantheon Of Pharloom](https://thunderstore.io/c/hollow-knight-silksong/p/momochi003/Pantheon_Of_Pharloom/)
+

@@ -140,13 +140,21 @@ namespace SilkenImpact {
                 enemyGO.AddComponent<OwnerType>();
             }
 
+            ApplySpecialPatches(enemyGO);
+
+            linkBuffer.RegisterOrigin(enemyGO);
+        }
+
+        protected void ApplySpecialPatches(GameObject enemyGO) {
             if (DeathWatcher.IngameGameObjectNames.Contains(enemyGO.name.ToLower()) && !enemyGO.GetComponent<DeathWatcher>()) {
                 var deathWatcher = enemyGO.AddComponent<DeathWatcher>();
                 // CAUTION: Init() needs to be called after enemyGO.AddComponent<OwnerType>();
                 deathWatcher.Init(enemyGO);
             }
 
-            linkBuffer.RegisterOrigin(enemyGO);
+            if (!enemyGO.GetComponent<InitHpWatcher>()) {
+                enemyGO.AddComponent<InitHpWatcher>();
+            }
         }
 
         protected void OnEnemyDamage(GameObject enemyGO, float amount) {

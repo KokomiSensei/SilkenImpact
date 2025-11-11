@@ -233,7 +233,7 @@ namespace SilkenImpact.Patch {
         #endregion
 
 
-        [HarmonyPatch("Start")]
+        [HarmonyPatch("Awake")]
         [HarmonyPostfix]
         public static void HealthManager_Awake_Postfix(HealthManager __instance) {
             PluginLogger.LogInfo($"{__instance.gameObject.name}.Health Manager Awoken, hp -> {__instance.hp}");
