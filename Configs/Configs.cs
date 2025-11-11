@@ -30,8 +30,7 @@ namespace SilkenImpact {
 
         public ConfigEntry<bool> displayMobHpBar;
         public ConfigEntry<bool> displayBossHpBar;
-
-
+        public ConfigEntry<float> spriteTrackerZOffset;
 
         public ConfigEntry<float> maxZPosition;
         public ConfigEntry<float> visibleCacheSeconds;
@@ -60,41 +59,44 @@ namespace SilkenImpact {
 
         private ConfigFile config => Plugin.Instance.Config;
 
-        ConfigEntry<LanguageOption> selectedLanguage;
+        internal ConfigEntry<LanguageOption> selectedLanguage;
 
         void Awake() {
             if (__instance != null && __instance != this) {
                 Destroy(this.gameObject);
                 return;
             }
-            selectedLanguage = config.Bind("Language", "Selected Language", LanguageOption.English, "Choose config language (requires reopening the config manager window)");
+            BindLanguage(LanguageOption.English);
             LoadLanguageConfigs(selectedLanguage.Value);
+        }
+
+        void BindLanguage(LanguageOption defaultOption) {
+            new MyConfigSection("Language", config)
+                .AddAdvancedEntry(ref selectedLanguage, defaultOption, "Selected Language", "Choose config language (requires reopening the config manager window)");
             selectedLanguage.SettingChanged += OnLanguageChanged;
         }
 
         private void OnLanguageChanged(object sender, System.EventArgs e) {
-            config.Clear();
+            var autoSave = config.SaveOnConfigSet;
+            config.SaveOnConfigSet = false;
 
-            var newLanguage = ((SettingChangedEventArgs)e).ChangedSetting.BoxedValue;
-            LoadLanguageConfigs(newLanguage as LanguageOption? ?? LanguageOption.English);
-            PluginLogger.LogInfo("Language changed to " + newLanguage + ". Restart game to apply config descriptions.");
+            try {
+                var newLanguage = ((SettingChangedEventArgs)e).ChangedSetting.BoxedValue;
+                var currentLang = selectedLanguage;
 
-            selectedLanguage = config.Bind("Language", "Selected Language", LanguageOption.English, "Choose config language (requires reopening the config manager window)");
-            selectedLanguage.SettingChanged += OnLanguageChanged;
+                config.Clear();
+                LanguageOption newLang = newLanguage as LanguageOption? ?? LanguageOption.English;
+                LoadLanguageConfigs(newLang);
+                BindLanguage(newLang);
+
+                PluginLogger.LogInfo("Language changed to " + newLanguage + ". Restart game to apply config descriptions.");
+            } finally {
+                config.SaveOnConfigSet = autoSave;
+            }
         }
 
         private void LoadLanguageConfigs(LanguageOption language) {
-            switch (language) {
-                case LanguageOption.English:
-                    EnglishConfigs.Load(this);
-                    break;
-                case LanguageOption.ChineseSimplified:
-                    ChineseConfigs.Load(this);
-                    break;
-                default:
-                    EnglishConfigs.Load(this);
-                    break;
-            }
+            LocalizedConfigs.Load(this, language);
         }
 
 

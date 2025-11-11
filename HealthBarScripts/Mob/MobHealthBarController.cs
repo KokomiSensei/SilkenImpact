@@ -18,7 +18,9 @@ namespace SilkenImpact {
         protected override void OnEnemySpawn(GameObject enemyGO, float maxHp) {
             base.OnEnemySpawn(enemyGO, maxHp);
             var healthBarGO = healthBarGoOf[enemyGO];
-            healthBarGO.GetComponent<SpriteTracker>().SetTarget(enemyGO);
+            var spriteTracker = healthBarGO.GetComponent<SpriteTracker>();
+            spriteTracker.SetTarget(enemyGO);
+            spriteTracker.zOffset = Configs.Instance.spriteTrackerZOffset.Value;
         }
 
 #if DEBUG

@@ -80,6 +80,7 @@ namespace SilkenImpact {
             delayedEffect.Init(height, width, margin);
             background.Init(height, width, 0);
             currentHealth = maxHealth;
+            OnHealthChanged();
         }
 
         protected virtual void OnHealthChanged() {

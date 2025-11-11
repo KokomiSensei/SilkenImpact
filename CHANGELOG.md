@@ -125,3 +125,46 @@
 - Extracted `BaseHealthBarOwner` from `MobHealthBarOwner` and `BossHealthBarOwner`.
 - Extracted health bar spawning logic into `SpawnManager`.
 - Support linked health bar with `LinkBuffer` and `LinkedVisibilityController`.
+
+
+
+### 1.2.0
+
+> [!important]
+>
+> Major changes in this update include:
+
+**New Features**
+
+- Configuration Options
+  - Added separate **toggle controls for health bar visibility**:
+    - Regular enemy health bars (Default: Enabled)
+    - Boss health bars (Default: Enabled)
+  - Added separate **toggle controls for number popups**:
+    - Damage numbers (Default: Enabled)
+    - Healing numbers (Default: Enabled)
+  - Added option to **display health values on health bars** (Default: Disabled)
+    - Additionally, the text color is adjustable.
+  - Reorganized settings:
+    - Moved some configuration options to the "Advanced" tab.
+    - Improved settings organization for better clarity.
+- **Localization**
+  
+  - Added multi-language support for the configuration menu. The option is available in the "Advanced" tab.
+  - Currently supports:
+    - English
+    - 简体中文 (Chinese Simplified)
+    - Deutsch (German)
+    - Español (Spanish)
+    - Français (French)
+    - Italiano (Italian)
+    - 日本語 (Japanese)
+    - 한국어 (Korean)
+    - Português (Portuguese)
+    - Русский (Russian)
+  
+  > [!Warning]
+  >
+  > Currently, **Changing into a new language will RESET all the configs to default**. Moreover, you need to close the Configuration Manager window and reopen it for its GUI to update. 
+  >
+  > Due to these limitations, this option is currently placed in the "Advanced" tab. Please use this feature at your own discretion.

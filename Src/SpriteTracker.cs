@@ -3,6 +3,7 @@
 namespace SilkenImpact {
     public class SpriteTracker : MonoBehaviour {
         public float gapBetweenTop = 0;
+        public float zOffset = 0;
 
         [SerializeField] private GameObject target;
         [SerializeField] private Vector3 basicOffset = Vector3.zero;
@@ -40,7 +41,7 @@ namespace SilkenImpact {
             }
         }
 
-        private Vector3 Offset => basicOffset + new Vector3(0, gapBetweenTop, 0);
+        private Vector3 Offset => basicOffset + new Vector3(0, gapBetweenTop, zOffset);
 
 
         private void Update() {

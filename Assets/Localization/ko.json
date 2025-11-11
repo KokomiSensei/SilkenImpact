@@ -1,0 +1,151 @@
+{
+  "sections": {
+    "User: Health Bar Sizes": {
+      "name": "사용자: 체력바 크기",
+      "entries": {
+        "Short Bar Width": {
+          "key": "짧은 바 너비",
+          "description": "일반 몬스터의 짧은 체력바 너비"
+        },
+        "Medium Bar Width": {
+          "key": "중간 바 너비",
+          "description": "일반 몬스터의 중간 체력바 너비"
+        },
+        "Long Bar Width": {
+          "key": "긴 바 너비",
+          "description": "일반 몬스터의 긴 체력바 너비"
+        },
+        "Boss Bar Width": {
+          "key": "보스 바 너비",
+          "description": "보스 몬스터의 체력바 너비"
+        }
+      }
+    },
+    "User: Visibility Control": {
+      "name": "사용자: 표시 제어",
+      "entries": {
+        "Display Mob HP Bar": {
+          "key": "몹 HP 바 표시",
+          "description": "일반 몬스터의 체력바를 표시할지 여부"
+        },
+        "Display Boss HP Bar": {
+          "key": "보스 HP 바 표시",
+          "description": "보스 몬스터의 체력바를 표시할지 여부"
+        },
+        "Display Damage Text": {
+          "key": "데미지 텍스트 표시",
+          "description": "피격 시 데미지 텍스트를 표시할지 여부"
+        },
+        "Display Heal Text": {
+          "key": "회복 텍스트 표시",
+          "description": "회복 텍스트를 표시할지 여부"
+        },
+        "Display Health Numbers": {
+          "key": "HP 숫자 표시",
+          "description": "체력바에 HP 숫자를 표시할지 여부"
+        }
+      }
+    },
+    "User: Health Bar Thresholds": {
+      "name": "사용자: 체력바 임계값",
+      "entries": {
+        "Min Mob HP": {
+          "key": "최소 몹 HP",
+          "description": "몹 체력바를 표시하기 위한 최소 HP(일부 환경 오브젝트도 HP가 있음)"
+        },
+        "Min Medium Bar HP": {
+          "key": "중간 바 최소 HP",
+          "description": "중간 체력바로 전환하기 위한 최소 HP"
+        },
+        "Min Long Bar HP": {
+          "key": "긴 바 최소 HP",
+          "description": "긴 체력바로 전환하기 위한 최소 HP"
+        },
+        "Min Boss Bar HP": {
+          "key": "보스 바 최소 HP",
+          "description": "보스 체력바로 전환하기 위한 최소 HP(120은 이끼 어머니의 HP)"
+        }
+      }
+    },
+    "User: Health Bar Colors": {
+      "name": "사용자: 체력바 색상",
+      "entries": {
+        "HP Color": {
+          "key": "HP 색상",
+          "description": "체력바의 HP 부분 색상"
+        },
+        "Delayed Effect Color": {
+          "key": "지연 효과 색상",
+          "description": "체력바의 지연 효과 부분 색상"
+        },
+        "HP Bar Background Color": {
+          "key": "바 배경 색상",
+          "description": "체력바의 배경 색상"
+        },
+        "HP Number Color": {
+          "key": "HP 숫자 색상",
+          "description": "체력바의 HP 숫자 색상"
+        }
+      }
+    },
+    "User: Damage Text Colors": {
+      "name": "사용자: 데미지 텍스트 색상",
+      "entries": {
+        "Default Color": {
+          "key": "기본 색상",
+          "description": "기본 데미지 텍스트 색상"
+        },
+        "Crit Hit Color": {
+          "key": "치명타 색상",
+          "description": "치명타 데미지 텍스트 색상"
+        },
+        "Poison Color": {
+          "key": "독 색상",
+          "description": "독 데미지 텍스트 색상"
+        },
+        "Fire Color": {
+          "key": "화염 색상",
+          "description": "화염 데미지 텍스트 색상"
+        },
+        "Heal Color": {
+          "key": "회복 색상",
+          "description": "회복 텍스트 색상"
+        }
+      }
+    },
+    "Dev: Visibility Controller Settings": {
+      "name": "개발자: 표시 컨트롤러 설정",
+      "entries": {
+        "Max Z Position": {
+          "key": "최대 Z 위치",
+          "description": "표시로 간주되는 최소 절대 Z 위치"
+        },
+        "Visible Cache Seconds": {
+          "key": "표시 캐시(초)",
+          "description": "표시 상태를 캐시하는 시간(초)"
+        },
+        "Invisible Cache Seconds": {
+          "key": "비표시 캐시(초)",
+          "description": "비표시 상태를 캐시하는 시간(초)"
+        },
+        "Infinite HP Threshold": {
+          "key": "무한 HP 임계값",
+          "description": "무한 HP로 간주되는 HP 값"
+        },
+        "Sprite Tracker Z Offset": {
+          "key": "스프라이트 트래커 Z 오프셋",
+          "description": "몹 체력바의 스프라이트 트래커 컴포넌트의 Z 오프셋"
+        }
+      }
+    },
+    "Dev: Damage Text Settings": {
+      "name": "개발자: 데미지 텍스트 설정",
+      "entries": {
+        "Weight Of New Hit": {
+          "key": "새로운 타격 가중치",
+          "description": "지수이동평균 계산에서 새로운 타격의 가중치"
+        }
+      }
+    }
+  }
+}
