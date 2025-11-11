@@ -20,25 +20,29 @@ namespace SilkenImpact {
             }
             return false;
         }
-        private void Link(HealthManager origin, HealthManager relay) {
+        private void DoLink(HealthManager origin, HealthManager relay) {
             float? overrideHp = LinkPolicy.Instance.GetOverrideHpIfAny(origin);
             bool isBoss = IsBoss(origin, overrideHp);
             // TODO 
             // WARNING: isBoss calculated here may be different from the one calculated when origin was spawned, because the user may have changed the config in between.
             // But we will stick with this design for now.
             if (isBoss) {
+                if (!Configs.Instance.displayBossHpBar.Value) return;
                 EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Link, origin.gameObject, relay.gameObject);
             } else {
+                if (!Configs.Instance.displayMobHpBar.Value) return;
                 EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Link, origin.gameObject, relay.gameObject);
             }
         }
 
-        private void spawnHealthBar(HealthManager hm, float? overrideHp = null) {
+        private void DoSpawnHealthBar(HealthManager hm, float? overrideHp = null) {
             float hp = overrideHp ?? hm.hp;
             if (IsBoss(hm, overrideHp)) {
+                if (!Configs.Instance.displayBossHpBar.Value) return;
                 EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, hm.gameObject, hp);
                 EventHandle<BossOwnerEvent>.SendEvent(HealthBarOwnerEventType.Hide, hm.gameObject);
             } else {
+                if (!Configs.Instance.displayMobHpBar.Value) return;
                 EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, hm.gameObject, hp);
                 EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Hide, hm.gameObject);
             }
@@ -50,11 +54,11 @@ namespace SilkenImpact {
                     PluginLogger.LogError($"[SpawnManager] Failed to get origin endpoint for relay endpoint {hm.gameObject.name}");
                     return;
                 }
-                Link(originHm, hm);
+                DoLink(originHm, hm);
                 return;
             }
             float? overrideHp = LinkPolicy.Instance.GetOverrideHpIfAny(hm);
-            spawnHealthBar(hm, overrideHp);
+            DoSpawnHealthBar(hm, overrideHp);
         }
     }
 }

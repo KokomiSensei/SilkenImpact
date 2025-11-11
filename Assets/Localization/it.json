@@ -1,0 +1,151 @@
+{
+  "sections": {
+    "User: Health Bar Sizes": {
+      "name": "Utente: Dimensioni barra salute",
+      "entries": {
+        "Short Bar Width": {
+          "key": "Larghezza barra corta",
+          "description": "Larghezza delle barre salute corte per i mostri normali"
+        },
+        "Medium Bar Width": {
+          "key": "Larghezza barra media",
+          "description": "Larghezza delle barre salute medie per i mostri normali"
+        },
+        "Long Bar Width": {
+          "key": "Larghezza barra lunga",
+          "description": "Larghezza delle barre salute lunghe per i mostri normali"
+        },
+        "Boss Bar Width": {
+          "key": "Larghezza barra boss",
+          "description": "Larghezza delle barre salute per i boss"
+        }
+      }
+    },
+    "User: Visibility Control": {
+      "name": "Utente: Controllo visibilità",
+      "entries": {
+        "Display Mob HP Bar": {
+          "key": "Mostra barra HP mostro",
+          "description": "Mostra le barre salute per i mostri normali"
+        },
+        "Display Boss HP Bar": {
+          "key": "Mostra barra HP boss",
+          "description": "Mostra le barre salute per i boss"
+        },
+        "Display Damage Text": {
+          "key": "Mostra testo danno",
+          "description": "Mostra il testo del danno quando colpito"
+        },
+        "Display Heal Text": {
+          "key": "Mostra testo cura",
+          "description": "Mostra il testo della cura"
+        },
+        "Display Health Numbers": {
+          "key": "Mostra numeri salute",
+          "description": "Mostra i numeri della salute sulle barre"
+        }
+      }
+    },
+    "User: Health Bar Thresholds": {
+      "name": "Utente: Soglie barra salute",
+      "entries": {
+        "Min Mob HP": {
+          "key": "HP minima mostro",
+          "description": "HP minima per mostrare le barre salute dei mostri (anche alcuni oggetti ambientali hanno HP)"
+        },
+        "Min Medium Bar HP": {
+          "key": "HP minima per barra media",
+          "description": "HP minima per passare alle barre salute medie"
+        },
+        "Min Long Bar HP": {
+          "key": "HP minima per barra lunga",
+          "description": "HP minima per passare alle barre salute lunghe"
+        },
+        "Min Boss Bar HP": {
+          "key": "HP minima boss",
+          "description": "HP minima per passare alle barre salute boss (120 è la HP della Madre Muschio)"
+        }
+      }
+    },
+    "User: Health Bar Colors": {
+      "name": "Utente: Colori barra salute",
+      "entries": {
+        "HP Color": {
+          "key": "Colore HP",
+          "description": "Colore della parte salute della barra"
+        },
+        "Delayed Effect Color": {
+          "key": "Colore effetto ritardato",
+          "description": "Colore della parte effetto ritardato della barra"
+        },
+        "HP Bar Background Color": {
+          "key": "Colore sfondo barra",
+          "description": "Colore di sfondo della barra salute"
+        },
+        "HP Number Color": {
+          "key": "Colore numeri HP",
+          "description": "Colore dei numeri della salute sulla barra"
+        }
+      }
+    },
+    "User: Damage Text Colors": {
+      "name": "Utente: Colori testo danno",
+      "entries": {
+        "Default Color": {
+          "key": "Colore predefinito",
+          "description": "Colore del testo danno predefinito"
+        },
+        "Crit Hit Color": {
+          "key": "Colore colpo critico",
+          "description": "Colore del testo danno critico"
+        },
+        "Poison Color": {
+          "key": "Colore veleno",
+          "description": "Colore del testo danno da veleno"
+        },
+        "Fire Color": {
+          "key": "Colore fuoco",
+          "description": "Colore del testo danno da fuoco"
+        },
+        "Heal Color": {
+          "key": "Colore cura",
+          "description": "Colore del testo di cura"
+        }
+      }
+    },
+    "Dev: Visibility Controller Settings": {
+      "name": "Sviluppatore: Impostazioni controller visibilità",
+      "entries": {
+        "Max Z Position": {
+          "key": "Posizione Z massima",
+          "description": "Posizione Z assoluta minima per essere considerata visibile"
+        },
+        "Visible Cache Seconds": {
+          "key": "Cache visibilità (secondi)",
+          "description": "Tempo in secondi per memorizzare lo stato di visibilità"
+        },
+        "Invisible Cache Seconds": {
+          "key": "Cache invisibilità (secondi)",
+          "description": "Tempo in secondi per memorizzare lo stato di invisibilità"
+        },
+        "Infinite HP Threshold": {
+          "key": "Soglia HP infinita",
+          "description": "Valore HP considerato come infinito"
+        },
+        "Sprite Tracker Z Offset": {
+          "key": "Offset Z tracker sprite",
+          "description": "Offset Z per il componente Sprite Tracker sulle barre salute dei mostri"
+        }
+      }
+    },
+    "Dev: Damage Text Settings": {
+      "name": "Sviluppatore: Impostazioni testo danno",
+      "entries": {
+        "Weight Of New Hit": {
+          "key": "Peso del nuovo colpo",
+          "description": "Peso del nuovo colpo nel calcolo della media mobile esponenziale"
+        }
+      }
+    }
+  }
+}

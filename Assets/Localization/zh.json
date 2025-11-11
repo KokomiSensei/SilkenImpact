@@ -1,0 +1,151 @@
+{
+  "sections": {
+    "User: Health Bar Sizes": {
+      "name": "用户: 血条尺寸",
+      "entries": {
+        "Short Bar Width": {
+          "key": "短血条宽度",
+          "description": "普通怪物短血条的宽度"
+        },
+        "Medium Bar Width": {
+          "key": "中血条宽度",
+          "description": "普通怪物中血条的宽度"
+        },
+        "Long Bar Width": {
+          "key": "长血条宽度",
+          "description": "普通怪物长血条的宽度"
+        },
+        "Boss Bar Width": {
+          "key": "Boss血条宽度",
+          "description": "Boss血条的宽度"
+        }
+      }
+    },
+    "User: Visibility Control": {
+      "name": "用户: 显示控制",
+      "entries": {
+        "Display Mob HP Bar": {
+          "key": "显示怪物血条",
+          "description": "是否显示普通怪物的血条"
+        },
+        "Display Boss HP Bar": {
+          "key": "显示Boss血条",
+          "description": "是否显示Boss的血条"
+        },
+        "Display Damage Text": {
+          "key": "显示伤害数字",
+          "description": "是否显示伤害数字"
+        },
+        "Display Heal Text": {
+          "key": "显示治疗数字",
+          "description": "是否显示治疗数字"
+        },
+        "Display Health Numbers": {
+          "key": "显示生命值数字",
+          "description": "是否在血条上显示生命值数字"
+        }
+      }
+    },
+    "User: Health Bar Thresholds": {
+      "name": "用户: 血条阈值",
+      "entries": {
+        "Min Mob HP": {
+          "key": "最小怪物血量",
+          "description": "显示血条的最小生命值（例如某些环境物体也有生命值）"
+        },
+        "Min Medium Bar HP": {
+          "key": "中血条最小血量",
+          "description": "使用中血条的最小生命值"
+        },
+        "Min Long Bar HP": {
+          "key": "长血条最小血量",
+          "description": "使用长血条的最小生命值"
+        },
+        "Min Boss Bar HP": {
+          "key": "Boss血条最小血量",
+          "description": "使用Boss血条的最小生命值（苔藓之母的血量为120）"
+        }
+      }
+    },
+    "User: Health Bar Colors": {
+      "name": "用户: 血条颜色",
+      "entries": {
+        "HP Color": {
+          "key": "生命值颜色",
+          "description": "血条中生命值部分的颜色"
+        },
+        "Delayed Effect Color": {
+          "key": "延迟效果颜色",
+          "description": "血条中延迟效果部分的颜色"
+        },
+        "HP Bar Background Color": {
+          "key": "血条背景颜色",
+          "description": "血条的背景颜色"
+        },
+        "HP Number Color": {
+          "key": "生命值数字颜色",
+          "description": "血条上生命值数字的颜色"
+        }
+      }
+    },
+    "User: Damage Text Colors": {
+      "name": "用户: 伤害数字颜色",
+      "entries": {
+        "Default Color": {
+          "key": "默认颜色",
+          "description": "默认伤害数字的颜色"
+        },
+        "Crit Hit Color": {
+          "key": "暴击颜色",
+          "description": "暴击伤害数字的颜色"
+        },
+        "Poison Color": {
+          "key": "毒素颜色",
+          "description": "毒素伤害数字的颜色"
+        },
+        "Fire Color": {
+          "key": "火焰颜色",
+          "description": "火焰伤害数字的颜色"
+        },
+        "Heal Color": {
+          "key": "治疗颜色",
+          "description": "治疗数字的颜色"
+        }
+      }
+    },
+    "Dev: Visibility Controller Settings": {
+      "name": "开发者: 可见性控制器设置",
+      "entries": {
+        "Max Z Position": {
+          "key": "最大Z坐标",
+          "description": "判定为可见的最大Z轴绝对值"
+        },
+        "Visible Cache Seconds": {
+          "key": "可见缓存时间",
+          "description": "可见状态的缓存时间（秒）"
+        },
+        "Invisible Cache Seconds": {
+          "key": "不可见缓存时间",
+          "description": "不可见状态的缓存时间（秒）"
+        },
+        "Infinite HP Threshold": {
+          "key": "无限生命值阈值",
+          "description": "被视为无限生命值的阈值"
+        },
+        "Sprite Tracker Z Offset": {
+          "key": "精灵追踪器Z偏移",
+          "description": "怪物血条精灵追踪器组件的Z轴偏移"
+        }
+      }
+    },
+    "Dev: Damage Text Settings": {
+      "name": "开发者: 伤害数字设置",
+      "entries": {
+        "Weight Of New Hit": {
+          "key": "新伤害权重",
+          "description": "指数移动平均计算中新伤害的权重"
+        }
+      }
+    }
+  }
+}

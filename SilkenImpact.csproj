@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>com.kokomi.silkenimpact</AssemblyName>
     <Product>Silken Impact</Product>
-    <Version>1.1.3</Version>
+    <Version>1.2.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <RestoreAdditionalProjectSources>
@@ -61,6 +61,10 @@
       <HintPath>..\..\..\..\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="PlayMaker">
       <HintPath>..\..\..\..\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\PlayMaker.dll</HintPath>
       <Private>False</Private>
@@ -92,6 +96,12 @@
   </ItemGroup>
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if not exist &quot;D:\Apps\Steam\steamapps\common\Hollow Knight Silksong\BepInEx\plugins\SilkenImpact&quot; mkdir &quot;D:\Apps\Steam\steamapps\common\Hollow Knight Silksong\BepInEx\plugins\SilkenImpact&quot; &#xD;&#xA;xcopy &quot;$(TargetDir)$(TargetName).dll&quot; &quot;D:\Apps\Steam\steamapps\common\Hollow Knight Silksong\BepInEx\plugins\SilkenImpact&quot; /Y" />
+    <PropertyGroup>
+      <PluginDir>D:\Apps\Steam\steamapps\common\Hollow Knight Silksong\BepInEx\plugins\SilkenImpact</PluginDir>
+    </PropertyGroup>
+    <!-- <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(PluginDir)" /> -->
+    <!-- <Copy SourceFiles="$(ProjectDir)Assets\Localization\*.json" DestinationFolder="$(PluginDir)\Assets\Localization" /> -->
+    <!-- <Copy SourceFiles="$(TargetDir)System.Text.Json.dll" DestinationFolder="$(PluginDir)" /> -->
+    <Exec Command="if not exist &quot;$(PluginDir)&quot; mkdir &quot;$(PluginDir)&quot; &#xD;&#xA;if not exist &quot;$(PluginDir)\Assets\Localization&quot; mkdir &quot;$(PluginDir)\Assets\Localization&quot; &#xD;&#xA;xcopy &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(PluginDir)&quot; /Y &#xD;&#xA;xcopy &quot;$(ProjectDir)Assets\Localization\*.json&quot; &quot;$(PluginDir)\Assets\Localization&quot; /Y" />
   </Target>
 </Project>

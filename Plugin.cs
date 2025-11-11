@@ -13,6 +13,7 @@ namespace SilkenImpact;
 public class Plugin : BaseUnityPlugin {
     internal static new ManualLogSource Logger;
     public static string PluginFolder { private set; get; }
+    public static string AssetsFolder => Path.Combine(PluginFolder, "Assets");
     private static AssetBundle bundle;
     private Harmony _harmony;
     private static Plugin __instance;
@@ -82,8 +83,7 @@ public class Plugin : BaseUnityPlugin {
             bundle.Unload(true);
         }
         PluginFolder = Path.GetDirectoryName(Info.Location);
-        string assetFolder = Path.Combine(PluginFolder, "Assets");
-        string latestBundlePath = LatestBundleInFolder(assetFolder); //TODO For Quick Debugging Only
+        string latestBundlePath = LatestBundleInFolder(AssetsFolder);
         bundle = AssetBundle.LoadFromFile(latestBundlePath);
         Logger.LogInfo($"Loaded AssetBundle from {latestBundlePath}");
     }

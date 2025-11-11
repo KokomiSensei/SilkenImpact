@@ -1,0 +1,151 @@
+{
+  "sections": {
+    "User: Health Bar Sizes": {
+      "name": "User: Health Bar Sizes",
+      "entries": {
+        "Short Bar Width": {
+          "key": "Short Bar Width",
+          "description": "Width of short mob health bars"
+        },
+        "Medium Bar Width": {
+          "key": "Medium Bar Width",
+          "description": "Width of medium mob health bars"
+        },
+        "Long Bar Width": {
+          "key": "Long Bar Width",
+          "description": "Width of long mob health bars"
+        },
+        "Boss Bar Width": {
+          "key": "Boss Bar Width",
+          "description": "Width of boss mob health bars"
+        }
+      }
+    },
+    "User: Visibility Control": {
+      "name": "User: Visibility Control",
+      "entries": {
+        "Display Mob HP Bar": {
+          "key": "Display Mob HP Bar",
+          "description": "Whether to display health bars for regular mobs"
+        },
+        "Display Boss HP Bar": {
+          "key": "Display Boss HP Bar",
+          "description": "Whether to display health bars for boss mobs"
+        },
+        "Display Damage Text": {
+          "key": "Display Damage Text",
+          "description": "Whether to display damage text upon hit"
+        },
+        "Display Heal Text": {
+          "key": "Display Heal Text",
+          "description": "Whether to display healing text"
+        },
+        "Display Health Numbers": {
+          "key": "Display Health Numbers",
+          "description": "Whether to display health numbers on health bars"
+        }
+      }
+    },
+    "User: Health Bar Thresholds": {
+      "name": "User: Health Bar Thresholds",
+      "entries": {
+        "Min Mob HP": {
+          "key": "Min Mob HP",
+          "description": "Minimum HP for showing mob health bars(e.g. Some environment objects have HP too)"
+        },
+        "Min Medium Bar HP": {
+          "key": "Min Medium Bar HP",
+          "description": "Minimum HP for switching to medium mob health bars"
+        },
+        "Min Long Bar HP": {
+          "key": "Min Long Bar HP",
+          "description": "Minimum HP for switching to long mob health bars"
+        },
+        "Min Boss Bar HP": {
+          "key": "Min Boss Bar HP",
+          "description": "Minimum HP for switching to boss mob health bars. (120 is the HP of Moss Mother)"
+        }
+      }
+    },
+    "User: Health Bar Colors": {
+      "name": "User: Health Bar Colors",
+      "entries": {
+        "HP Color": {
+          "key": "HP Color",
+          "description": "Color of the health portion of the health bar"
+        },
+        "Delayed Effect Color": {
+          "key": "Delayed Effect Color",
+          "description": "Color of the delayed effect portion of the health bar"
+        },
+        "HP Bar Background Color": {
+          "key": "HP Bar Background Color",
+          "description": "Color of the health bar background"
+        },
+        "HP Number Color": {
+          "key": "HP Number Color",
+          "description": "Color of the health numbers on the health bar"
+        }
+      }
+    },
+    "User: Damage Text Colors": {
+      "name": "User: Damage Text Colors",
+      "entries": {
+        "Default Color": {
+          "key": "Default Color",
+          "description": "Color of default damage text"
+        },
+        "Crit Hit Color": {
+          "key": "Crit Hit Color",
+          "description": "Color of critical hit damage text"
+        },
+        "Poison Color": {
+          "key": "Poison Color",
+          "description": "Color of poison damage text"
+        },
+        "Fire Color": {
+          "key": "Fire Color",
+          "description": "Color of fire damage text"
+        },
+        "Heal Color": {
+          "key": "Heal Color",
+          "description": "Color of healing text"
+        }
+      }
+    },
+    "Dev: Visibility Controller Settings": {
+      "name": "Dev: Visibility Controller Settings",
+      "entries": {
+        "Max Z Position": {
+          "key": "Max Z Position",
+          "description": "Minimum absolute Z position to be considered as shown"
+        },
+        "Visible Cache Seconds": {
+          "key": "Visible Cache Seconds",
+          "description": "Time in seconds to cache visibility state"
+        },
+        "Invisible Cache Seconds": {
+          "key": "Invisible Cache Seconds",
+          "description": "Time in seconds to cache visibility state"
+        },
+        "Infinite HP Threshold": {
+          "key": "Infinite HP Threshold",
+          "description": "HP value considered as infinite HP"
+        },
+        "Sprite Tracker Z Offset": {
+          "key": "Sprite Tracker Z Offset",
+          "description": "Z offset for the Sprite Tracker component on mob health bars."
+        }
+      }
+    },
+    "Dev: Damage Text Settings": {
+      "name": "Dev: Damage Text Settings",
+      "entries": {
+        "Weight Of New Hit": {
+          "key": "Weight Of New Hit",
+          "description": "Weight of new hit in exponential moving average calculation."
+        }
+      }
+    }
+  }
+}

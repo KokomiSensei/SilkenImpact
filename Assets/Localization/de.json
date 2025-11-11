@@ -1,0 +1,151 @@
+{
+  "sections": {
+    "User: Health Bar Sizes": {
+      "name": "Benutzer: Gesundheitsbalkengrößen",
+      "entries": {
+        "Short Bar Width": {
+          "key": "Kurze Balkenbreite",
+          "description": "Breite der kurzen Gesundheitsbalken für normale Gegner"
+        },
+        "Medium Bar Width": {
+          "key": "Mittlere Balkenbreite",
+          "description": "Breite der mittleren Gesundheitsbalken für normale Gegner"
+        },
+        "Long Bar Width": {
+          "key": "Lange Balkenbreite",
+          "description": "Breite der langen Gesundheitsbalken für normale Gegner"
+        },
+        "Boss Bar Width": {
+          "key": "Boss-Balkenbreite",
+          "description": "Breite der Gesundheitsbalken für Bosse"
+        }
+      }
+    },
+    "User: Visibility Control": {
+      "name": "Benutzer: Sichtbarkeitskontrolle",
+      "entries": {
+        "Display Mob HP Bar": {
+          "key": "Monster-HP-Balken anzeigen",
+          "description": "Ob Gesundheitsbalken für normale Gegner angezeigt werden"
+        },
+        "Display Boss HP Bar": {
+          "key": "Boss-HP-Balken anzeigen",
+          "description": "Ob Gesundheitsbalken für Bosse angezeigt werden"
+        },
+        "Display Damage Text": {
+          "key": "Schadensanzeige anzeigen",
+          "description": "Ob Schadenszahlen beim Treffer angezeigt werden"
+        },
+        "Display Heal Text": {
+          "key": "Heilungsanzeige anzeigen",
+          "description": "Ob Heilungszahlen angezeigt werden"
+        },
+        "Display Health Numbers": {
+          "key": "HP-Zahlen anzeigen",
+          "description": "Ob Lebenspunkte als Zahl auf den Balken angezeigt werden"
+        }
+      }
+    },
+    "User: Health Bar Thresholds": {
+      "name": "Benutzer: Gesundheitsbalken-Schwellenwerte",
+      "entries": {
+        "Min Mob HP": {
+          "key": "Minimale Monster-HP",
+          "description": "Minimale HP für die Anzeige von Monster-Gesundheitsbalken (z.B. haben einige Umweltobjekte auch HP)"
+        },
+        "Min Medium Bar HP": {
+          "key": "Minimale mittlere Balken-HP",
+          "description": "Minimale HP für mittlere Gesundheitsbalken"
+        },
+        "Min Long Bar HP": {
+          "key": "Minimale lange Balken-HP",
+          "description": "Minimale HP für lange Gesundheitsbalken"
+        },
+        "Min Boss Bar HP": {
+          "key": "Minimale Boss-HP",
+          "description": "Minimale HP für Boss-Gesundheitsbalken (120 ist die HP der Moosmutter)"
+        }
+      }
+    },
+    "User: Health Bar Colors": {
+      "name": "Benutzer: Gesundheitsbalkenfarben",
+      "entries": {
+        "HP Color": {
+          "key": "HP-Farbe",
+          "description": "Farbe des Lebensbalkens"
+        },
+        "Delayed Effect Color": {
+          "key": "Verzögerungseffekt-Farbe",
+          "description": "Farbe des verzögerten Effekts im Lebensbalken"
+        },
+        "HP Bar Background Color": {
+          "key": "Balkenhintergrundfarbe",
+          "description": "Hintergrundfarbe des Lebensbalkens"
+        },
+        "HP Number Color": {
+          "key": "HP-Zahlenfarbe",
+          "description": "Farbe der Lebenspunkte-Zahlen auf dem Balken"
+        }
+      }
+    },
+    "User: Damage Text Colors": {
+      "name": "Benutzer: Schadenszahlenfarben",
+      "entries": {
+        "Default Color": {
+          "key": "Standardfarbe",
+          "description": "Farbe der normalen Schadensanzeige"
+        },
+        "Crit Hit Color": {
+          "key": "Kritische Trefferfarbe",
+          "description": "Farbe der kritischen Schadensanzeige"
+        },
+        "Poison Color": {
+          "key": "Giftfarbe",
+          "description": "Farbe der Giftschadensanzeige"
+        },
+        "Fire Color": {
+          "key": "Feuerfarbe",
+          "description": "Farbe der Feuerschadensanzeige"
+        },
+        "Heal Color": {
+          "key": "Heilungsfarbe",
+          "description": "Farbe der Heilungsanzeige"
+        }
+      }
+    },
+    "Dev: Visibility Controller Settings": {
+      "name": "Entwickler: Sichtbarkeitscontroller-Einstellungen",
+      "entries": {
+        "Max Z Position": {
+          "key": "Maximale Z-Position",
+          "description": "Minimale absolute Z-Position, um als sichtbar zu gelten"
+        },
+        "Visible Cache Seconds": {
+          "key": "Sichtbarkeits-Cache (Sekunden)",
+          "description": "Zeit in Sekunden, um den Sichtbarkeitsstatus zu cachen"
+        },
+        "Invisible Cache Seconds": {
+          "key": "Unsichtbarkeits-Cache (Sekunden)",
+          "description": "Zeit in Sekunden, um den Unsichtbarkeitsstatus zu cachen"
+        },
+        "Infinite HP Threshold": {
+          "key": "Unendliche HP-Schwelle",
+          "description": "HP-Wert, der als unendlich gilt"
+        },
+        "Sprite Tracker Z Offset": {
+          "key": "Sprite-Tracker-Z-Versatz",
+          "description": "Z-Versatz für die Sprite-Tracker-Komponente auf Monsterbalken"
+        }
+      }
+    },
+    "Dev: Damage Text Settings": {
+      "name": "Entwickler: Schadensanzeige-Einstellungen",
+      "entries": {
+        "Weight Of New Hit": {
+          "key": "Gewichtung neuer Treffer",
+          "description": "Gewichtung neuer Treffer in der exponentiellen gleitenden Mittelwertberechnung"
+        }
+      }
+    }
+  }
+}

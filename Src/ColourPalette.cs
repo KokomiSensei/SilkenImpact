@@ -32,6 +32,7 @@ namespace SilkenImpact {
         public static Color HP => FromHexString("#FC5A49");
         public static Color DelayedEffect => FromHexString("#FFCE89");
         public static Color HpBarBackground => FromHexString("#00000059");
+        public static Color HpNumber => FromHexString("#bfbfbfff");
 
         public static List<Color> AllElementColors => new List<Color> {
             Hydro,

@@ -129,6 +129,12 @@ namespace SilkenImpact {
             bar.SetBackgroundColor(Configs.Instance.hpBarBackgroundColor.Value);
             bar.SetWidth(BarWidth(maxHp));
             bar.SetMaxHealth(maxHp);
+            var uiBar = healthBarGO.GetComponent<UIHealthBar>();
+            if (uiBar != null) {
+                PluginLogger.LogInfo($"{GetType().Name}: Setting up UIHealthBar for enemyGO {enemyGO.name}");
+                uiBar.SetHpTextEnabled(Configs.Instance.displayHpNumbers.Value);
+                uiBar.SetHpTextColor(Configs.Instance.hpNumberColor.Value);
+            }
 
             if (!enemyGO.GetComponent<OwnerType>()) {
                 enemyGO.AddComponent<OwnerType>();

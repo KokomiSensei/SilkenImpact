@@ -159,11 +159,11 @@ def check_versions(release_version) -> bool:
 
 
 if __name__ == "__main__":
-    make_nexus_output()
     version = input("Enter the version number for Thunderstore (e.g., 1.0.1): ")
     if not check_versions(version):
         print("Version check failed. Please ensure versions are consistent.")
         exit(0)
+    make_nexus_output()
     make_thunderstore_output(version)
     print("Export complete.")
     print("See the output at: " + OUTPUT_FOLDER)

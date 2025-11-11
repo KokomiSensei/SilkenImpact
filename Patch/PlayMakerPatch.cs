@@ -9,11 +9,17 @@ namespace SilkenImpact.Patch {
 
     [HarmonyPatch]
     public class PlayMakerPatch {
+        public class AddHpArg {
+            public int handle;
+            public int hpInPrefix;
+            public bool isDeadInPrefix;
+        }
+
         // I have seen it called on Grand Silk Mother.
         [HarmonyPatch(typeof(AddHP))] // HealToMax or += AddHp.Value
         [HarmonyPatch("OnEnter")]
         [HarmonyPrefix]
-        public static void AddHP_OnEnter_Prefix(AddHP __instance, ref Tuple<int, int> __state) {
+        public static void AddHP_OnEnter_Prefix(AddHP __instance, ref AddHpArg __state) {
             var go = __instance.target.GetSafe(__instance);
             go.TryGetComponent<HealthManager>(out HealthManager hm);
 
@@ -21,7 +27,11 @@ namespace SilkenImpact.Patch {
             if (hm) {
                 int currentHP = Mathf.Max(hm.hp, 0);
                 int handle = hm.GetComponent<IHealthBarOwner>()?.Dispatcher.Enqueue<SetHpEventArgs>() ?? -1;
-                __state = new Tuple<int, int>(currentHP, handle);
+                __state = new AddHpArg {
+                    handle = handle,
+                    hpInPrefix = currentHP,
+                    isDeadInPrefix = hm.isDead
+                };
 
                 PluginLogger.LogWarning($"PlayMaker AddHP Prefix: {hm.gameObject.name}.isDead = {hm.isDead}");
             }
@@ -30,16 +40,18 @@ namespace SilkenImpact.Patch {
         [HarmonyPatch(typeof(AddHP))] // HealToMax or += AddHp.Value
         [HarmonyPatch("OnEnter")]
         [HarmonyPostfix]
-        public static void AddHP_OnEnter_Postfix(AddHP __instance, ref Tuple<int, int> __state) {
+        public static void AddHP_OnEnter_Postfix(AddHP __instance, ref AddHpArg __state) {
             var go = __instance.target.GetSafe(__instance);
             PluginLogger.LogWarning($"{go.name} PlayMaker AddHP");
             go.TryGetComponent<HealthManager>(out HealthManager hm);
             if (hm) {
                 float hp = hm.hp;
-                float amount = hp - __state.Item1;
-                hm.GetComponent<IHealthBarOwner>()?.Dispatcher.Submit(__state.Item2, new SetHpEventArgs(hp));
-                if (!hm.isDead)
+                hm.GetComponent<IHealthBarOwner>()?.Dispatcher.Submit(__state.handle, new SetHpEventArgs(hp));
+
+                if (!__state.isDeadInPrefix && !hm.isDead) {
+                    float amount = hp - __state.hpInPrefix;
                     HealthManagerPatch.SpawnHealText(hm, amount);
+                }
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, go);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
                 PluginLogger.LogWarning($"{go.name} PlayMaker AddHP hp:{hp}");

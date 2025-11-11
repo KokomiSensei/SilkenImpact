@@ -1,0 +1,151 @@
+{
+  "sections": {
+    "User: Health Bar Sizes": {
+      "name": "Utilisateur : Tailles des barres de santé",
+      "entries": {
+        "Short Bar Width": {
+          "key": "Largeur de barre courte",
+          "description": "Largeur des barres de santé courtes pour les monstres ordinaires"
+        },
+        "Medium Bar Width": {
+          "key": "Largeur de barre moyenne",
+          "description": "Largeur des barres de santé moyennes pour les monstres ordinaires"
+        },
+        "Long Bar Width": {
+          "key": "Largeur de barre longue",
+          "description": "Largeur des barres de santé longues pour les monstres ordinaires"
+        },
+        "Boss Bar Width": {
+          "key": "Largeur de barre de boss",
+          "description": "Largeur des barres de santé pour les boss"
+        }
+      }
+    },
+    "User: Visibility Control": {
+      "name": "Utilisateur : Contrôle de visibilité",
+      "entries": {
+        "Display Mob HP Bar": {
+          "key": "Afficher la barre de HP des monstres",
+          "description": "Afficher les barres de santé pour les monstres ordinaires"
+        },
+        "Display Boss HP Bar": {
+          "key": "Afficher la barre de HP des boss",
+          "description": "Afficher les barres de santé pour les boss"
+        },
+        "Display Damage Text": {
+          "key": "Afficher le texte des dégâts",
+          "description": "Afficher le texte des dégâts lors d'un coup"
+        },
+        "Display Heal Text": {
+          "key": "Afficher le texte de soin",
+          "description": "Afficher le texte de soin"
+        },
+        "Display Health Numbers": {
+          "key": "Afficher les nombres de santé",
+          "description": "Afficher les nombres de santé sur les barres de santé"
+        }
+      }
+    },
+    "User: Health Bar Thresholds": {
+      "name": "Utilisateur : Seuils des barres de santé",
+      "entries": {
+        "Min Mob HP": {
+          "key": "HP minimum des monstres",
+          "description": "HP minimum pour afficher les barres de santé des monstres (certains objets de l'environnement ont aussi des HP)"
+        },
+        "Min Medium Bar HP": {
+          "key": "HP minimum pour barre moyenne",
+          "description": "HP minimum pour passer aux barres de santé moyennes"
+        },
+        "Min Long Bar HP": {
+          "key": "HP minimum pour barre longue",
+          "description": "HP minimum pour passer aux barres de santé longues"
+        },
+        "Min Boss Bar HP": {
+          "key": "HP minimum des boss",
+          "description": "HP minimum pour passer aux barres de santé de boss (120 est la HP de la Mère Mousse)"
+        }
+      }
+    },
+    "User: Health Bar Colors": {
+      "name": "Utilisateur : Couleurs des barres de santé",
+      "entries": {
+        "HP Color": {
+          "key": "Couleur de HP",
+          "description": "Couleur de la partie santé de la barre"
+        },
+        "Delayed Effect Color": {
+          "key": "Couleur d'effet retardé",
+          "description": "Couleur de la partie effet retardé de la barre"
+        },
+        "HP Bar Background Color": {
+          "key": "Couleur de fond de barre",
+          "description": "Couleur de fond de la barre de santé"
+        },
+        "HP Number Color": {
+          "key": "Couleur des nombres de HP",
+          "description": "Couleur des nombres de santé sur la barre"
+        }
+      }
+    },
+    "User: Damage Text Colors": {
+      "name": "Utilisateur : Couleurs du texte de dégâts",
+      "entries": {
+        "Default Color": {
+          "key": "Couleur par défaut",
+          "description": "Couleur du texte de dégâts par défaut"
+        },
+        "Crit Hit Color": {
+          "key": "Couleur de coup critique",
+          "description": "Couleur du texte de dégâts critique"
+        },
+        "Poison Color": {
+          "key": "Couleur de poison",
+          "description": "Couleur du texte de dégâts de poison"
+        },
+        "Fire Color": {
+          "key": "Couleur de feu",
+          "description": "Couleur du texte de dégâts de feu"
+        },
+        "Heal Color": {
+          "key": "Couleur de soin",
+          "description": "Couleur du texte de soin"
+        }
+      }
+    },
+    "Dev: Visibility Controller Settings": {
+      "name": "Développeur : Paramètres du contrôleur de visibilité",
+      "entries": {
+        "Max Z Position": {
+          "key": "Position Z maximale",
+          "description": "Position Z absolue minimale pour être considéré comme visible"
+        },
+        "Visible Cache Seconds": {
+          "key": "Cache de visibilité (secondes)",
+          "description": "Temps en secondes pour mettre en cache l'état de visibilité"
+        },
+        "Invisible Cache Seconds": {
+          "key": "Cache d'invisibilité (secondes)",
+          "description": "Temps en secondes pour mettre en cache l'état d'invisibilité"
+        },
+        "Infinite HP Threshold": {
+          "key": "Seuil de HP infini",
+          "description": "Valeur de HP considérée comme infinie"
+        },
+        "Sprite Tracker Z Offset": {
+          "key": "Décalage Z du traqueur de sprites",
+          "description": "Décalage Z pour le composant Sprite Tracker sur les barres de santé des monstres"
+        }
+      }
+    },
+    "Dev: Damage Text Settings": {
+      "name": "Développeur : Paramètres du texte de dégâts",
+      "entries": {
+        "Weight Of New Hit": {
+          "key": "Poids du nouveau coup",
+          "description": "Poids du nouveau coup dans le calcul de la moyenne mobile exponentielle"
+        }
+      }
+    }
+  }
+}

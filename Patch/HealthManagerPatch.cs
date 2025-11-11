@@ -71,6 +71,9 @@ namespace SilkenImpact.Patch {
                 PluginLogger.LogWarning($"SpawnDamageText called with non-positive damage: {damage}");
                 return;
             }
+            if (!Configs.Instance.displayDamageText.Value) {
+                return;
+            }
             // TODO scale up the text
             float horizontalOffsetScale = UnityEngine.Random.Range(-1f, 1f);
             float verticalOffsetScale = UnityEngine.Random.Range(-0.4f, 0.7f);
@@ -85,6 +88,9 @@ namespace SilkenImpact.Patch {
         public static void SpawnHealText(HealthManager __instance, float amount, Color? color = null) {
             if (amount <= 0) {
                 PluginLogger.LogWarning($"SpawnHealText called with non-positive amount: {amount}");
+                return;
+            }
+            if (!Configs.Instance.displayHealText.Value) {
                 return;
             }
             float horizontalOffsetScale = UnityEngine.Random.Range(-0.5f, 0.5f);

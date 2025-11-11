@@ -1,0 +1,151 @@
+{
+  "sections": {
+    "User: Health Bar Sizes": {
+      "name": "ユーザー：HPバーサイズ",
+      "entries": {
+        "Short Bar Width": {
+          "key": "短いバーの幅",
+          "description": "通常モンスターの短いHPバーの幅"
+        },
+        "Medium Bar Width": {
+          "key": "中くらいのバーの幅",
+          "description": "通常モンスターの中くらいのHPバーの幅"
+        },
+        "Long Bar Width": {
+          "key": "長いバーの幅",
+          "description": "通常モンスターの長いHPバーの幅"
+        },
+        "Boss Bar Width": {
+          "key": "ボスバーの幅",
+          "description": "ボスモンスターのHPバーの幅"
+        }
+      }
+    },
+    "User: Visibility Control": {
+      "name": "ユーザー：表示コントロール",
+      "entries": {
+        "Display Mob HP Bar": {
+          "key": "モブHPバーを表示",
+          "description": "通常モンスターのHPバーを表示するかどうか"
+        },
+        "Display Boss HP Bar": {
+          "key": "ボスHPバーを表示",
+          "description": "ボスモンスターのHPバーを表示するかどうか"
+        },
+        "Display Damage Text": {
+          "key": "ダメージテキストを表示",
+          "description": "ヒット時にダメージテキストを表示するかどうか"
+        },
+        "Display Heal Text": {
+          "key": "回復テキストを表示",
+          "description": "回復テキストを表示するかどうか"
+        },
+        "Display Health Numbers": {
+          "key": "HP数値を表示",
+          "description": "HPバーに数値を表示するかどうか"
+        }
+      }
+    },
+    "User: Health Bar Thresholds": {
+      "name": "ユーザー：HPバーのしきい値",
+      "entries": {
+        "Min Mob HP": {
+          "key": "最小モブHP",
+          "description": "モブHPバーを表示する最小HP（例：一部の環境オブジェクトにもHPがある）"
+        },
+        "Min Medium Bar HP": {
+          "key": "中バー最小HP",
+          "description": "中くらいのHPバーに切り替える最小HP"
+        },
+        "Min Long Bar HP": {
+          "key": "長バー最小HP",
+          "description": "長いHPバーに切り替える最小HP"
+        },
+        "Min Boss Bar HP": {
+          "key": "ボスバー最小HP",
+          "description": "ボスHPバーに切り替える最小HP（モスマザーのHPは120）"
+        }
+      }
+    },
+    "User: Health Bar Colors": {
+      "name": "ユーザー：HPバーの色",
+      "entries": {
+        "HP Color": {
+          "key": "HPの色",
+          "description": "HPバーのHP部分の色"
+        },
+        "Delayed Effect Color": {
+          "key": "遅延効果の色",
+          "description": "HPバーの遅延効果部分の色"
+        },
+        "HP Bar Background Color": {
+          "key": "バー背景色",
+          "description": "HPバーの背景色"
+        },
+        "HP Number Color": {
+          "key": "HP数値の色",
+          "description": "HPバー上のHP数値の色"
+        }
+      }
+    },
+    "User: Damage Text Colors": {
+      "name": "ユーザー：ダメージテキストの色",
+      "entries": {
+        "Default Color": {
+          "key": "デフォルト色",
+          "description": "デフォルトのダメージテキストの色"
+        },
+        "Crit Hit Color": {
+          "key": "クリティカルヒット色",
+          "description": "クリティカルヒットのダメージテキストの色"
+        },
+        "Poison Color": {
+          "key": "毒色",
+          "description": "毒ダメージテキストの色"
+        },
+        "Fire Color": {
+          "key": "火炎色",
+          "description": "火炎ダメージテキストの色"
+        },
+        "Heal Color": {
+          "key": "回復色",
+          "description": "回復テキストの色"
+        }
+      }
+    },
+    "Dev: Visibility Controller Settings": {
+      "name": "開発者：表示コントローラー設定",
+      "entries": {
+        "Max Z Position": {
+          "key": "最大Z位置",
+          "description": "表示と見なされる最小絶対Z位置"
+        },
+        "Visible Cache Seconds": {
+          "key": "表示キャッシュ秒数",
+          "description": "表示状態をキャッシュする秒数"
+        },
+        "Invisible Cache Seconds": {
+          "key": "非表示キャッシュ秒数",
+          "description": "非表示状態をキャッシュする秒数"
+        },
+        "Infinite HP Threshold": {
+          "key": "無限HPしきい値",
+          "description": "無限HPと見なされるHP値"
+        },
+        "Sprite Tracker Z Offset": {
+          "key": "スプライトトラッカーZオフセット",
+          "description": "モブHPバーのスプライトトラッカーコンポーネントのZオフセット"
+        }
+      }
+    },
+    "Dev: Damage Text Settings": {
+      "name": "開発者：ダメージテキスト設定",
+      "entries": {
+        "Weight Of New Hit": {
+          "key": "新しいヒットの重み",
+          "description": "指数移動平均計算における新しいヒットの重み"
+        }
+      }
+    }
+  }
+}
