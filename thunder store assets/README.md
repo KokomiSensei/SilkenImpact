@@ -2,6 +2,8 @@
 
 ## English Version
 
+> If you encounter problem installing with mod manager, please try installing manaually!
+
 ### About this mod
 
 Silken Impact is a stylish health bar display mod that elevates combat feedback to a whole new level. Inspired by the art and hit animations of Genshin Impact.
@@ -58,6 +60,8 @@ Huge thanks to Xiaohai for his outstanding work and generous contribution to the
 
 
 ## 简体中文版本
+
+> 如果您无法通过Mod启动器安装，请尝试手动安装！
 
 ### 简介
 

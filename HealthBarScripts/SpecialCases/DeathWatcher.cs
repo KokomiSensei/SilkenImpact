@@ -5,7 +5,8 @@ namespace SilkenImpact {
 
     class DeathWatcher : MonoBehaviour {
         public static HashSet<string> IngameGameObjectNames = new HashSet<string> {
-            "garmond fighter" // TODO The map guy?
+            "garmond fighter", // TODO The map guy?
+            // "shakra" 
         };
         private HealthManager hm;
         private IHealthBarOwner hpBarOwner;
