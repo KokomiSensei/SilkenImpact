@@ -177,3 +177,8 @@
 
 - Added compatibility with [Pantheon Of Pharloom](https://thunderstore.io/c/hollow-knight-silksong/p/momochi003/Pantheon_Of_Pharloom/)
 
+
+
+### 1.3.1
+
+**Support Installation via Thunderstore Mod Manager**
