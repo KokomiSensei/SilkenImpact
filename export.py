@@ -127,9 +127,11 @@ def make_thunderstore_output(version: str):
         shutil.copy2(CHANGE_LOG_PATH, os.path.join(temp_dir, "CHANGELOG.md"))
 
         # copy the content of BEPINEX_FOLDER into the temp folder
+        core_dir = os.path.join(temp_dir, "core")
+        os.makedirs(core_dir, exist_ok=True)
         for entry in os.listdir(BEPINEX_FOLDER):
             src = os.path.join(BEPINEX_FOLDER, entry)
-            dst = os.path.join(temp_dir, entry)
+            dst = os.path.join(core_dir, entry)
             if os.path.isdir(src):
                 shutil.copytree(src, dst)
             else:
@@ -143,18 +145,39 @@ def make_thunderstore_output(version: str):
         shutil.rmtree(temp_dir, ignore_errors=True)
 
 
+def build_project() -> bool:
+    # Run dotnet build on the csproj file
+    csproj_path = CSPROJ_PATH
+    res = os.system(f'dotnet build "{csproj_path}" -c Release')
+    return res == 0
+
+
 def check_versions(release_version) -> bool:
     passed = True
-    log_latest_version = get_version_from_changlog()
-    if log_latest_version != release_version:
-        passed = False
-        print(f"Warning: The version in CHANGELOG.md ({log_latest_version}) does not match the specified version ({release_version}).")
+
     project_version = get_version_from_csproj()
     if project_version != release_version:
         passed = False
         print(f"Warning: The version in SilkenImpact.csproj ({project_version}) does not match the specified version ({release_version}).")
         set_version_in_csproj(release_version)
         print(f"Updated version to {release_version}. Make sure to build again")
+        if build_project():
+            passed = True
+            print(f"Successfully built to new version {release_version}.")
+    else:
+        print(f"Version in SilkenImpact.csproj matches the specified version: {release_version}.")
+        op = input("Do you want to rebuild the project? (y/n): ").strip().lower()
+        if op == "y":
+            if build_project():
+                print("Project rebuilt successfully.")
+            else:
+                passed = False
+                print("Project rebuild failed.")
+
+    log_latest_version = get_version_from_changlog()
+    if log_latest_version != release_version:
+        passed = False
+        print(f"Warning: The version in CHANGELOG.md ({log_latest_version}) does not match the specified version ({release_version}).")
     return passed
 
 
