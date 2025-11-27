@@ -29,6 +29,12 @@ public class BossHealthBarContainer : MonoBehaviour {
     }
 #endif
 
+    public void SetWidth(float width) {
+        var r = GetComponent<RectTransform>();
+        r.sizeDelta = new Vector2(width, r.sizeDelta.y);
+        OnUpdate();
+    }
+
     public void AddBar(HealthBar bar) {
         if (bars.Find(b => b == bar)) return;
         bars.Add(bar);

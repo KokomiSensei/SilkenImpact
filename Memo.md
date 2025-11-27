@@ -81,3 +81,7 @@
 - 巨型螺蝇：血条hp不匹配，似乎和link有关
 
 - 第四圣咏团：血条只在他俯身挥手攻击的时候显示
+
+- bell eater: 【非常小概率触发，未能复现】使用带毒的原始丝弹枪射他的屁股，会突然蹦出一大堆中毒伤害数字。HealthManager的hp真的被改变了，但血条没变化。
+  报错日志不慎丢失，但是大概溯源到 `BaseHealthBarController.OnDamage()` 中的 `go.GetComponent<HealthBar>()`。
+  记忆中，stacktrace 报错追溯到 `GetComponent<HealthManager>` 内部，应该是 `GetComponent` 报错了。此时通过了 `guardExist`，go 肯定非空、并且具有 HealthBar 组件。怀疑这可能是一个多线程/Unity相关的问题。

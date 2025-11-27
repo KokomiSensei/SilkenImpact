@@ -14,6 +14,11 @@ namespace SilkenImpact {
 
         public override Canvas BarCanvas => ScreenSpaceCanvas.GetScreenSpaceCanvas;
 
+        void UpdateContainerWidth() {
+            float targetWidth = Configs.Instance.bossBarWidth.Value;
+            container.SetWidth(targetWidth);
+        }
+
         void prepareContainer() {
             var containerGO = Plugin.InstantiateFromAssetsBundle(containerPrefabPath, "BossHealthBarContainer");
             container = containerGO.GetComponent<BossHealthBarContainer>();
@@ -28,8 +33,12 @@ namespace SilkenImpact {
 
         protected override void Awake() {
             base.Awake();
-
             prepareContainer();
+        }
+
+        protected override void MatchVisualsWithConfigs() {
+            base.MatchVisualsWithConfigs();
+            UpdateContainerWidth();
         }
 
 
@@ -37,16 +46,15 @@ namespace SilkenImpact {
             if (!guardExist(enemyGO)) return;
             base.OnEnemyShow(enemyGO);
 
-            var barGO = healthBarGoOf[enemyGO];
-            container.AddBar(barGO.GetComponent<HealthBar>());
+            var bar = healthBarOf[enemyGO];
+            container.AddBar(bar);
         }
 
         protected override void OnEnemySpawn(GameObject bossGO, float maxHp) {
             base.OnEnemySpawn(bossGO, maxHp);
 
-            var healthBarGO = healthBarGoOf[bossGO];
-            healthBarGO.transform.localScale = Vector3.one;
-            UIHealthBar uIHealthBar = healthBarGO.GetComponent<UIHealthBar>();
+            var healthBar = healthBarOf[bossGO];
+            UIHealthBar uIHealthBar = healthBar.GetComponent<UIHealthBar>();
             if (uIHealthBar) {
                 string locolisedName = HealthManagerPatch.LocalisedName(__instance: bossGO.GetComponent<HealthManager>());
                 PluginLogger.LogInfo($"BossHealthBarController: Localised name for bossGO {bossGO.name} is {locolisedName}");
@@ -60,14 +68,14 @@ namespace SilkenImpact {
             if (!guardExist(bossGO)) return;
             base.OnEnemyHide(bossGO);
 
-            var go = healthBarGoOf[bossGO];
-            container.RemoveBar(go.GetComponent<HealthBar>());
+            var bar = healthBarOf[bossGO];
+            container.RemoveBar(bar);
         }
 
         protected override void OnEnemyDie(GameObject bossGO) {
             if (!guardExist(bossGO)) return;
-            var go = healthBarGoOf[bossGO];
-            container.RemoveBar(go.GetComponent<HealthBar>());
+            var bar = healthBarOf[bossGO];
+            container.RemoveBar(bar);
 
             base.OnEnemyDie(bossGO);
         }

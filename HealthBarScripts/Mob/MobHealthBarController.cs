@@ -17,21 +17,25 @@ namespace SilkenImpact {
 
         protected override void OnEnemySpawn(GameObject enemyGO, float maxHp) {
             base.OnEnemySpawn(enemyGO, maxHp);
-            var healthBarGO = healthBarGoOf[enemyGO];
-            var spriteTracker = healthBarGO.GetComponent<SpriteTracker>();
+            var healthBarGO = healthBarOf[enemyGO].gameObject;
+            if (!healthBarGO.TryGetComponent<SpriteTracker>(out var spriteTracker)) {
+                spriteTracker = healthBarGO.AddComponent<SpriteTracker>();
+            }
             spriteTracker.SetTarget(enemyGO);
             spriteTracker.zOffset = Configs.Instance.spriteTrackerZOffset.Value;
         }
 
 #if DEBUG
         void Update() {
-            foreach (var kvp in healthBarGoOf) {
+            foreach (var kvp in healthBarOf) {
                 var hm = kvp.Key.GetComponent<HealthManager>();
-                var barGO = kvp.Value;
-                var bar = barGO.GetComponent<HealthBar>();
-                if (hm == null || barGO == null) continue;
+                var bar = kvp.Value;
+                var barGO = bar.gameObject;
+                if (hm == null || barGO == null)
+                    continue;
                 barGO.name = hm.name + "_HealthBar";
-                if (bar) bar.name = hm.name + "_HealthBar_Component";
+                if (bar)
+                    bar.name = hm.name + "_HealthBar_Component";
             }
         }
 
