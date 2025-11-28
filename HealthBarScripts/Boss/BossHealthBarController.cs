@@ -8,7 +8,18 @@ namespace SilkenImpact {
     public class BossHealthBarController : BaseHealthBarController<BossOwnerEvent, BossHealthBarOwner> {
 
         BossHealthBarContainer container;
-        protected string healthBarPrefabPath = "Assets/Addressables/Prefabs/HealthBarBossWithName.prefab";
+        protected string healthBarPrefabPath {
+            get {
+                switch (Configs.Instance.healthBarShape.Value) {
+                    case HealthBarShape.Rounded:
+                        return "Assets/Addressables/Prefabs/Health Bars/Masked UI Health Bars/RoundedBoss.prefab";
+                    case HealthBarShape.Diamond:
+                        return "Assets/Addressables/Prefabs/Health Bars/Masked UI Health Bars/DiamondBoss.prefab";
+                    default:
+                        return "Assets/Addressables/Prefabs/Health Bars/Masked UI Health Bars/RoundedBoss.prefab";
+                }
+            }
+        }
         protected string containerPrefabPath = "Assets/Addressables/Prefabs/Container.prefab";
         public override GameObject GetNewHealthBar => Plugin.InstantiateFromAssetsBundle(healthBarPrefabPath, "BossHealthBar");
 

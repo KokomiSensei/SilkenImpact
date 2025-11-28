@@ -2,7 +2,8 @@ using System.Collections;
 using UnityEngine;
 namespace SilkenImpact {
     public abstract class Bar : MonoBehaviour {
-        public float margin;
+        public float verticalMargin;
+        public float horizontalMargin;
         public float maxHeight;
         public float maxWidth;
 
@@ -15,14 +16,14 @@ namespace SilkenImpact {
         /// <summary>
         /// Update the size of the bar, while keeping its current percentage.
         /// </summary>
-        public abstract void UpdateSize(float maxHeight, float maxWidth, float margin);
+        public abstract void UpdateSize(float maxHeight, float maxWidth, float verticalMargin, float horizontalMargin);
 
         public abstract void SetVisibility(bool visible);
 
         public abstract void SetColor(Color color);
 
-        public void Init(float maxHeight, float maxWidth, float margin) {
-            UpdateSize(maxHeight, maxWidth, margin);
+        public void Init(float maxHeight, float maxWidth, float verticalMargin, float horizontalMargin) {
+            UpdateSize(maxHeight, maxWidth, verticalMargin, horizontalMargin);
             MatchWithPercentage(1);
         }
 

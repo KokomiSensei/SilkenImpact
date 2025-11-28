@@ -12,7 +12,8 @@ namespace SilkenImpact {
 
         [SerializeField] protected float height;
         [SerializeField] protected float width;
-        [SerializeField] protected float margin;
+        [SerializeField] protected float verticalMargin;
+        [SerializeField] protected float horizontalMargin;
 
         [SerializeField] protected float maxHealth = 100f;
         [SerializeField] protected float currentHealth = 100f;
@@ -54,8 +55,9 @@ namespace SilkenImpact {
             Redraw();
         }
 
-        public void SetMargin(float margin) {
-            this.margin = margin;
+        public void SetMargin(float verticalMargin, float horizontalMargin) {
+            this.verticalMargin = verticalMargin;
+            this.horizontalMargin = horizontalMargin;
             Redraw();
         }
 
@@ -70,15 +72,15 @@ namespace SilkenImpact {
         }
 
         protected virtual void Redraw() {
-            hp.UpdateSize(height, width, margin);
-            delayedEffect.UpdateSize(height, width, margin);
-            background.UpdateSize(height, width, 0);
+            hp.UpdateSize(height, width, verticalMargin, horizontalMargin);
+            delayedEffect.UpdateSize(height, width, verticalMargin, horizontalMargin);
+            background.UpdateSize(height, width, 0, 0);
         }
 
         protected virtual void OnStart() {
-            hp.Init(height, width, margin);
-            delayedEffect.Init(height, width, margin);
-            background.Init(height, width, 0);
+            hp.Init(height, width, verticalMargin, horizontalMargin);
+            delayedEffect.Init(height, width, verticalMargin, horizontalMargin);
+            background.Init(height, width, 0, 0);
             currentHealth = maxHealth;
             OnHealthChanged();
         }

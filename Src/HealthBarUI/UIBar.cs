@@ -1,20 +1,12 @@
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 namespace SilkenImpact {
     public class UIBar : Bar {
-        private RectTransform rectTransform;
-        private CanvasGroup canvasGroup;
+        [SerializeField] protected RectTransform rectTransform;
+        [SerializeField] protected CanvasGroup canvasGroup;
+        [SerializeField] protected Image image;
 
-        private void Awake() {
-            rectTransform = GetComponent<RectTransform>();
-            canvasGroup = GetComponent<CanvasGroup>() ?? gameObject.AddComponent<CanvasGroup>();
-        }
-
-        public override float CurrentPercentage =>
-            rectTransform.sizeDelta.x / maxWidth;
-
-
-
+        public override float CurrentPercentage => rectTransform.sizeDelta.x / maxWidth;
 
         /// <summary>
         /// Update the size of the bar, while keeping its current percentage.
@@ -22,16 +14,18 @@ namespace SilkenImpact {
         /// </summary>
         /// <param name="maxHeight"></param>
         /// <param name="maxWidth"></param>
-        /// <param name="margin"></param>
-        public override void UpdateSize(float maxHeight, float maxWidth, float margin) {
+        /// <param name="verticalMargin"></param>
+        /// <param name="horizontalMargin"></param>
+        public override void UpdateSize(float maxHeight, float maxWidth, float verticalMargin, float horizontalMargin) {
             float p = CurrentPercentage;
-            this.maxHeight = maxHeight - 2 * margin;
-            this.maxWidth = maxWidth - 2 * margin;
-            this.margin = margin;
+            this.maxHeight = maxHeight - 2 * verticalMargin;
+            this.maxWidth = maxWidth - 2 * horizontalMargin;
+            this.verticalMargin = verticalMargin;
+            this.horizontalMargin = horizontalMargin;
             rectTransform.anchorMin = new Vector2(0, 0);
             rectTransform.anchorMax = new Vector2(0, 1);
             rectTransform.pivot = new Vector2(0, 0.5f);
-            rectTransform.offsetMin = new Vector2(margin, margin);
+            rectTransform.offsetMin = new Vector2(horizontalMargin, verticalMargin);
             //rectTransform.offsetMax = new Vector2(maxWidth - margin, -margin);
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, this.maxHeight);
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, this.maxWidth * p);
@@ -47,7 +41,6 @@ namespace SilkenImpact {
         }
 
         public override void SetColor(Color color) {
-            var image = GetComponent<UnityEngine.UI.Image>();
             if (image != null) {
                 image.color = color;
             }

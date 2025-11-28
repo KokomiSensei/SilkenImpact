@@ -67,6 +67,15 @@
         }
       }
     },
+    "User: Health Bar Shapes": {
+      "name": "Benutzer: Gesundheitsleisten-Formen",
+      "entries": {
+        "Health Bar Shape": {
+          "key": "Gesundheitsleisten-Form",
+          "description": "Form der Gesundheitsleiste (z. B. Diamond)"
+        }
+      }
+    },
     "User: Health Bar Colors": {
       "name": "Benutzer: Gesundheitsbalkenfarben",
       "entries": {

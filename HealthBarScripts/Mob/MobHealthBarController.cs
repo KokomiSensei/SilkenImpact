@@ -6,7 +6,18 @@ using UnityEngine.UI;
 
 namespace SilkenImpact {
     public class MobHealthBarController : BaseHealthBarController<MobOwnerEvent, MobHealthBarOwner> {
-        private string prefabPath = "Assets/Addressables/Prefabs/HealthBarSmall.prefab";
+        private string prefabPath {
+            get {
+                switch (Configs.Instance.healthBarShape.Value) {
+                    case HealthBarShape.Rounded:
+                        return "Assets/Addressables/Prefabs/Health Bars/Masked UI Health Bars/Rounded.prefab";
+                    case HealthBarShape.Diamond:
+                        return "Assets/Addressables/Prefabs/Health Bars/Masked UI Health Bars/Diamond.prefab";
+                    default:
+                        return "Assets/Addressables/Prefabs/Health Bars/Masked UI Health Bars/Rounded.prefab";
+                }
+            }
+        }
         public override GameObject GetNewHealthBar => Plugin.InstantiateFromAssetsBundle(prefabPath, "MobHealthBar");
 
         public override Canvas BarCanvas => WorldSpaceCanvas.GetWorldSpaceCanvas;

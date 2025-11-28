@@ -67,6 +67,15 @@
         }
       }
     },
+    "User: Health Bar Shapes": {
+      "name": "Usuário: Formas da barra de vida",
+      "entries": {
+        "Health Bar Shape": {
+          "key": "Forma da barra de vida",
+          "description": "Forma da barra de vida (ex.: Diamond)"
+        }
+      }
+    },
     "User: Health Bar Colors": {
       "name": "Usuário: Cores da barra de vida",
       "entries": {

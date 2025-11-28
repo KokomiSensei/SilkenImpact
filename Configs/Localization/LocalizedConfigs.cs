@@ -98,6 +98,10 @@ namespace SilkenImpact {
                 .AddAdvancedEntry(ref configs.minLongBarHp, 100f, thresholds.Get("Min Long Bar HP"))
                 .AddAdvancedEntry(ref configs.minBossBarHp, 120f, thresholds.Get("Min Boss Bar HP"));
 
+            var shapes = localization["User: Health Bar Shapes"];
+            new MyConfigSection(shapes.name, configFile)
+                .AddEntry(ref configs.healthBarShape, HealthBarShape.Diamond, shapes.Get("Health Bar Shape"));
+
             // Health Bar Colors
             var colors = localization["User: Health Bar Colors"];
             new MyConfigSection(colors.name, configFile)

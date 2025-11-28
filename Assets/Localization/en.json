@@ -67,6 +67,15 @@
         }
       }
     },
+    "User: Health Bar Shapes": {
+      "name": "User: Health Bar Shapes",
+      "entries": {
+        "Health Bar Shape": {
+          "key": "Health Bar Shape",
+          "description": "Shape of the health bar (e.g., Diamond)"
+        }
+      }
+    },
     "User: Health Bar Colors": {
       "name": "User: Health Bar Colors",
       "entries": {

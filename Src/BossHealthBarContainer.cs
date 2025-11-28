@@ -6,6 +6,13 @@ using UnityEngine;
 using UnityEngine.Assertions.Must;
 
 public class BossHealthBarContainer : MonoBehaviour {
+    /*
+    Important Rect Transform Settings of a BossHealthBar:
+    Anchor Min: (0, 0.5)
+    Anchor Max: (0, 0.5)
+    Pivot: (0.5, 0.5)
+    Make sure these are correctly set in the prefab!
+    */
     [SerializeField] private List<HealthBar> bars = new();
     [SerializeField] private RectTransform rect;
     public float interval = 0.3f;
