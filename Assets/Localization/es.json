@@ -67,6 +67,15 @@
         }
       }
     },
+    "User: Health Bar Shapes": {
+      "name": "Usuario: Formas de la barra de salud",
+      "entries": {
+        "Health Bar Shape": {
+          "key": "Forma de la barra de salud",
+          "description": "Forma de la barra de salud (p. ej., Diamond)"
+        }
+      }
+    },
     "User: Health Bar Colors": {
       "name": "Usuario: Colores de la barra de salud",
       "entries": {

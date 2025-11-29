@@ -4,6 +4,11 @@ using System.Collections;
 using UnityEngine;
 
 namespace SilkenImpact {
+    public enum HealthBarShape {
+        Rounded,
+        Diamond
+    }
+
     public class Configs : MonoBehaviour {
         private static Configs __instance;
         public static Configs Instance {
@@ -21,6 +26,8 @@ namespace SilkenImpact {
         public ConfigEntry<float> mediumBarWidth;
         public ConfigEntry<float> longBarWidth;
         public ConfigEntry<float> bossBarWidth;
+
+        public ConfigEntry<HealthBarShape> healthBarShape;
 
         public ConfigEntry<float> minMobHp;
         public ConfigEntry<float> minMediumBarHp;

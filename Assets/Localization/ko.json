@@ -67,6 +67,15 @@
         }
       }
     },
+    "User: Health Bar Shapes": {
+      "name": "사용자: 체력바 모양",
+      "entries": {
+        "Health Bar Shape": {
+          "key": "체력바 모양",
+          "description": "체력바의 모양(예: Diamond)"
+        }
+      }
+    },
     "User: Health Bar Colors": {
       "name": "사용자: 체력바 색상",
       "entries": {

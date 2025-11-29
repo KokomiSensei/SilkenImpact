@@ -182,3 +182,26 @@
 ### 1.3.1
 
 **Support Installation via Thunderstore Mod Manager**
+
+
+
+### 1.4.0
+
+**New Feature**
+
+- Health Bar Visuals
+  - Added a diamond shaped health bar as the new default. You can switch back to the old health bar in mod's settings.
+  
+  - Decrease bar height by 13%.
+  
+  - Changed the right-edge outline of the `HP bar` and the `Damage delayed effect` from a curve to a vertical line for clearer display.
+  
+  - Example of current default visuals:
+  
+     ![image-20251128194112155](https://staticdelivery.nexusmods.com/mods/8136/images/686/686-1764330437-1966180064.png)
+
+
+
+**Bug Fix**
+
+- Problem adjusting width of Boss health bars

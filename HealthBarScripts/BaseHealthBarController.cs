@@ -8,7 +8,7 @@ using UnityEngine.UI;
 namespace SilkenImpact {
     public abstract class BaseHealthBarController<EventType, OwnerType> : MonoBehaviour where OwnerType : MonoBehaviour, IHealthBarOwner {
 
-        protected Dictionary<GameObject, GameObject> healthBarGoOf = new();
+        protected Dictionary<GameObject, HealthBar> healthBarOf = new();
         public abstract GameObject GetNewHealthBar { get; }
         public abstract Canvas BarCanvas { get; }
 
@@ -31,13 +31,13 @@ namespace SilkenImpact {
         protected virtual void Awake() {
             RegisterEventHandlers();
             linkBuffer = new LinkBuffer(TryLinkEnemy);
+            InvokeRepeating(nameof(MatchVisualsWithConfigs), 0f, 1f);
         }
 
         protected void OnCheckHP(GameObject enemyGO, bool fixMismatch = false) {
             float realHp = enemyGO.GetComponent<HealthManager>().hp;
             if (!guardExist(enemyGO)) return;
-            var go = healthBarGoOf[enemyGO];
-            var bar = go.GetComponent<HealthBar>();
+            var bar = healthBarOf[enemyGO];
             if (Mathf.Abs(bar.CurrentHealth - realHp) > 0.01f) {
                 PluginLogger.LogError($"{GetType().Name}: OnCheckHP detected HP mismatch for enemyGO {enemyGO.name}, HealthBar has {bar.CurrentHealth}, but HealthManager has {realHp}");
                 float damage = bar.CurrentHealth - realHp;
@@ -54,17 +54,17 @@ namespace SilkenImpact {
 
 
         protected bool guardExist(GameObject enemyGO) {
-            if (!healthBarGoOf.ContainsKey(enemyGO)) {
-                PluginLogger.LogWarning($"{GetType().Name}: GuardExist failed, enemyGO {enemyGO.name} not found in healthBarGoOf");
+            if (!healthBarOf.ContainsKey(enemyGO)) {
+                PluginLogger.LogWarning($"{GetType().Name}: GuardExist failed, enemyGO {enemyGO.name} not found in healthBarOf");
                 return false;
             }
             return true;
         }
 
         public GameObject GetRandomEnemyGO() {
-            foreach (var kvp in healthBarGoOf) {
+            foreach (var kvp in healthBarOf) {
                 if (kvp.Key != null)
-                    return kvp.Key;
+                    return kvp.Key.gameObject;
             }
             return null;
         }
@@ -72,21 +72,20 @@ namespace SilkenImpact {
         protected virtual void OnEnemyShow(GameObject enemyGO) {
             if (!guardExist(enemyGO)) return;
             PluginLogger.LogWarning($"{GetType().Name}: OnEnemyShow called on {enemyGO.name}");
-            var barGO = healthBarGoOf[enemyGO];
-            barGO.GetComponent<HealthBar>().SetVisibility(true);
+            var bar = healthBarOf[enemyGO];
+            bar.SetVisibility(true);
         }
 
         protected abstract float BarWidth(float maxHp);
 
         protected bool TryLinkEnemy(GameObject originGO, GameObject relayGO) {
             if (!guardExist(originGO)) return false;
-            if (healthBarGoOf.ContainsKey(relayGO)) {
+            if (healthBarOf.ContainsKey(relayGO)) {
                 PluginLogger.LogInfo($"{GetType().Name}: LinkEnemy called on {relayGO.name}. Destroying existing health bar");
-                var withBarGO = healthBarGoOf[relayGO];
+                var withBarGO = healthBarOf[relayGO].gameObject;
                 Destroy(withBarGO);
             }
-            var sourceBarGO = healthBarGoOf[originGO];
-            healthBarGoOf[relayGO] = sourceBarGO;
+            healthBarOf[relayGO] = healthBarOf[originGO];
             if (relayGO.TryGetComponent<IHealthBarOwner>(out var relayOwner)) {
                 relayOwner.RemoveVisibilityController();
             }
@@ -104,14 +103,33 @@ namespace SilkenImpact {
             linkBuffer.RegisterRelay(sourceGO, withGO);
         }
 
+        protected void MatchVisualsWithConfigs(HealthBar bar) {
+            if (!bar) return;
+            bar.SetHpColor(Configs.Instance.hpColor.Value);
+            bar.SetDelayedEffectColor(Configs.Instance.delayedEffectColor.Value);
+            bar.SetBackgroundColor(Configs.Instance.hpBarBackgroundColor.Value);
+            bar.SetWidth(BarWidth(bar.MaxHealth));
+            var uiBar = bar.GetComponent<UIHealthBar>();
+            if (uiBar != null) {
+                PluginLogger.LogInfo($"{GetType().Name}: Setting up UIHealthBar for bar: {bar.gameObject.name}");
+                uiBar.SetHpTextEnabled(Configs.Instance.displayHpNumbers.Value);
+                uiBar.SetHpTextColor(Configs.Instance.hpNumberColor.Value);
+            }
+        }
+
+        protected virtual void MatchVisualsWithConfigs() {
+            foreach (var kvp in healthBarOf) {
+                MatchVisualsWithConfigs(kvp.Value);
+            }
+        }
+
         protected virtual void OnEnemySpawn(GameObject enemyGO, float maxHp) {
             GameObject healthBarGO;
             HealthBar bar;
-            if (healthBarGoOf.ContainsKey(enemyGO)) {
+            if (healthBarOf.ContainsKey(enemyGO)) {
                 PluginLogger.LogWarning($"{GetType().Name}: OnEnemySpawn called but enemyGO {enemyGO.name} already has a health bar");
                 PluginLogger.LogWarning($"{GetType().Name}: Overwriting maxHp enemyGO {enemyGO.name} with [{maxHp}]");
-                healthBarGO = healthBarGoOf[enemyGO];
-                bar = healthBarGO.GetComponent<HealthBar>();
+                bar = healthBarOf[enemyGO];
                 bar.SetMaxHealth(maxHp);
                 return;
             }
@@ -119,22 +137,17 @@ namespace SilkenImpact {
 
             healthBarGO = GetNewHealthBar;
 
-            healthBarGoOf[enemyGO] = healthBarGO;
+            // Setup HealthBarGO
             healthBarGO.transform.SetParent(BarCanvas.transform);
             healthBarGO.transform.localScale = Vector3.one;
 
+            // Setup HealthBar
             bar = healthBarGO.GetComponent<HealthBar>();
-            bar.SetHpColor(Configs.Instance.hpColor.Value);
-            bar.SetDelayedEffectColor(Configs.Instance.delayedEffectColor.Value);
-            bar.SetBackgroundColor(Configs.Instance.hpBarBackgroundColor.Value);
-            bar.SetWidth(BarWidth(maxHp));
             bar.SetMaxHealth(maxHp);
-            var uiBar = healthBarGO.GetComponent<UIHealthBar>();
-            if (uiBar != null) {
-                PluginLogger.LogInfo($"{GetType().Name}: Setting up UIHealthBar for enemyGO {enemyGO.name}");
-                uiBar.SetHpTextEnabled(Configs.Instance.displayHpNumbers.Value);
-                uiBar.SetHpTextColor(Configs.Instance.hpNumberColor.Value);
-            }
+            MatchVisualsWithConfigs(bar);
+
+            // Update Dictionary
+            healthBarOf[enemyGO] = bar;
 
             if (!enemyGO.GetComponent<OwnerType>()) {
                 enemyGO.AddComponent<OwnerType>();
@@ -159,8 +172,7 @@ namespace SilkenImpact {
 
         protected void OnEnemyDamage(GameObject enemyGO, float amount) {
             if (!guardExist(enemyGO)) return;
-            var go = healthBarGoOf[enemyGO];
-            var bar = go.GetComponent<HealthBar>();
+            var bar = healthBarOf[enemyGO];
             bar.TakeDamage(amount);
             // OnCheckHP(enemyGO, true); // Must not call this here
             OnCheckHP(enemyGO);
@@ -168,29 +180,27 @@ namespace SilkenImpact {
 
         protected void OnEnemyHeal(GameObject enemyGO, float amount) {
             if (!guardExist(enemyGO)) return;
-            var go = healthBarGoOf[enemyGO];
-            var bar = go.GetComponent<HealthBar>();
+            var bar = healthBarOf[enemyGO];
             bar.Heal(amount);
             OnCheckHP(enemyGO);
         }
 
         protected virtual void OnEnemyHide(GameObject enemyGO) {
             if (!guardExist(enemyGO)) return;
-            var go = healthBarGoOf[enemyGO];
-            go.GetComponent<HealthBar>().SetVisibility(false);
+            var bar = healthBarOf[enemyGO];
+            bar.SetVisibility(false);
         }
 
         protected virtual void OnEnemyDie(GameObject enemyGO) {
             if (!guardExist(enemyGO)) return;
-            var go = healthBarGoOf[enemyGO];
-            Destroy(go);
-            healthBarGoOf.Remove(enemyGO);
+            var bar = healthBarOf[enemyGO];
+            Destroy(bar.gameObject);
+            healthBarOf.Remove(enemyGO);
         }
 
         protected void OnEnemySetHP(GameObject enemyGO, float hp) {
             if (!guardExist(enemyGO)) return;
-            var go = healthBarGoOf[enemyGO];
-            var bar = go.GetComponent<HealthBar>();
+            var bar = healthBarOf[enemyGO];
             bar.ResetHealth(hp);
             OnCheckHP(enemyGO, true);
         }

@@ -67,6 +67,15 @@
         }
       }
     },
+    "User: Health Bar Shapes": {
+      "name": "Пользователь: формы полосы здоровья",
+      "entries": {
+        "Health Bar Shape": {
+          "key": "Форма полосы здоровья",
+          "description": "Форма полосы здоровья (напр., Diamond)"
+        }
+      }
+    },
     "User: Health Bar Colors": {
       "name": "Пользователь: цвета полосы здоровья",
       "entries": {

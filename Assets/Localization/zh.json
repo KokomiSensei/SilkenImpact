@@ -67,6 +67,15 @@
         }
       }
     },
+    "User: Health Bar Shapes": {
+      "name": "用户: 血条形状",
+      "entries": {
+        "Health Bar Shape": {
+          "key": "血条形状",
+          "description": "血条的形状（例如：Diamond）"
+        }
+      }
+    },
     "User: Health Bar Colors": {
       "name": "用户: 血条颜色",
       "entries": {

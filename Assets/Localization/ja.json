@@ -67,6 +67,15 @@
         }
       }
     },
+    "User: Health Bar Shapes": {
+      "name": "ユーザー：HPバーの形状",
+      "entries": {
+        "Health Bar Shape": {
+          "key": "HPバーの形状",
+          "description": "HPバーの形（例：Diamond)"
+        }
+      }
+    },
     "User: Health Bar Colors": {
       "name": "ユーザー：HPバーの色",
       "entries": {
