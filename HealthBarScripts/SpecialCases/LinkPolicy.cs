@@ -63,7 +63,9 @@ namespace SilkenImpact {
         Dictionary<Endpoint, Endpoint> originOfRelayEndpoint = new Dictionary<Endpoint, Endpoint>() {
             {
                 Endpoint.RelayEndpoint("Giant Centipede Butt"),
-                Endpoint.OriginEndpoint("Giant Centipede Head", overrideHp: 800f + 50f) // Add an extra 50, because the bell eater is always killed by bell beast.
+                Endpoint.OriginEndpoint("Giant Centipede Head", overrideHp: 800f) 
+                // Given up: Add an extra 50, because the bell eater is always killed by bell beast.
+                // Update: Whatever, I decided to just keep it to 800. So when the number of HP is displayed, it won't cause confusion.
                     .SetHealthManagerFinder(() => {
                         return GameObject.Find("Giant Centipede Head")?.GetComponent<HealthManager>();
                     })

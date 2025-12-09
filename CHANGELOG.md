@@ -198,10 +198,26 @@
   
   - Example of current default visuals:
   
-     ![image-20251128194112155](https://staticdelivery.nexusmods.com/mods/8136/images/686/686-1764330437-1966180064.png)
+      ![image-20251128194112155](https://staticdelivery.nexusmods.com/mods/8136/images/686/686-1764330437-1966180064.png)
 
 
 
 **Bug Fix**
 
 - Problem adjusting width of Boss health bars
+
+
+
+### 1.4.1
+
+**Actually support Installation via Thunderstore Mod Manager**
+
+- Now the mod manager should be able to install the mod to the `plugins` folder automatically, instead of the `cores` folder.
+
+  > I am so sorry for the inconvenience and confusion I caused earlier.
+
+
+
+**Bell eater**
+
+- Removed the 50 over health that had only existed for visual purposes. Now the health bar's max health of the bell eater is set to 800, to avoid confusion when the HP's number is displayed.
