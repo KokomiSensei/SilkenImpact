@@ -122,6 +122,40 @@
         }
       }
     },
+    "User: Damage Text Settings": {
+      "name": "User: Damage Text Settings",
+      "entries": {
+        "Damage Font Scaler": {
+          "key": "Damage Font Scaler",
+          "description": "Scale factor for damage text font size."
+        },
+        "Weight Of New Hit": {
+          "key": "Weight Of New Hit",
+          "description": "Weight of new hit in exponential moving average calculation."
+        }
+      }
+    },
+    "User: Font Settings": {
+      "name": "User: Font Settings",
+      "entries": {
+        "Damage Font": {
+          "key": "Damage Font",
+          "description": "Font used for damage text. Select from bundled fonts or use a system font."
+        },
+        "Damage OS Font Name": {
+          "key": "Damage OS Font Name",
+          "description": "Name of the system font to use for damage text (e.g., Arial). Only applies when 'Damage Font' is set to use system fonts."
+        },
+        "HP Bar Font": {
+          "key": "HP Bar Font",
+          "description": "Font used for health numbers on health bars. Select from bundled fonts or use a system font."
+        },
+        "HP Bar OS Font Name": {
+          "key": "HP Bar OS Font Name",
+          "description": "Name of the system font to use for HP bar numbers (e.g., Arial). Only applies when 'HP Bar Font' is set to use system fonts."
+        }
+      }
+    },
     "Dev: Visibility Controller Settings": {
       "name": "Dev: Visibility Controller Settings",
       "entries": {
@@ -144,15 +178,6 @@
         "Sprite Tracker Z Offset": {
           "key": "Sprite Tracker Z Offset",
           "description": "Z offset for the Sprite Tracker component on mob health bars."
-        }
-      }
-    },
-    "User: Damage Text Settings": {
-      "name": "User: Damage Text Settings",
-      "entries": {
-        "Weight Of New Hit": {
-          "key": "Weight Of New Hit",
-          "description": "Weight of new hit in exponential moving average calculation."
         }
       }
     }

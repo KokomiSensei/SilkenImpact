@@ -122,6 +122,40 @@
         }
       }
     },
+    "User: Damage Text Settings": {
+      "name": "사용자: 데미지 텍스트 설정",
+      "entries": {
+        "Damage Font Scaler": {
+          "key": "데미지 폰트 크기 배율",
+          "description": "데미지 텍스트 폰트 크기의 배율."
+        },
+        "Weight Of New Hit": {
+          "key": "새로운 타격 가중치",
+          "description": "지수이동평균 계산에서 새로운 타격의 가중치"
+        }
+      }
+    },
+    "User: Font Settings": {
+      "name": "사용자: 폰트 설정",
+      "entries": {
+        "Damage Font": {
+          "key": "데미지 폰트",
+          "description": "데미지 텍스트에 사용되는 폰트. 포함된 폰트에서 선택하거나 시스템 폰트를 사용합니다."
+        },
+        "Damage OS Font Name": {
+          "key": "데미지 시스템 폰트 이름",
+          "description": "데미지 텍스트용 시스템 폰트 이름(예: Arial). '데미지 폰트'가 시스템 폰트 사용으로 설정된 경우에만 적용됩니다."
+        },
+        "HP Bar Font": {
+          "key": "체력바 폰트",
+          "description": "체력바 숫자에 사용되는 폰트. 포함된 폰트에서 선택하거나 시스템 폰트를 사용합니다."
+        },
+        "HP Bar OS Font Name": {
+          "key": "체력바 시스템 폰트 이름",
+          "description": "체력바 숫자용 시스템 폰트 이름(예: Arial). '체력바 폰트'가 시스템 폰트 사용으로 설정된 경우에만 적용됩니다."
+        }
+      }
+    },
     "Dev: Visibility Controller Settings": {
       "name": "개발자: 표시 컨트롤러 설정",
       "entries": {
@@ -144,15 +178,6 @@
         "Sprite Tracker Z Offset": {
           "key": "스프라이트 트래커 Z 오프셋",
           "description": "몹 체력바의 스프라이트 트래커 컴포넌트의 Z 오프셋"
-        }
-      }
-    },
-    "User: Damage Text Settings": {
-      "name": "개발자: 데미지 텍스트 설정",
-      "entries": {
-        "Weight Of New Hit": {
-          "key": "새로운 타격 가중치",
-          "description": "지수이동평균 계산에서 새로운 타격의 가중치"
         }
       }
     }

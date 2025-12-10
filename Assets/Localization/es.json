@@ -122,6 +122,40 @@
         }
       }
     },
+    "User: Damage Text Settings": {
+      "name": "Usuario: Configuración del texto de daño",
+      "entries": {
+        "Damage Font Scaler": {
+          "key": "Escala de fuente de daño",
+          "description": "Factor de escala para el tamaño de fuente del texto de daño."
+        },
+        "Weight Of New Hit": {
+          "key": "Peso del nuevo golpe",
+          "description": "Peso del nuevo golpe en el cálculo de media móvil exponencial"
+        }
+      }
+    },
+    "User: Font Settings": {
+      "name": "Usuario: Configuración de fuentes",
+      "entries": {
+        "Damage Font": {
+          "key": "Fuente de daño",
+          "description": "Fuente utilizada para el texto de daño. Seleccione de las fuentes incluidas o use una fuente del sistema."
+        },
+        "Damage OS Font Name": {
+          "key": "Nombre de fuente del sistema para daño",
+          "description": "Nombre de la fuente del sistema para el texto de daño (p. ej., Arial). Solo se aplica cuando 'Fuente de daño' está configurada para usar fuentes del sistema."
+        },
+        "HP Bar Font": {
+          "key": "Fuente de barra de vida",
+          "description": "Fuente utilizada para los números de salud en las barras. Seleccione de las fuentes incluidas o use una fuente del sistema."
+        },
+        "HP Bar OS Font Name": {
+          "key": "Nombre de fuente del sistema para barra de vida",
+          "description": "Nombre de la fuente del sistema para los números de HP (p. ej., Arial). Solo se aplica cuando 'Fuente de barra de vida' está configurada para usar fuentes del sistema."
+        }
+      }
+    },
     "Dev: Visibility Controller Settings": {
       "name": "Desarrollador: Configuración del controlador de visibilidad",
       "entries": {
@@ -142,17 +176,8 @@
           "description": "Valor de HP considerado como HP infinita"
         },
         "Sprite Tracker Z Offset": {
-          "key": "Desplazamiento Z del rastreador de sprites",
+          "key": "Desplazamiento Z del Sprite Tracker",
           "description": "Desplazamiento Z para el componente Sprite Tracker en las barras de salud de monstruos"
-        }
-      }
-    },
-    "User: Damage Text Settings": {
-      "name": "Desarrollador: Configuración del texto de daño",
-      "entries": {
-        "Weight Of New Hit": {
-          "key": "Peso del nuevo golpe",
-          "description": "Peso del nuevo golpe en el cálculo de media móvil exponencial"
         }
       }
     }
