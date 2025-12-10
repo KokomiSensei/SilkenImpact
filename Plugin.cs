@@ -14,7 +14,7 @@ public class Plugin : BaseUnityPlugin {
     internal static new ManualLogSource Logger;
     public static string PluginFolder { private set; get; }
     public static string AssetsFolder => Path.Combine(PluginFolder, "Assets");
-    private static AssetBundle bundle;
+    public static AssetBundle bundle { private set; get; }
     private Harmony _harmony;
     private static Plugin __instance;
     public static Plugin Instance {

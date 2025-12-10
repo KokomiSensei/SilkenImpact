@@ -63,6 +63,19 @@ namespace SilkenImpact {
         public ConfigEntry<bool> displayHealText;
         #endregion
 
+        #region Font
+        public ConfigEntry<FontOptions> damageFont;
+        public ConfigEntry<string> damageOsFontName;
+        public ConfigEntry<float> damageFontScaler;
+
+
+        public ConfigEntry<FontOptions> hpBarFont;
+        public ConfigEntry<string> hpBarOsFontName;
+        // TODO scaler
+        // TODO local
+        // TODO test
+        #endregion
+
 
         private ConfigFile config => Plugin.Instance.Config;
 
