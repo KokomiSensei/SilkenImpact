@@ -2,34 +2,27 @@ using System;
 using System.Linq;
 using UnityEngine;
 
+namespace System.Runtime.CompilerServices {
+    internal static class IsExternalInit { }
+}
+
+
 namespace SilkenImpact {
     public interface IFontLoader {
         Font Load();
     }
 
-    public enum FontOptions {
+    public enum FontOption {
         SmileySans,
         InGame,
         LoadFromOS,
     }
 
-    public abstract class FontArgs {
-        public FontOptions FontOption { get; protected set; }
-    }
+    public abstract record FontArgs(FontOption FontOption);
 
-    public sealed class SmileySansFontArgs : FontArgs {
-        public SmileySansFontArgs() => FontOption = FontOptions.SmileySans;
-    }
+    public sealed record SmileySansFontArgs() : FontArgs(FontOption.SmileySans);
 
-    public sealed class InGameFontArgs : FontArgs {
-        public InGameFontArgs() => FontOption = FontOptions.InGame;
-    }
+    public sealed record InGameFontArgs() : FontArgs(FontOption.InGame);
 
-    public sealed class OSFontArgs : FontArgs {
-        public string FontName { get; }
-        public OSFontArgs(string fontName) {
-            FontOption = FontOptions.LoadFromOS;
-            FontName = fontName;
-        }
-    }
+    public sealed record OSFontArgs(string FontName) : FontArgs(FontOption.LoadFromOS);
 }

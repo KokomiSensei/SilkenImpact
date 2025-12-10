@@ -122,15 +122,15 @@ namespace SilkenImpact {
             // Damage Text Settings
             var damageTextSettings = localization["User: Damage Text Settings"];
             new MyConfigSection(damageTextSettings.name, configFile)
-                .AddEntry(ref configs.damageFontScaler, 1f, damageTextSettings.Get("Damage Font Scaler"))
+                .AddEntry(ref configs.damageFontSizeScaler, 1f, damageTextSettings.Get("Damage Font Scaler"))
                 .AddDebugOnlyEntry(ref configs.weightOfNewHit, 0.2f, damageTextSettings.Get("Weight Of New Hit"));
 
             // Font Configs
             var fontSettings = localization["User: Font Settings"];
             new MyConfigSection(fontSettings.name, configFile)
-                .AddEntry(ref configs.damageFont, FontOptions.SmileySans, fontSettings.Get("Damage Font"))
+                .AddEntry(ref configs.damageFont, FontOption.SmileySans, fontSettings.Get("Damage Font"))
                 .AddEntry(ref configs.damageOsFontName, "Arial", fontSettings.Get("Damage OS Font Name"))
-                .AddEntry(ref configs.hpBarFont, FontOptions.SmileySans, fontSettings.Get("HP Bar Font"))
+                .AddEntry(ref configs.hpBarFont, FontOption.SmileySans, fontSettings.Get("HP Bar Font"))
                 .AddEntry(ref configs.hpBarOsFontName, "Arial", fontSettings.Get("HP Bar OS Font Name"));
 
             // Developer Settings

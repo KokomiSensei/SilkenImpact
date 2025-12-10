@@ -37,7 +37,7 @@ namespace SilkenImpact.Patch {
                     PluginLogger.LogWarning($"LifebloodStatePatch Update Modified the HP {previousHP} -> {currentHP} of {hm.gameObject.name}");
                     float healAmount = currentHP - previousHP;
                     hm.GetComponent<IHealthBarOwner>()?.Dispatcher.Submit(handle, new HealEventArgs(healAmount));
-                    HealthManagerPatch.SpawnHealText(hm, healAmount, ColourPalette.Hydro);
+                    DamageTextSpawnUtils.SpawnHealText(hm, healAmount, ColourPalette.Hydro);
                 } else {
                     PluginLogger.LogDetail($"LifebloodStatePatch Update Modified the HP {previousHP} -> {currentHP} of {hm.gameObject.name}, {currentHP} <= {previousHP}, cancelling dispatch");
                     if (currentHP < previousHP)

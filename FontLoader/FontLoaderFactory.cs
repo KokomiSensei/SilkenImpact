@@ -8,9 +8,9 @@ namespace SilkenImpact {
         }
         public static IFontLoader CreateFontLoader(FontArgs args) {
             return args.FontOption switch {
-                FontOptions.SmileySans => new SmileySansLoader(),
-                FontOptions.InGame => new GameFontLoader(),
-                FontOptions.LoadFromOS => new OSFontLoader(((OSFontArgs)args).FontName),
+                FontOption.SmileySans => new SmileySansLoader(),
+                FontOption.InGame => new GameFontLoader(),
+                FontOption.LoadFromOS => new OSFontLoader(((OSFontArgs)args).FontName),
                 _ => FallbackFontLoader(args),
             };
         }

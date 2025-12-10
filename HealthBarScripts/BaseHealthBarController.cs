@@ -114,6 +114,7 @@ namespace SilkenImpact {
                 PluginLogger.LogInfo($"{GetType().Name}: Setting up UIHealthBar for bar: {bar.gameObject.name}");
                 uiBar.SetHpTextEnabled(Configs.Instance.displayHpNumbers.Value);
                 uiBar.SetHpTextColor(Configs.Instance.hpNumberColor.Value);
+                uiBar.SetFont(FontManager.instance.HpBarFontLoader.Load());
             }
         }
 

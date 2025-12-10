@@ -61,14 +61,14 @@ namespace SilkenImpact {
         public ConfigEntry<float> weightOfNewHit;
         public ConfigEntry<bool> displayDamageText;
         public ConfigEntry<bool> displayHealText;
-        public ConfigEntry<float> damageFontScaler;
+        public ConfigEntry<float> damageFontSizeScaler;
         #endregion
 
         #region Font
-        public ConfigEntry<FontOptions> damageFont;
+        public ConfigEntry<FontOption> damageFont;
         public ConfigEntry<string> damageOsFontName;
 
-        public ConfigEntry<FontOptions> hpBarFont;
+        public ConfigEntry<FontOption> hpBarFont;
         public ConfigEntry<string> hpBarOsFontName;
         // TODO scaler
         // TODO local

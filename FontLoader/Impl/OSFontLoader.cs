@@ -7,10 +7,22 @@ namespace SilkenImpact {
         }
         public string FontName { get; set; }
         protected override Font DoLoad() {
-            Font osFont = Font.CreateDynamicFontFromOSFont(FontName, 16);
-            if (osFont == null) {
+            string[] osFontNames = Font.GetOSInstalledFontNames();
+            PluginLogger.LogInfo("Installed OS Fonts:");
+            foreach (string name in osFontNames) {
+                PluginLogger.LogInfo(name);
+            }
+            bool found = false;
+            foreach (string name in osFontNames) {
+                if (name == FontName) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
                 PluginLogger.LogError($"{FontName} Not Found");
             }
+            Font osFont = Font.CreateDynamicFontFromOSFont(FontName, 16);
             return osFont;
 
         }

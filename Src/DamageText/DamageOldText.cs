@@ -14,5 +14,11 @@ namespace SilkenImpact {
             get => textComponent.color;
             set => textComponent.color = value;
         }
+        public override Font TextFont {
+            set {
+                if (value == null) return;
+                textComponent.font = value;
+            }
+        }
     }
 }

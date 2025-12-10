@@ -41,5 +41,15 @@ namespace SilkenImpact {
             base.SetVisibility(visible);
             canvasGroup.alpha = visible ? 1 : 0;
         }
+
+        public void SetFont(Font font) {
+            if (font == null) return;
+            if (hpText != null) {
+                hpText.font = font;
+            }
+            if (nameText != null) {
+                nameText.font = font;
+            }
+        }
     }
 }

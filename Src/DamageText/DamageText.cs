@@ -20,6 +20,7 @@ namespace SilkenImpact {
 
         public abstract string DamageString { get; set; }
         public abstract Color TextColor { get; set; }
+        public abstract Font TextFont { set; }
 
         private void Start() {
             startPosition = transform.position;
