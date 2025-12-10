@@ -147,7 +147,7 @@
         }
       }
     },
-    "Dev: Damage Text Settings": {
+    "User: Damage Text Settings": {
       "name": "Разработчик: настройки текста урона",
       "entries": {
         "Weight Of New Hit": {

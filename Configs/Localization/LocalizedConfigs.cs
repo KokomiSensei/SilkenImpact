@@ -119,6 +119,20 @@ namespace SilkenImpact {
                 .AddEntry(ref configs.fireColor, ColourPalette.Pyro, textColors.Get("Fire Color"))
                 .AddEntry(ref configs.healTextColor, ColourPalette.HealTextColor, textColors.Get("Heal Color"));
 
+            // Damage Text Settings
+            var damageTextSettings = localization["User: Damage Text Settings"];
+            new MyConfigSection(damageTextSettings.name, configFile)
+                .AddEntry(ref configs.damageFontScaler, 1f, damageTextSettings.Get("Damage Font Scaler"))
+                .AddDebugOnlyEntry(ref configs.weightOfNewHit, 0.2f, damageTextSettings.Get("Weight Of New Hit"));
+
+            // Font Configs
+            var fontSettings = localization["User: Font Settings"];
+            new MyConfigSection(fontSettings.name, configFile)
+                .AddEntry(ref configs.damageFont, FontOptions.SmileySans, fontSettings.Get("Damage Font"))
+                .AddEntry(ref configs.damageOsFontName, "Arial", fontSettings.Get("Damage OS Font Name"))
+                .AddEntry(ref configs.hpBarFont, FontOptions.SmileySans, fontSettings.Get("HP Bar Font"))
+                .AddEntry(ref configs.hpBarOsFontName, "Arial", fontSettings.Get("HP Bar OS Font Name"));
+
             // Developer Settings
             var visibilitySettings = localization["Dev: Visibility Controller Settings"];
             new MyConfigSection(visibilitySettings.name, configFile)
@@ -128,10 +142,7 @@ namespace SilkenImpact {
                 .AddDebugOnlyEntry(ref configs.infHp, 10000f, visibilitySettings.Get("Infinite HP Threshold"))
                 .AddDebugOnlyEntry(ref configs.spriteTrackerZOffset, -1.5f, visibilitySettings.Get("Sprite Tracker Z Offset"));
 
-            // Damage Text Settings
-            var damageTextSettings = localization["Dev: Damage Text Settings"];
-            new MyConfigSection(damageTextSettings.name, configFile)
-                .AddDebugOnlyEntry(ref configs.weightOfNewHit, 0.2f, damageTextSettings.Get("Weight Of New Hit"));
+
 
         }
     }

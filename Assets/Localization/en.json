@@ -147,8 +147,8 @@
         }
       }
     },
-    "Dev: Damage Text Settings": {
-      "name": "Dev: Damage Text Settings",
+    "User: Damage Text Settings": {
+      "name": "User: Damage Text Settings",
       "entries": {
         "Weight Of New Hit": {
           "key": "Weight Of New Hit",

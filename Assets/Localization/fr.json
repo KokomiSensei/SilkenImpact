@@ -147,7 +147,7 @@
         }
       }
     },
-    "Dev: Damage Text Settings": {
+    "User: Damage Text Settings": {
       "name": "Développeur : Paramètres du texte de dégâts",
       "entries": {
         "Weight Of New Hit": {

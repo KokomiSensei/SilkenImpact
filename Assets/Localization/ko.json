@@ -147,7 +147,7 @@
         }
       }
     },
-    "Dev: Damage Text Settings": {
+    "User: Damage Text Settings": {
       "name": "개발자: 데미지 텍스트 설정",
       "entries": {
         "Weight Of New Hit": {
