@@ -97,6 +97,19 @@
         }
       }
     },
+    "User: Health Bar Font Size": {
+      "name": "Пользователь: размер шрифта полосы здоровья",
+      "entries": {
+        "HP Number Font Size Scaler": {
+          "key": "Масштаб размера шрифта числа HP",
+          "description": "Масштаб для размера шрифта числа HP на полосе здоровья."
+        },
+        "Boss Name Font Size Scaler": {
+          "key": "Масштаб размера шрифта имени босса",
+          "description": "Масштаб для размера шрифта имени босса на полосе здоровья босса."
+        }
+      }
+    },
     "User: Damage Text Colors": {
       "name": "Пользователь: цвета текста урона",
       "entries": {

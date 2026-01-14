@@ -97,6 +97,19 @@
         }
       }
     },
+    "User: Health Bar Font Size": {
+      "name": "Benutzer: Gesundheitsbalken-Schriftgröße",
+      "entries": {
+        "HP Number Font Size Scaler": {
+          "key": "HP-Zahlenschriftgröße-Skala",
+          "description": "Skalierungsfaktor für die Schriftgröße der HP-Zahlen auf dem Gesundheitsbalken."
+        },
+        "Boss Name Font Size Scaler": {
+          "key": "Boss-Namensschriftgröße-Skala",
+          "description": "Skalierungsfaktor für die Schriftgröße des Boss-Namens auf dem Boss-Gesundheitsbalken."
+        }
+      }
+    },
     "User: Damage Text Colors": {
       "name": "Benutzer: Schadenszahlenfarben",
       "entries": {

@@ -97,6 +97,19 @@
         }
       }
     },
+    "User: Health Bar Font Size": {
+      "name": "Utilisateur : Taille de police de la barre de santé",
+      "entries": {
+        "HP Number Font Size Scaler": {
+          "key": "Échelle de taille de police du nombre de HP",
+          "description": "Facteur d'échelle pour la taille de police des nombres de HP sur la barre de santé."
+        },
+        "Boss Name Font Size Scaler": {
+          "key": "Échelle de taille de police du nom du boss",
+          "description": "Facteur d'échelle pour la taille de police du nom du boss sur la barre de santé du boss."
+        }
+      }
+    },
     "User: Damage Text Colors": {
       "name": "Utilisateur : Couleurs du texte de dégâts",
       "entries": {

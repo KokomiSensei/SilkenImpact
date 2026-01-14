@@ -97,6 +97,19 @@
         }
       }
     },
+    "User: Health Bar Font Size": {
+      "name": "User: Health Bar Font Size",
+      "entries": {
+        "HP Number Font Size Scaler": {
+          "key": "HP Number Font Size Scaler",
+          "description": "Scale factor for health bar HP number font size."
+        },
+        "Boss Name Font Size Scaler": {
+          "key": "Boss Name Font Size Scaler",
+          "description": "Scale factor for boss name font size on boss health bar."
+        }
+      }
+    },
     "User: Damage Text Colors": {
       "name": "User: Damage Text Colors",
       "entries": {

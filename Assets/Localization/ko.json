@@ -97,6 +97,19 @@
         }
       }
     },
+    "User: Health Bar Font Size": {
+      "name": "사용자: 체력바 글꼴 크기",
+      "entries": {
+        "HP Number Font Size Scaler": {
+          "key": "HP 숫자 글꼴 크기 배율",
+          "description": "체력바 HP 숫자 글꼴 크기의 배율."
+        },
+        "Boss Name Font Size Scaler": {
+          "key": "보스 이름 글꼴 크기 배율",
+          "description": "보스 체력바의 보스 이름 글꼴 크기 배율."
+        }
+      }
+    },
     "User: Damage Text Colors": {
       "name": "사용자: 데미지 텍스트 색상",
       "entries": {

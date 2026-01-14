@@ -97,6 +97,19 @@
         }
       }
     },
+    "User: Health Bar Font Size": {
+      "name": "ユーザー：HPバーのフォントサイズ",
+      "entries": {
+        "HP Number Font Size Scaler": {
+          "key": "HP数字フォント倍率",
+          "description": "HPバー上のHP数字のフォントサイズ倍率。"
+        },
+        "Boss Name Font Size Scaler": {
+          "key": "ボス名フォント倍率",
+          "description": "ボスHPバー上のボス名のフォントサイズ倍率。"
+        }
+      }
+    },
     "User: Damage Text Colors": {
       "name": "ユーザー：ダメージテキストの色",
       "entries": {
