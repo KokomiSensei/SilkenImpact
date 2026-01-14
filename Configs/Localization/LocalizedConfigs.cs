@@ -98,6 +98,7 @@ namespace SilkenImpact {
                 .AddAdvancedEntry(ref configs.minLongBarHp, 100f, thresholds.Get("Min Long Bar HP"))
                 .AddAdvancedEntry(ref configs.minBossBarHp, 120f, thresholds.Get("Min Boss Bar HP"));
 
+            // Health Bar Shape
             var shapes = localization["User: Health Bar Shapes"];
             new MyConfigSection(shapes.name, configFile)
                 .AddEntry(ref configs.healthBarShape, HealthBarShape.Diamond, shapes.Get("Health Bar Shape"));
@@ -109,6 +110,12 @@ namespace SilkenImpact {
                 .AddEntry(ref configs.delayedEffectColor, ColourPalette.DelayedEffect, colors.Get("Delayed Effect Color"))
                 .AddEntry(ref configs.hpBarBackgroundColor, ColourPalette.HpBarBackground, colors.Get("HP Bar Background Color"))
                 .AddEntry(ref configs.hpNumberColor, ColourPalette.HpNumber, colors.Get("HP Number Color"));
+
+            // Health Bar Font Size
+            var fontSizes = localization["User: Health Bar Font Size"];
+            new MyConfigSection(fontSizes.name, configFile)
+                .AddSliderEntry(ref configs.hpNumberFontSizeScaler, 1f, fontSizes.Get("HP Number Font Size Scaler"), minValue: 0.1f, maxValue: 2f)
+                .AddSliderEntry(ref configs.bossNameFontSizeScaler, 1f, fontSizes.Get("Boss Name Font Size Scaler"), minValue: 0.1f, maxValue: 2f);
 
             // Damage Text Colors
             var textColors = localization["User: Damage Text Colors"];
@@ -122,7 +129,7 @@ namespace SilkenImpact {
             // Damage Text Settings
             var damageTextSettings = localization["User: Damage Text Settings"];
             new MyConfigSection(damageTextSettings.name, configFile)
-                .AddEntry(ref configs.damageFontSizeScaler, 1f, damageTextSettings.Get("Damage Font Scaler"))
+                .AddSliderEntry(ref configs.damageFontSizeScaler, 1f, damageTextSettings.Get("Damage Font Scaler"), minValue: 0.1f, maxValue: 2f)
                 .AddDebugOnlyEntry(ref configs.weightOfNewHit, 0.2f, damageTextSettings.Get("Weight Of New Hit"));
 
             // Font Configs

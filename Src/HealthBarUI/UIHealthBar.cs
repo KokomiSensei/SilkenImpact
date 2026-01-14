@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 namespace SilkenImpact {
@@ -6,10 +7,15 @@ namespace SilkenImpact {
         [SerializeField] protected Text nameText;
         [SerializeField] protected CanvasGroup canvasGroup;
 
+        Vector3 nameTextOriginalScale;
+        Vector3 hpTextOriginalScale;
+
 
         protected override void OnStart() {
             base.OnStart();
             GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
+            hpTextOriginalScale = hpText.transform.localScale;
+            nameTextOriginalScale = nameText.transform.localScale;
         }
         protected override void Redraw() {
             base.Redraw();
@@ -50,6 +56,14 @@ namespace SilkenImpact {
             if (nameText != null) {
                 nameText.font = font;
             }
+        }
+
+        internal void SetNameScale(float value) {
+            nameText.transform.localScale = nameTextOriginalScale * value;
+        }
+
+        internal void SetHpNumberScale(float value) {
+            hpText.transform.localScale = hpTextOriginalScale * value;
         }
     }
 }

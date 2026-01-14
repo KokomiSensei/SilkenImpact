@@ -48,7 +48,8 @@ namespace SilkenImpact {
         public ConfigEntry<Color> hpBarBackgroundColor;
         public ConfigEntry<Color> hpNumberColor;
         public ConfigEntry<bool> displayHpNumbers;
-
+        public ConfigEntry<float> hpNumberFontSizeScaler;
+        public ConfigEntry<float> bossNameFontSizeScaler;
         #endregion
 
         #region Damage Text Configs
