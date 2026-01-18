@@ -8,8 +8,8 @@ namespace SilkenImpact {
                 var option = Configs.Instance.hpBarFont.Value;
                 return option switch {
                     FontOption.SmileySans => new SmileySansFontArgs(),
-                    FontOption.InGame => new InGameFontArgs(),
-                    FontOption.LoadFromOS => new OSFontArgs(Configs.Instance.hpBarOsFontName.Value),
+                    FontOption.InGameFont => new InGameFontArgs(),
+                    FontOption.OSFont => new OSFontArgs(Configs.Instance.hpBarOsFontName.Value),
                     _ => throw new ArgumentOutOfRangeException()
                 };
             }

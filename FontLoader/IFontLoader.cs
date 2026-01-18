@@ -14,15 +14,15 @@ namespace SilkenImpact {
 
     public enum FontOption {
         SmileySans,
-        InGame,
-        LoadFromOS,
+        InGameFont,
+        OSFont,
     }
 
     public abstract record FontArgs(FontOption FontOption);
 
     public sealed record SmileySansFontArgs() : FontArgs(FontOption.SmileySans);
 
-    public sealed record InGameFontArgs() : FontArgs(FontOption.InGame);
+    public sealed record InGameFontArgs() : FontArgs(FontOption.InGameFont);
 
-    public sealed record OSFontArgs(string FontName) : FontArgs(FontOption.LoadFromOS);
+    public sealed record OSFontArgs(string FontName) : FontArgs(FontOption.OSFont);
 }

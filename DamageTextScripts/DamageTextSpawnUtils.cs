@@ -30,8 +30,7 @@ namespace SilkenImpact {
             var text = textGO.GetComponent<DamageText>();
             text.DamageString = content;
             text.TextColor = color;
-            text.maxHeight *= sizeScale;
-            text.maxWidth *= sizeScale;
+            text.BaseScale *= sizeScale;
             text.TextFont = FontManager.instance.DamageFontLoader.Load();
         }
 
