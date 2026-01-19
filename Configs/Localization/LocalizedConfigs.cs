@@ -98,6 +98,7 @@ namespace SilkenImpact {
                 .AddAdvancedEntry(ref configs.minLongBarHp, 100f, thresholds.Get("Min Long Bar HP"))
                 .AddAdvancedEntry(ref configs.minBossBarHp, 120f, thresholds.Get("Min Boss Bar HP"));
 
+            // Health Bar Shape
             var shapes = localization["User: Health Bar Shapes"];
             new MyConfigSection(shapes.name, configFile)
                 .AddEntry(ref configs.healthBarShape, HealthBarShape.Diamond, shapes.Get("Health Bar Shape"));
@@ -110,6 +111,12 @@ namespace SilkenImpact {
                 .AddEntry(ref configs.hpBarBackgroundColor, ColourPalette.HpBarBackground, colors.Get("HP Bar Background Color"))
                 .AddEntry(ref configs.hpNumberColor, ColourPalette.HpNumber, colors.Get("HP Number Color"));
 
+            // Health Bar Font Size
+            var fontSizes = localization["User: Health Bar Font Size"];
+            new MyConfigSection(fontSizes.name, configFile)
+                .AddSliderEntry(ref configs.hpNumberFontSizeScaler, 1f, fontSizes.Get("HP Number Font Size Scaler"), minValue: 0.1f, maxValue: 2f)
+                .AddSliderEntry(ref configs.bossNameFontSizeScaler, 1f, fontSizes.Get("Boss Name Font Size Scaler"), minValue: 0.1f, maxValue: 2f);
+
             // Damage Text Colors
             var textColors = localization["User: Damage Text Colors"];
             new MyConfigSection(textColors.name, configFile)
@@ -118,6 +125,20 @@ namespace SilkenImpact {
                 .AddEntry(ref configs.poisonColor, ColourPalette.Electro, textColors.Get("Poison Color"))
                 .AddEntry(ref configs.fireColor, ColourPalette.Pyro, textColors.Get("Fire Color"))
                 .AddEntry(ref configs.healTextColor, ColourPalette.HealTextColor, textColors.Get("Heal Color"));
+
+            // Damage Text Settings
+            var damageTextSettings = localization["User: Damage Text Settings"];
+            new MyConfigSection(damageTextSettings.name, configFile)
+                .AddSliderEntry(ref configs.damageFontSizeScaler, 1f, damageTextSettings.Get("Damage Font Scaler"), minValue: 0.1f, maxValue: 2f)
+                .AddDebugOnlyEntry(ref configs.weightOfNewHit, 0.2f, damageTextSettings.Get("Weight Of New Hit"));
+
+            // Font Configs
+            var fontSettings = localization["User: Font Settings"];
+            new MyConfigSection(fontSettings.name, configFile)
+                .AddEntry(ref configs.damageFont, FontOption.SmileySans, fontSettings.Get("Damage Font"))
+                .AddEntry(ref configs.damageOsFontName, "Arial", fontSettings.Get("Damage OS Font Name"))
+                .AddEntry(ref configs.hpBarFont, FontOption.SmileySans, fontSettings.Get("HP Bar Font"))
+                .AddEntry(ref configs.hpBarOsFontName, "Arial", fontSettings.Get("HP Bar OS Font Name"));
 
             // Developer Settings
             var visibilitySettings = localization["Dev: Visibility Controller Settings"];
@@ -128,10 +149,7 @@ namespace SilkenImpact {
                 .AddDebugOnlyEntry(ref configs.infHp, 10000f, visibilitySettings.Get("Infinite HP Threshold"))
                 .AddDebugOnlyEntry(ref configs.spriteTrackerZOffset, -1.5f, visibilitySettings.Get("Sprite Tracker Z Offset"));
 
-            // Damage Text Settings
-            var damageTextSettings = localization["Dev: Damage Text Settings"];
-            new MyConfigSection(damageTextSettings.name, configFile)
-                .AddDebugOnlyEntry(ref configs.weightOfNewHit, 0.2f, damageTextSettings.Get("Weight Of New Hit"));
+
 
         }
     }

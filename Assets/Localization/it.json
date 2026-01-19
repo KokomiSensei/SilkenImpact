@@ -97,6 +97,19 @@
         }
       }
     },
+    "User: Health Bar Font Size": {
+      "name": "Utente: Dimensione carattere barra salute",
+      "entries": {
+        "HP Number Font Size Scaler": {
+          "key": "Scala dimensione carattere numeri HP",
+          "description": "Fattore di scala per la dimensione del carattere dei numeri HP sulla barra salute."
+        },
+        "Boss Name Font Size Scaler": {
+          "key": "Scala dimensione carattere nome Boss",
+          "description": "Fattore di scala per la dimensione del carattere del nome Boss sulla barra salute Boss."
+        }
+      }
+    },
     "User: Damage Text Colors": {
       "name": "Utente: Colori testo danno",
       "entries": {
@@ -122,6 +135,40 @@
         }
       }
     },
+    "User: Damage Text Settings": {
+      "name": "Utente: Impostazioni testo danno",
+      "entries": {
+        "Damage Font Scaler": {
+          "key": "Scala font danno",
+          "description": "Fattore di scala per la dimensione del font del testo danno."
+        },
+        "Weight Of New Hit": {
+          "key": "Peso del nuovo colpo",
+          "description": "Peso del nuovo colpo nel calcolo della media mobile esponenziale"
+        }
+      }
+    },
+    "User: Font Settings": {
+      "name": "Utente: Impostazioni caratteri",
+      "entries": {
+        "Damage Font": {
+          "key": "Font danno",
+          "description": "Font usato per il testo danno. Selezionare dai font inclusi o usare un font di sistema."
+        },
+        "Damage OS Font Name": {
+          "key": "Nome font di sistema per danno",
+          "description": "Nome del font di sistema per il testo danno (es. Arial). Si applica solo quando 'Font danno' è impostato su font di sistema."
+        },
+        "HP Bar Font": {
+          "key": "Font barra vita",
+          "description": "Font usato per i numeri di salute sulle barre. Selezionare dai font inclusi o usare un font di sistema."
+        },
+        "HP Bar OS Font Name": {
+          "key": "Nome font di sistema per barra vita",
+          "description": "Nome del font di sistema per i numeri HP (es. Arial). Si applica solo quando 'Font barra vita' è impostato su font di sistema."
+        }
+      }
+    },
     "Dev: Visibility Controller Settings": {
       "name": "Sviluppatore: Impostazioni controller visibilità",
       "entries": {
@@ -142,17 +189,8 @@
           "description": "Valore HP considerato come infinito"
         },
         "Sprite Tracker Z Offset": {
-          "key": "Offset Z tracker sprite",
+          "key": "Offset Z Sprite Tracker",
           "description": "Offset Z per il componente Sprite Tracker sulle barre salute dei mostri"
-        }
-      }
-    },
-    "Dev: Damage Text Settings": {
-      "name": "Sviluppatore: Impostazioni testo danno",
-      "entries": {
-        "Weight Of New Hit": {
-          "key": "Peso del nuovo colpo",
-          "description": "Peso del nuovo colpo nel calcolo della media mobile esponenziale"
         }
       }
     }

@@ -97,6 +97,19 @@
         }
       }
     },
+    "User: Health Bar Font Size": {
+      "name": "Utilisateur : Taille de police de la barre de santé",
+      "entries": {
+        "HP Number Font Size Scaler": {
+          "key": "Échelle de taille de police du nombre de HP",
+          "description": "Facteur d'échelle pour la taille de police des nombres de HP sur la barre de santé."
+        },
+        "Boss Name Font Size Scaler": {
+          "key": "Échelle de taille de police du nom du boss",
+          "description": "Facteur d'échelle pour la taille de police du nom du boss sur la barre de santé du boss."
+        }
+      }
+    },
     "User: Damage Text Colors": {
       "name": "Utilisateur : Couleurs du texte de dégâts",
       "entries": {
@@ -122,6 +135,40 @@
         }
       }
     },
+    "User: Damage Text Settings": {
+      "name": "Utilisateur : Paramètres du texte de dégâts",
+      "entries": {
+        "Damage Font Scaler": {
+          "key": "Échelle de police de dégâts",
+          "description": "Facteur d'échelle pour la taille de police du texte de dégâts."
+        },
+        "Weight Of New Hit": {
+          "key": "Poids du nouveau coup",
+          "description": "Poids du nouveau coup dans le calcul de la moyenne mobile exponentielle"
+        }
+      }
+    },
+    "User: Font Settings": {
+      "name": "Utilisateur : Paramètres de police",
+      "entries": {
+        "Damage Font": {
+          "key": "Police de dégâts",
+          "description": "Police utilisée pour le texte de dégâts. Sélectionnez parmi les polices fournies ou utilisez une police système."
+        },
+        "Damage OS Font Name": {
+          "key": "Nom de police système pour dégâts",
+          "description": "Nom de la police système pour le texte de dégâts (ex. Arial). S'applique uniquement lorsque 'Police de dégâts' est réglée sur police système."
+        },
+        "HP Bar Font": {
+          "key": "Police de barre de vie",
+          "description": "Police utilisée pour les nombres de santé sur les barres. Sélectionnez parmi les polices fournies ou utilisez une police système."
+        },
+        "HP Bar OS Font Name": {
+          "key": "Nom de police système pour barre de vie",
+          "description": "Nom de la police système pour les nombres de HP (ex. Arial). S'applique uniquement lorsque 'Police de barre de vie' est réglée sur police système."
+        }
+      }
+    },
     "Dev: Visibility Controller Settings": {
       "name": "Développeur : Paramètres du contrôleur de visibilité",
       "entries": {
@@ -142,17 +189,8 @@
           "description": "Valeur de HP considérée comme infinie"
         },
         "Sprite Tracker Z Offset": {
-          "key": "Décalage Z du traqueur de sprites",
+          "key": "Décalage Z du Sprite Tracker",
           "description": "Décalage Z pour le composant Sprite Tracker sur les barres de santé des monstres"
-        }
-      }
-    },
-    "Dev: Damage Text Settings": {
-      "name": "Développeur : Paramètres du texte de dégâts",
-      "entries": {
-        "Weight Of New Hit": {
-          "key": "Poids du nouveau coup",
-          "description": "Poids du nouveau coup dans le calcul de la moyenne mobile exponentielle"
         }
       }
     }
