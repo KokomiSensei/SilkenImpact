@@ -97,6 +97,19 @@
         }
       }
     },
+    "User: Health Bar Font Size": {
+      "name": "用户: 血条字体大小",
+      "entries": {
+        "HP Number Font Size Scaler": {
+          "key": "血条数字字体缩放",
+          "description": "血条上生命值数字的字体缩放系数。"
+        },
+        "Boss Name Font Size Scaler": {
+          "key": "Boss名称字体缩放",
+          "description": "Boss血条上名称的字体缩放系数。"
+        }
+      }
+    },
     "User: Damage Text Colors": {
       "name": "用户: 伤害数字颜色",
       "entries": {
@@ -122,6 +135,40 @@
         }
       }
     },
+    "User: Damage Text Settings": {
+      "name": "用户: 伤害数字设置",
+      "entries": {
+        "Damage Font Scaler": {
+          "key": "伤害字体缩放",
+          "description": "伤害数字字体大小的缩放系数。"
+        },
+        "Weight Of New Hit": {
+          "key": "新伤害权重",
+          "description": "指数移动平均计算中新伤害的权重"
+        }
+      }
+    },
+    "User: Font Settings": {
+      "name": "用户: 字体设置",
+      "entries": {
+        "Damage Font": {
+          "key": "伤害字体",
+          "description": "伤害数字使用的字体。可从内置字体中选择或使用系统字体。"
+        },
+        "Damage OS Font Name": {
+          "key": "伤害系统字体名称",
+          "description": "用于伤害数字的系统字体名称（例如：Arial）。仅当'伤害字体'设置为使用系统字体时生效。"
+        },
+        "HP Bar Font": {
+          "key": "血条字体",
+          "description": "血条上生命值数字使用的字体。可从内置字体中选择或使用系统字体。"
+        },
+        "HP Bar OS Font Name": {
+          "key": "血条系统字体名称",
+          "description": "用于血条数字的系统字体名称（例如：Arial）。仅当'血条字体'设置为使用系统字体时生效。"
+        }
+      }
+    },
     "Dev: Visibility Controller Settings": {
       "name": "开发者: 可见性控制器设置",
       "entries": {
@@ -138,21 +185,12 @@
           "description": "不可见状态的缓存时间（秒）"
         },
         "Infinite HP Threshold": {
-          "key": "无限生命值阈值",
-          "description": "被视为无限生命值的阈值"
+          "key": "无限血量阈值",
+          "description": "被视为无限血量的血量值"
         },
         "Sprite Tracker Z Offset": {
-          "key": "精灵追踪器Z偏移",
+          "key": "精灵追踪器Z轴偏移",
           "description": "怪物血条精灵追踪器组件的Z轴偏移"
-        }
-      }
-    },
-    "Dev: Damage Text Settings": {
-      "name": "开发者: 伤害数字设置",
-      "entries": {
-        "Weight Of New Hit": {
-          "key": "新伤害权重",
-          "description": "指数移动平均计算中新伤害的权重"
         }
       }
     }

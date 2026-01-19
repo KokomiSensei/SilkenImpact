@@ -97,6 +97,19 @@
         }
       }
     },
+    "User: Health Bar Font Size": {
+      "name": "ユーザー：HPバーのフォントサイズ",
+      "entries": {
+        "HP Number Font Size Scaler": {
+          "key": "HP数字フォント倍率",
+          "description": "HPバー上のHP数字のフォントサイズ倍率。"
+        },
+        "Boss Name Font Size Scaler": {
+          "key": "ボス名フォント倍率",
+          "description": "ボスHPバー上のボス名のフォントサイズ倍率。"
+        }
+      }
+    },
     "User: Damage Text Colors": {
       "name": "ユーザー：ダメージテキストの色",
       "entries": {
@@ -122,6 +135,40 @@
         }
       }
     },
+    "User: Damage Text Settings": {
+      "name": "ユーザー：ダメージテキスト設定",
+      "entries": {
+        "Damage Font Scaler": {
+          "key": "ダメージフォント倍率",
+          "description": "ダメージテキストのフォントサイズの倍率。"
+        },
+        "Weight Of New Hit": {
+          "key": "新しいヒットの重み",
+          "description": "指数移動平均計算における新しいヒットの重み"
+        }
+      }
+    },
+    "User: Font Settings": {
+      "name": "ユーザー：フォント設定",
+      "entries": {
+        "Damage Font": {
+          "key": "ダメージフォント",
+          "description": "ダメージテキストに使用するフォント。同梱フォントから選択するか、システムフォントを使用します。"
+        },
+        "Damage OS Font Name": {
+          "key": "ダメージOSフォント名",
+          "description": "ダメージテキスト用のシステムフォント名（例：Arial）。「ダメージフォント」がシステムフォント使用に設定されている場合のみ適用されます。"
+        },
+        "HP Bar Font": {
+          "key": "HPバーフォント",
+          "description": "体力バーの数値に使用するフォント。同梱フォントから選択するか、システムフォントを使用します。"
+        },
+        "HP Bar OS Font Name": {
+          "key": "HPバーOSフォント名",
+          "description": "HPバー数値用のシステムフォント名（例：Arial）。「HPバーフォント」がシステムフォント使用に設定されている場合のみ適用されます。"
+        }
+      }
+    },
     "Dev: Visibility Controller Settings": {
       "name": "開発者：表示コントローラー設定",
       "entries": {
@@ -144,15 +191,6 @@
         "Sprite Tracker Z Offset": {
           "key": "スプライトトラッカーZオフセット",
           "description": "モブHPバーのスプライトトラッカーコンポーネントのZオフセット"
-        }
-      }
-    },
-    "Dev: Damage Text Settings": {
-      "name": "開発者：ダメージテキスト設定",
-      "entries": {
-        "Weight Of New Hit": {
-          "key": "新しいヒットの重み",
-          "description": "指数移動平均計算における新しいヒットの重み"
         }
       }
     }

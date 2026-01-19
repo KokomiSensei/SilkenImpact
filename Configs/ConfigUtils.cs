@@ -21,6 +21,20 @@ namespace SilkenImpact {
         }
     }
 
+    class MyConfigSliderEntry<T> : MyConfigEntry<T> where T : System.IComparable {
+        public T MinValue;
+        public T MaxValue;
+
+        public new ConfigEntry<T> Bind(ConfigFile config) {
+            var entry = config.Bind(Section, Key, DefaultValue, new ConfigDescription(Description, new AcceptableValueRange<T>(MinValue, MaxValue), new ConfigurationManagerAttributes {
+                IsAdvanced = IsAdvanced,
+                Order = Order,
+                Browsable = Browsable
+            }));
+            return entry;
+        }
+    }
+
     class MyConfigSection {
         public string Name { get; }
         public ConfigFile configFile;
@@ -46,9 +60,31 @@ namespace SilkenImpact {
             return this;
         }
 
+        public MyConfigSection AddSliderEntry<T>(ref ConfigEntry<T> entry, T defaultValue, string key, string description, T minValue, T maxValue, bool isAdvanced = false, bool browsable = true) where T : System.IComparable {
+            int order = _nextOrder--;
+            var myEntry = new MyConfigSliderEntry<T> {
+                Section = Name,
+                Key = key,
+                DefaultValue = defaultValue,
+                Description = description,
+                IsAdvanced = isAdvanced,
+                Order = order,
+                Browsable = browsable,
+                MinValue = minValue,
+                MaxValue = maxValue
+            };
+            entry = myEntry.Bind(configFile);
+            return this;
+        }
+
         public MyConfigSection AddEntry<T>(ref ConfigEntry<T> entry, T defaultValue, (string key, string description) config, bool isAdvanced = false, bool browsable = true) {
             return AddEntry(ref entry, defaultValue, config.key, config.description, isAdvanced, browsable);
         }
+
+        public MyConfigSection AddSliderEntry<T>(ref ConfigEntry<T> entry, T defaultValue, (string key, string description) config, T minValue, T maxValue, bool isAdvanced = false, bool browsable = true) where T : System.IComparable {
+            return AddSliderEntry(ref entry, defaultValue, config.key, config.description, minValue, maxValue, isAdvanced, browsable);
+        }
+
 
         public MyConfigSection AddHiddenEntry<T>(ref ConfigEntry<T> entry, T defaultValue, string key, string description, bool isAdvanced = false) {
             return AddEntry(ref entry, defaultValue, key, description, isAdvanced, false);

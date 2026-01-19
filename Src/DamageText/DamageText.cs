@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 namespace SilkenImpact {
 
@@ -8,7 +9,6 @@ namespace SilkenImpact {
         public float maxWidth;
         public float maxHeight;
 
-        private float yScale;
 
         public RectTransform rectTransform;
         public Material fontMaterial;
@@ -16,18 +16,27 @@ namespace SilkenImpact {
         [SerializeField] private float secondsElapsed;
         [SerializeField] private Vector3 startPosition;
         [SerializeField] private Vector2 baseSize => new Vector2(maxWidth, maxHeight);
+        [SerializeField] private Vector3 baseScale;
+        [SerializeField]
+        public Vector3 BaseScale {
+            get => transform.localScale;
+            set {
+                transform.localScale = value;
+                baseScale = value;
+            }
+        }
         [SerializeField] private Color baseColor;
 
         public abstract string DamageString { get; set; }
         public abstract Color TextColor { get; set; }
+        public abstract Font TextFont { set; }
 
         private void Start() {
             startPosition = transform.position;
             secondsElapsed = 0;
 
             baseColor = this.TextColor;
-
-            yScale = transform.lossyScale.y;
+            BaseScale = transform.localScale;
         }
 
         private void Update() {
@@ -54,10 +63,10 @@ namespace SilkenImpact {
             //fontMaterial.SetFloat("_FaceSoftness", config.blurCurve.Evaluate(progress));
 
             //Scale
-            rectTransform.sizeDelta = baseSize * config.scaleCurve.Evaluate(progress);
+            rectTransform.localScale = baseScale * config.scaleCurve.Evaluate(progress);
 
             // Position
-            transform.position = startPosition + new Vector3(0, yScale * config.verticalOffsetCurve.Evaluate(progress) * maxHeight, 0);
+            transform.position = startPosition + new Vector3(0, baseScale.y * config.verticalOffsetCurve.Evaluate(progress) * maxHeight, 0);
         }
     }
 }

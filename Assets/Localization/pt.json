@@ -97,6 +97,19 @@
         }
       }
     },
+    "User: Health Bar Font Size": {
+      "name": "Usuário: Tamanho da fonte da barra de vida",
+      "entries": {
+        "HP Number Font Size Scaler": {
+          "key": "Escala do tamanho da fonte do número de HP",
+          "description": "Fator de escala para o tamanho da fonte do número de HP na barra de vida."
+        },
+        "Boss Name Font Size Scaler": {
+          "key": "Escala do tamanho da fonte do nome do chefe",
+          "description": "Fator de escala para o tamanho da fonte do nome do chefe na barra de vida do chefe."
+        }
+      }
+    },
     "User: Damage Text Colors": {
       "name": "Usuário: Cores do texto de dano",
       "entries": {
@@ -122,6 +135,40 @@
         }
       }
     },
+    "User: Damage Text Settings": {
+      "name": "Usuário: Configurações de texto de dano",
+      "entries": {
+        "Damage Font Scaler": {
+          "key": "Escala da fonte de dano",
+          "description": "Multiplicador do tamanho da fonte do texto de dano."
+        },
+        "Weight Of New Hit": {
+          "key": "Peso do novo acerto",
+          "description": "Peso do novo acerto no cálculo da média móvel exponencial"
+        }
+      }
+    },
+    "User: Font Settings": {
+      "name": "Usuário: Configurações de fonte",
+      "entries": {
+        "Damage Font": {
+          "key": "Fonte de dano",
+          "description": "Fonte usada para o texto de dano. Escolha entre fontes incluídas ou use uma fonte do sistema."
+        },
+        "Damage OS Font Name": {
+          "key": "Nome da fonte do sistema para dano",
+          "description": "Nome da fonte do sistema para texto de dano (ex: Arial). Aplicado apenas quando 'Fonte de dano' está configurada para usar fonte do sistema."
+        },
+        "HP Bar Font": {
+          "key": "Fonte da barra de HP",
+          "description": "Fonte usada para os números da barra de HP. Escolha entre fontes incluídas ou use uma fonte do sistema."
+        },
+        "HP Bar OS Font Name": {
+          "key": "Nome da fonte do sistema para barra de HP",
+          "description": "Nome da fonte do sistema para números da barra de HP (ex: Arial). Aplicado apenas quando 'Fonte da barra de HP' está configurada para usar fonte do sistema."
+        }
+      }
+    },
     "Dev: Visibility Controller Settings": {
       "name": "Desenvolvedor: Configurações do controlador de visibilidade",
       "entries": {
@@ -142,17 +189,8 @@
           "description": "Valor de HP considerado como infinito"
         },
         "Sprite Tracker Z Offset": {
-          "key": "Deslocamento Z do rastreador de sprites",
+          "key": "Deslocamento Z do Sprite Tracker",
           "description": "Deslocamento Z para o componente Sprite Tracker nas barras de vida dos monstros"
-        }
-      }
-    },
-    "Dev: Damage Text Settings": {
-      "name": "Desenvolvedor: Configurações do texto de dano",
-      "entries": {
-        "Weight Of New Hit": {
-          "key": "Peso do novo golpe",
-          "description": "Peso do novo golpe no cálculo da média móvel exponencial"
         }
       }
     }

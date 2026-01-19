@@ -97,6 +97,19 @@
         }
       }
     },
+    "User: Health Bar Font Size": {
+      "name": "Benutzer: Gesundheitsbalken-Schriftgröße",
+      "entries": {
+        "HP Number Font Size Scaler": {
+          "key": "HP-Zahlenschriftgröße-Skala",
+          "description": "Skalierungsfaktor für die Schriftgröße der HP-Zahlen auf dem Gesundheitsbalken."
+        },
+        "Boss Name Font Size Scaler": {
+          "key": "Boss-Namensschriftgröße-Skala",
+          "description": "Skalierungsfaktor für die Schriftgröße des Boss-Namens auf dem Boss-Gesundheitsbalken."
+        }
+      }
+    },
     "User: Damage Text Colors": {
       "name": "Benutzer: Schadenszahlenfarben",
       "entries": {
@@ -122,6 +135,40 @@
         }
       }
     },
+    "User: Damage Text Settings": {
+      "name": "Benutzer: Schadenstext-Einstellungen",
+      "entries": {
+        "Damage Font Scaler": {
+          "key": "Schadenstext-Schriftgröße",
+          "description": "Skalierungsfaktor für die Schriftgröße des Schadenstexts."
+        },
+        "Weight Of New Hit": {
+          "key": "Gewichtung neuer Treffer",
+          "description": "Gewichtung neuer Treffer in der exponentiellen gleitenden Mittelwertberechnung"
+        }
+      }
+    },
+    "User: Font Settings": {
+      "name": "Benutzer: Schrifteinstellungen",
+      "entries": {
+        "Damage Font": {
+          "key": "Schadenstext-Schrift",
+          "description": "Schriftart für Schadenstext. Wählen Sie aus mitgelieferten Schriften oder verwenden Sie eine Systemschrift."
+        },
+        "Damage OS Font Name": {
+          "key": "Schadenstext-Systemschrift",
+          "description": "Name der Systemschrift für Schadenstext (z. B. Arial). Gilt nur, wenn 'Schadenstext-Schrift' auf Systemschrift eingestellt ist."
+        },
+        "HP Bar Font": {
+          "key": "Gesundheitsleisten-Schrift",
+          "description": "Schriftart für HP-Zahlen auf Gesundheitsleisten. Wählen Sie aus mitgelieferten Schriften oder verwenden Sie eine Systemschrift."
+        },
+        "HP Bar OS Font Name": {
+          "key": "Gesundheitsleisten-Systemschrift",
+          "description": "Name der Systemschrift für HP-Zahlen (z. B. Arial). Gilt nur, wenn 'Gesundheitsleisten-Schrift' auf Systemschrift eingestellt ist."
+        }
+      }
+    },
     "Dev: Visibility Controller Settings": {
       "name": "Entwickler: Sichtbarkeitscontroller-Einstellungen",
       "entries": {
@@ -144,15 +191,6 @@
         "Sprite Tracker Z Offset": {
           "key": "Sprite-Tracker-Z-Versatz",
           "description": "Z-Versatz für die Sprite-Tracker-Komponente auf Monsterbalken"
-        }
-      }
-    },
-    "Dev: Damage Text Settings": {
-      "name": "Entwickler: Schadensanzeige-Einstellungen",
-      "entries": {
-        "Weight Of New Hit": {
-          "key": "Gewichtung neuer Treffer",
-          "description": "Gewichtung neuer Treffer in der exponentiellen gleitenden Mittelwertberechnung"
         }
       }
     }
