@@ -70,6 +70,13 @@ namespace SilkenImpact {
                         return GameObject.Find("Giant Centipede Head")?.GetComponent<HealthManager>();
                     })
             },
+            // {
+            //     Endpoint.RelayEndpoint("Driller B"),
+            //     Endpoint.OriginEndpoint("Driller A", overrideHp: 400f)
+            //         .SetHealthManagerFinder(() => {
+            //             return GameObject.Find("Driller A")?.GetComponent<HealthManager>();
+            //         })
+            // }
         };
 
         # endregion
