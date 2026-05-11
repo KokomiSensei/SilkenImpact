@@ -37,7 +37,7 @@ namespace SilkenImpact {
                 if (!entry.ready) break;
 
                 if (handlers.TryGetValue(entry.args.type, out var handler)) {
-                    PluginLogger.LogInfo($"Dispatcher: Dispatched event of type {entry.args.type}");
+                    PluginLogger.LogDebug($"[Dispatcher][Dispatch] type={entry.args.type}");
                     handler(entry.args);
                 }
                 queue.RemoveFirst();
@@ -59,6 +59,7 @@ namespace SilkenImpact {
         }
 
         public int Enqueue<T>() where T : HealthBarEventArgs {
+            PluginLogger.LogDebug($"[Dispatcher][Enqueue] Enqueuing event");
             var entry = new EventEntry(null);
             queue.AddLast(entry);
             entry.ready = false;
@@ -67,6 +68,7 @@ namespace SilkenImpact {
         }
 
         public void EnqueueReady<T>(T args) where T : HealthBarEventArgs {
+            PluginLogger.LogDebug($"[Dispatcher][EnqueueReady] Enqueuing ready event");
             var entry = new EventEntry(args);
             entry.ready = true;
             queue.AddLast(entry);
@@ -74,6 +76,7 @@ namespace SilkenImpact {
         }
 
         public void Submit<T>(int id, T args) where T : HealthBarEventArgs {
+            PluginLogger.LogDebug($"[Dispatcher][Submit] Submitting event with id={id}");
             if (pendingEntries.TryGetValue(id, out var entry)) {
                 entry.ready = true;
                 entry.args = args;
@@ -83,6 +86,7 @@ namespace SilkenImpact {
         }
 
         public void Cancel(int id) {
+            PluginLogger.LogDebug($"[Dispatcher][Cancel] Canceling event with id={id}");
             if (pendingEntries.TryGetValue(id, out var entry)) {
                 queue.Remove(entry);
                 pendingEntries.Remove(id);

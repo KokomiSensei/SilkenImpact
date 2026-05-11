@@ -29,15 +29,14 @@ namespace SilkenImpact.Patch {
             if (em != null) {
                 var journalRecord = Traverse.Create(em).Field<EnemyJournalRecord>("journalRecord").Value;
                 if (journalRecord) {
-                    PluginLogger.LogWarning("Approach 1 Succeeded. Using: [__instance.GetComponent<EnemyDeathEffects>().journalRecord.DisplayName]");
-                    PluginLogger.LogWarning("Found EnemyDeathEffects on " + __instance.gameObject.name + ", Boss Name: " + journalRecord.DisplayName);
+                    PluginLogger.LogDebug($"[HealthManagerPatch][LocalizedName][NameResolvePrimary] enemy={__instance.gameObject.name} name={journalRecord.DisplayName}");
                     return journalRecord.DisplayName;
                 }
-                PluginLogger.LogWarning("Approach 1 Failed. journalRecord not found on " + __instance.gameObject.name);
+                PluginLogger.LogDebug($"[HealthManagerPatch][LocalizedName][NameResolvePrimaryMissingRecord] enemy={__instance.gameObject.name}");
             }
 
             // Approach 2:
-            PluginLogger.LogWarning("Approach 1 Failed. EnemyDeathEffects or journalRecord not found on " + __instance.gameObject.name);
+            PluginLogger.LogDebug($"[HealthManagerPatch][LocalizedName][NameResolveFallback] enemy={__instance.gameObject.name}");
 
             //return $"Enemy Death Effects Not Found on {__instance.gameObject.name}";
 
@@ -82,7 +81,7 @@ namespace SilkenImpact.Patch {
 
                 // 如果匹配了至少2个单词，认为是匹配成功
                 if (matchCount >= 2 && !string.IsNullOrEmpty(enemy.DisplayName)) {
-                    PluginLogger.LogInfo($"通过EnemyJournalManager匹配到Boss名称: {enemy.DisplayName} (匹配单词数: {matchCount})");
+                    PluginLogger.LogDebug($"[HealthManagerPatch][NameResolveJournalStrong] enemy={__instance.gameObject.name} name={enemy.DisplayName} matchCount={matchCount}");
                     return enemy.DisplayName;
                 }
             }
@@ -104,7 +103,7 @@ namespace SilkenImpact.Patch {
 
                         if (string.Equals(gameWord, enemyWord, System.StringComparison.OrdinalIgnoreCase)) {
                             if (!string.IsNullOrEmpty(enemy.DisplayName)) {
-                                PluginLogger.LogInfo($"通过EnemyJournalManager单词匹配到Boss名称: {enemy.DisplayName} (匹配单词: {gameWord})");
+                                PluginLogger.LogDebug($"[HealthManagerPatch][NameResolveJournalWeak] enemy={__instance.gameObject.name} name={enemy.DisplayName} token={gameWord}");
                                 return enemy.DisplayName;
                             }
                         }
@@ -149,9 +148,9 @@ namespace SilkenImpact.Patch {
         [HarmonyPatch("Awake")]
         [HarmonyPostfix]
         public static void HealthManager_Awake_Postfix(HealthManager __instance) {
-            PluginLogger.LogInfo($"{__instance.gameObject.name}.Health Manager Awoken, hp -> {__instance.hp}");
+            PluginLogger.LogInfo($"[HealthManagerPatch][AwakePostfix] enemy={__instance.gameObject.name} hp={__instance.hp}");
             if (SpawnPreventionPolicy.ShouldPreventSpawn(__instance)) {
-                PluginLogger.LogInfo($"Preventing health bar spawn for {__instance.gameObject.name} with hp {__instance.hp}");
+                PluginLogger.LogInfo($"[HealthManagerPatch][AwakePostfix] HealthBar spawn prevented by SpawnPreventionPolicy: enemy={__instance.gameObject.name} hp={__instance.hp}");
                 return;
             }
             SpawnManager.instance.SpawnHealthBar(__instance);
@@ -177,21 +176,19 @@ namespace SilkenImpact.Patch {
         [HarmonyPatch("SendDeathEvent")]
         [HarmonyPrefix]
         public static void HealthManager_SendDeathEvent_Prefix(HealthManager __instance) {
-            PluginLogger.LogWarning($"{__instance.gameObject.name} Die, hp -> {__instance.hp}, isDead -> {__instance.isDead}");
+            PluginLogger.LogInfo($"[HealthManagerPatch][SendDeathEventPrefix] Calling Die on HealthBarOwner of enemy={__instance.gameObject.name} hp={__instance.hp} isDead={__instance.isDead}");
             __instance.GetComponent<IHealthBarOwner>()?.Die();
         }
         /*
         [HarmonyPatch("HealToMax")]
         [HarmonyPrefix]
         public static void HealthManager_HealToMax_Prefix(HealthManager __instance, ref int __state) {
-            PluginLogger.LogWarning($"{__instance.gameObject.name} HealToMax, hp -> {__instance.hp}");
             __state = __instance.hp;
         }
 
         [HarmonyPatch("HealToMax")]
         [HarmonyPostfix]
         public static void HealthManager_HealToMax_Postfix(HealthManager __instance, ref int __state) {
-            PluginLogger.LogWarning($"{__instance.gameObject.name} HealToMax, hp -> {__instance.hp}");
             int healAmount = __instance.hp - __state;
             SpawnHealText(__instance, healAmount);
             __instance.GetComponent<IHealthBarOwner>()?.Heal(healAmount);
@@ -200,7 +197,7 @@ namespace SilkenImpact.Patch {
         [HarmonyPatch("RefillHP")]
         [HarmonyPrefix]
         public static void HealthManager_RefillHP_Prefix(HealthManager __instance, ref Tuple<int, int> __state) {
-            PluginLogger.LogWarning($"{__instance.gameObject.name} RefillHP, hp -> {__instance.hp}");
+            PluginLogger.LogInfo($"[HealthManagerPatch][RefillHP Prefix] Enqueuing HealEvent for enemy={__instance.gameObject.name} hpBefore={__instance.hp}");
             int currentHP = Mathf.Max(__instance.hp, 0);
             int? handle = __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.Enqueue<HealEventArgs>();
             __state = new Tuple<int, int>(currentHP, handle ?? -1);
@@ -209,17 +206,17 @@ namespace SilkenImpact.Patch {
         [HarmonyPatch("RefillHP")]
         [HarmonyPostfix]
         public static void HealthManager_RefillHP_Postfix(HealthManager __instance, Tuple<int, int> __state) {
-            PluginLogger.LogWarning($"{__instance.gameObject.name} RefillHP, hp -> {__instance.hp}");
             int healAmount = __instance.hp - __state.Item1;
             if (!__instance.isDead)
                 DamageTextSpawnUtils.SpawnHealText(__instance, healAmount);
             __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.Submit(__state.Item2, new HealEventArgs(healAmount));
+            PluginLogger.LogInfo($"[HealthManagerPatch][RefillHP Postfix] Submited HealEvent to Dispatcher for enemy={__instance.gameObject.name}, hpBefore={__state.Item1} hpAfter={__instance.hp} heal={healAmount} isDead={__instance.isDead}");
         }
 
         [HarmonyPatch("AddHP")]
         [HarmonyPrefix]
         public static void HealthManager_AddHP_Prefix(HealthManager __instance, int hpAdd, int hpMax, ref Tuple<int, int> __state) {
-            PluginLogger.LogWarning($"{__instance.gameObject.name} AddHP, hp -> {__instance.hp}");
+            PluginLogger.LogInfo($"[HealthManagerPatch][AddHP Prefix] Enqueuing HealEvent for enemy={__instance.gameObject.name} hpBefore={__instance.hp}");
             int currentHP = Mathf.Max(__instance.hp, 0);
             int? handle = __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.Enqueue<HealEventArgs>();
             __state = new Tuple<int, int>(currentHP, handle ?? -1);
@@ -228,12 +225,12 @@ namespace SilkenImpact.Patch {
         [HarmonyPatch("AddHP")]
         [HarmonyPostfix]
         public static void HealthManager_AddHP_Postfix(HealthManager __instance, int hpAdd, int hpMax, ref Tuple<int, int> __state) {
-            PluginLogger.LogWarning($"{__instance.gameObject.name} AddHP, hp -> {__instance.hp}");
             int healAmount = __instance.hp - __state.Item1;
             // TODO: if hp > bar.hpMax? bruh there is no backward reference...
             if (!__instance.isDead)
                 DamageTextSpawnUtils.SpawnHealText(__instance, healAmount);
             __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.Submit(__state.Item2, new HealEventArgs(healAmount));
+            PluginLogger.LogInfo($"[HealthManagerPatch][AddHP Postfix] Submited HealEvent to Dispatcher for enemy={__instance.gameObject.name}, hpBefore={__state.Item1} hpAfter={__instance.hp} heal={healAmount} isDead={__instance.isDead}");
         }
         #endregion
 
@@ -241,12 +238,13 @@ namespace SilkenImpact.Patch {
         [HarmonyPatch("TakeDamage")]
         [HarmonyPrefix]
         public static void HealthManager_TakeDamage_Prefix(HitInstance hitInstance, HealthManager __instance, ref int __state) {
-            PluginLogger.LogInfo($"{__instance.gameObject.name} is hit, hp -> {__instance.hp}");
-            PluginLogger.LogWarning($"{__instance.gameObject.name}, Tag={__instance.gameObject.tag}, DisplayName={LocalisedName(__instance)}");
+            PluginLogger.LogDebug($"[HealthManagerPatch][TakeDamagePrefix] enemy={__instance.gameObject.name} hp={__instance.hp} tag={__instance.gameObject.tag} displayName={LocalisedName(__instance)}");
             if (IsImmune(__instance, hitInstance)) {
+                PluginLogger.LogInfo($"[HealthManagerPatch][TakeDamagePrefix] Enemy is immune to this hit, skipping DamageEvent enqueue. enemy={__instance.gameObject.name} hp={__instance.hp} tag={__instance.gameObject.tag} displayName={LocalisedName(__instance)}");
                 return;
             }
             int? handle = __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.Enqueue<DamageEventArgs>();
+            PluginLogger.LogInfo($"[HealthManagerPatch][TakeDamagePrefix] Enqueuing DamageEvent for enemy={__instance.gameObject.name} hpBefore={__instance.hp} handle={handle}");
             __state = handle ?? -1;
         }
 
@@ -264,10 +262,7 @@ namespace SilkenImpact.Patch {
             DamageTextSpawnUtils.SpawnDamageText(__instance, damage, hitInstance.CriticalHit, hitInstance.NailElement);
             __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.Submit(__state, new DamageEventArgs(damage));
             __instance.GetComponent<IHealthBarOwner>()?.CheckHP();
-
-            PluginLogger.LogWarning($"TakeDamagePostfix: {__instance.gameObject.name}.isDead = {__instance.isDead}");
-            PluginLogger.LogInfo($"{__instance.gameObject.name} took {damage} damage, hp -> {__instance.hp}");
-            PluginLogger.LogWarning($"Neil=[{hitInstance.NailElement}]");
+            PluginLogger.LogInfo($"[HealthManagerPatch][TakeDamage] enemy={__instance.gameObject.name} damage={damage} hpAfter={__instance.hp} isDead={__instance.isDead} nailElement={hitInstance.NailElement}");
         }
 
 
@@ -286,8 +281,7 @@ namespace SilkenImpact.Patch {
         public static void ApplyExtraDamage1_Post(HealthManager __instance, HitInstance hitInstance, ref Tuple<int, int> __state) {
             int damage = __state.Item1;
             int handle = __state.Item2;
-            PluginLogger.LogInfo($"{__instance.gameObject.name} took {damage} tag damage, hp -> {__instance.hp}");
-            PluginLogger.LogWarning($"Neil=[{hitInstance.NailElement}]");
+            PluginLogger.LogInfo($"[HealthManagerPatch][ApplyExtraDamageHitInstance] enemy={__instance.gameObject.name} damage={damage} hpAfter={__instance.hp} nailElement={hitInstance.NailElement}");
             DamageTextSpawnUtils.SpawnDamageText(__instance, damage, false, hitInstance.NailElement);
             __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.Submit(handle, new DamageEventArgs(damage));
         }
@@ -297,7 +291,7 @@ namespace SilkenImpact.Patch {
         [HarmonyPostfix]
         public static void ApplyExtraDamage2(HealthManager __instance, int damageAmount) {
             int damage = damageAmount;
-            PluginLogger.LogInfo($"{__instance.gameObject.name} took {damage} tag damage, hp -> {__instance.hp}");
+            PluginLogger.LogInfo($"[HealthManagerPatch][ApplyExtraDamageInt] enemy={__instance.gameObject.name} damage={damage} hpAfter={__instance.hp}");
             DamageTextSpawnUtils.SpawnDamageText(__instance, damage, false);
             __instance.GetComponent<IHealthBarOwner>()?.Dispatcher.EnqueueReady(new DamageEventArgs(damage));
         }

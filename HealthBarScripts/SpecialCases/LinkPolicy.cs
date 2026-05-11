@@ -70,6 +70,13 @@ namespace SilkenImpact {
                         return GameObject.Find("Giant Centipede Head")?.GetComponent<HealthManager>();
                     })
             },
+            // {
+            //     Endpoint.RelayEndpoint("Driller B"),
+            //     Endpoint.OriginEndpoint("Driller A", overrideHp: 400f)
+            //         .SetHealthManagerFinder(() => {
+            //             return GameObject.Find("Driller A")?.GetComponent<HealthManager>();
+            //         })
+            // }
         };
 
         # endregion
@@ -92,7 +99,7 @@ namespace SilkenImpact {
         public float? GetOverrideHpIfAny(HealthManager hm) {
             if (!endpointOfName.TryGetValue(hm.gameObject.name, out var endpoint)) return null;
             if (endpoint != null && endpoint.type != EndpointType.OriginEndpoint) {
-                PluginLogger.LogWarning($"LinkPolicy: GetOverrideHpIfAny called on non-origin endpoint {hm.gameObject.name}, overrideHp = {endpoint.overrideOriginHp}");
+                PluginLogger.LogWarning($"[LinkPolicy][GetOverrideHpIfAny] GetOverrideHpIfAny called on non-origin endpoint {hm.gameObject.name}, overrideHp = {endpoint.overrideOriginHp}. Using the override HP anyway.");
             }
             return endpoint?.overrideOriginHp ?? null;
         }

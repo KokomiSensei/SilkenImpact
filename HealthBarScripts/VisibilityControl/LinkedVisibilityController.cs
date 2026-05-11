@@ -17,7 +17,7 @@ namespace SilkenImpact {
                 return false;
             }
             set {
-                PluginLogger.LogWarning("LinkedVisibilityController IsVisible set called, which is not supported.");
+                PluginLogger.LogWarning("[LinkedVisibilityController][IsVisibleSetter][UnsupportedSet] IsVisible setter ignored.");
             }
         }
 

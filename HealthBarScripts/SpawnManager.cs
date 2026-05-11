@@ -5,13 +5,14 @@ using UnityEngine;
 namespace SilkenImpact {
     public class SpawnManager : Singleton<SpawnManager> {
         public bool IsBoss(HealthManager hm, float? overrideHp = null) {
-            if (hm.CompareTag("Boss")) {
-                // This only works for some of the bosses in Act 1.
-                // I would guess that Team Cherry forgot to tag some of the later bosses?
+            // This only works for some of the bosses in Act 1.
+            // I would guess that Team Cherry forgot to tag some of the later bosses?
 
-                // Update on 2025/11/5. Turned out that some regular enemy are also tagged as "Boss", e.g., the enemies summoned by "The last conductor".
-                return true;
-            }
+            // Update on 2025/11/5. Turned out that some regular enemy are also tagged as "Boss", e.g., the enemies summoned by "The last conductor".
+
+            // if (hm.CompareTag("Boss")) {
+            //     return true;
+            // }
 
             float hp = overrideHp ?? hm.hp;
             if (hp >= Configs.Instance.minBossBarHp.Value) {
@@ -51,9 +52,10 @@ namespace SilkenImpact {
         public void SpawnHealthBar(HealthManager hm) {
             if (LinkPolicy.Instance.TryGetOriginHealthManager(hm, out var originHm)) {
                 if (originHm == null) {
-                    PluginLogger.LogError($"[SpawnManager] Failed to get origin endpoint for relay endpoint {hm.gameObject.name}");
+                    PluginLogger.LogError($"[SpawnManager][SpawnHealthBar][LinkOriginMissing] relay={hm.gameObject.name} should be linked to an origin according to LinkPolicy, but the returned origin is null.");
                     return;
                 }
+                PluginLogger.LogInfo($"[SpawnManager][SpawnHealthBar][LinkRelay] Calling DoLink with relay={hm.gameObject.name} origin={originHm.gameObject.name}");
                 DoLink(originHm, hm);
                 return;
             }

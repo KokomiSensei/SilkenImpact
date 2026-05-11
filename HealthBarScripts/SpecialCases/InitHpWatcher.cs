@@ -12,7 +12,7 @@ namespace SilkenImpact {
             hm = GetComponent<HealthManager>();
             owner = GetComponent<IHealthBarOwner>();
             if (hm == null || owner == null) {
-                PluginLogger.LogError($"InitHpWatcher: Missing components on {gameObject.name}");
+                PluginLogger.LogError($"[InitHpWatcher][Awake][MissingComponent] hm == null or owner == null. Enemy={gameObject.name}, hm={hm}, owner={owner}");
                 return;
             }
             initHpGetter = Traverse.Create(hm).Field<int>("initHp");
@@ -23,7 +23,7 @@ namespace SilkenImpact {
         }
         void MonitorInitHp() {
             if (hm == null || owner == null || initHpGetter == null) {
-                PluginLogger.LogError($"InitHpWatcher: Missing components on {gameObject.name}");
+                PluginLogger.LogError($"[InitHpWatcher][MonitorInitHp][MissingRuntimeDependency] hm == null or owner == null or initHpGetter == null. Enemy={gameObject.name}, hm={hm}, owner={owner}, initHpGetter={initHpGetter}");
                 return;
             }
 
@@ -33,10 +33,9 @@ namespace SilkenImpact {
             }
             int currentHP = initHpGetter.Value;
             if (currentHP != previousInitHp) {
-                PluginLogger.LogFatal($"Detected initHP change on {hm.name}: {previousInitHp} -> {currentHP}!");
-                PluginLogger.LogFatal($"Either Team Cherry added a new method to modify initHP after initialization, or another mod is interfering.");
-                PluginLogger.LogFatal($"Current HP: {currentHP}");
-                PluginLogger.LogFatal($"Attempting to make automatic adaptation. Updating health bar accordingly.");
+                PluginLogger.LogWarning($"[InitHpWatcher][MonitorInitHp][InitHpChanged] enemy={hm.name} initHpBefore={previousInitHp} initHpAfter={currentHP}");
+                PluginLogger.LogWarning("[InitHpWatcher][MonitorInitHp][Reason] Potential game update behavior change or external mod interference.");
+                PluginLogger.LogWarning($"[InitHpWatcher][MonitorInitHp][AutoAdapt] enemy={hm.name} currentHp={currentHP}");
 
                 owner.SetHP(currentHP);
                 previousInitHp = currentHP;

@@ -6,18 +6,13 @@ namespace SilkenImpact {
 
         private IVisibilityController visibilityController;
         public Dispatcher Dispatcher { get; private set; }
-#if DEBUG
-        private string originalName;
-#endif
+
 
 
         void Awake() {
             HealthManager hm = GetComponent<HealthManager>();
             visibilityController = new VisibilityController(hm);
             Dispatcher = new Dispatcher(this);
-#if DEBUG
-            originalName = gameObject.name;
-#endif
         }
 
 
@@ -32,10 +27,8 @@ namespace SilkenImpact {
                     Hide();
                 }
             }
-#if DEBUG
             var hm = GetComponent<HealthManager>();
-            hm.name = originalName + $" visible={visibilityController?.IsVisible} hp={hm.hp}";
-#endif
+            PluginLogger.LogDebug($"[BaseHealthBarOwner][Update][Status Report] Visible={visibilityController?.IsVisible} hp={hm.hp}");
         }
 
         // void OnDisable() {

@@ -18,7 +18,7 @@ namespace SilkenImpact {
 
         private void CheckHealth() {
             if (hm && hm.hp <= 0) {
-                PluginLogger.LogInfo($"{hm.name}.hp = {hm.hp} <= 0, Sending Die Event");
+                PluginLogger.LogInfo($"[DeathWatcher][CheckHealth][DieDetected] enemy={hm.name} hp={hm.hp} Canceling further checks, calling Die() on HealthbarOwner and destroying self (DeathWatcher).");
                 hpBarOwner?.Die();
                 CancelInvoke(nameof(CheckHealth)); // Stop checking after death
                 Destroy(this);

@@ -36,7 +36,7 @@ namespace SilkenImpact {
 
         public static void SpawnDamageText(HealthManager hm, float damage, bool isCritHit, NailElements element = NailElements.None, Color? color = null) {
             if (damage <= 0) {
-                PluginLogger.LogWarning($"SpawnDamageText called with non-positive damage: {damage}");
+                PluginLogger.LogWarning($"[DamageTextSpawnUtils][SpawnDamageText][Skip] enemy={hm?.gameObject?.name} damage={damage}. Refusing Text Spawn.");
                 return;
             }
             if (!Configs.Instance.displayDamageText.Value) {
@@ -54,7 +54,7 @@ namespace SilkenImpact {
 
         public static void SpawnHealText(HealthManager hm, float amount, Color? color = null) {
             if (amount <= 0) {
-                PluginLogger.LogWarning($"SpawnHealText called with non-positive amount: {amount}");
+                PluginLogger.LogWarning($"[DamageTextSpawnUtils][SpawnHealText][Skip] enemy={hm?.gameObject?.name} amount={amount}. Refusing Text Spawn.");
                 return;
             }
             if (!Configs.Instance.displayHealText.Value) {

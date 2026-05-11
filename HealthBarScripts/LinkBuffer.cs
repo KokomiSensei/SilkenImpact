@@ -16,11 +16,14 @@ namespace SilkenImpact {
                 relaysOfOrigin[origin] = new Queue<GameObject>();
             }
             relaysOfOrigin[origin].Enqueue(relay);
+            PluginLogger.LogInfo($"[LinkBuffer][WaitForLink] Enqueued Link task of: origin={origin.name} relay={relay.name}");
         }
         public void RegisterRelay(GameObject origin, GameObject relay) {
             if (TryLink(origin, relay)) {
+                PluginLogger.LogInfo($"[LinkBuffer][RegisterRelay][TryLinkSuccess] origin={origin.name} relay={relay.name}");
                 return;
             }
+            PluginLogger.LogInfo($"[LinkBuffer][RegisterRelay][TryLinkFailed] origin={origin.name} relay={relay.name}");
             WaitForLink(origin, relay);
         }
         public void RegisterOrigin(GameObject origin) {
@@ -30,7 +33,7 @@ namespace SilkenImpact {
                     var relay = queue.Dequeue();
                     bool succeeded = TryLink(origin, relay);
                     if (!succeeded) {
-                        PluginLogger.LogError($"[LinkBuffer] Failed to link origin {origin.name} to relay {relay.name} upon origin registration.");
+                        PluginLogger.LogError($"[LinkBuffer][RegisterOrigin][TryLinkFailed] Failed to link origin to relay upon origon registration, origin={origin.name} relay={relay.name}. This shouldn't be happening.");
                     }
                 }
                 relaysOfOrigin.Remove(origin);

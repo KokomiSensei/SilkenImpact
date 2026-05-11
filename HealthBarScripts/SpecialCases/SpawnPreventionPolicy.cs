@@ -4,7 +4,7 @@ namespace SilkenImpact {
         public static float INF => Configs.Instance.infHp.Value;
         public static bool ShouldPreventSpawn(HealthManager hm) {
             if (hm.hp < minMobHealth) {
-                return true;
+                return hm.name != "Driller B";
             }
             if (hm.hp >= INF) {
                 return true;
