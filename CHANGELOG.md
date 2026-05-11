@@ -248,3 +248,9 @@
 **Bug Fixes**
 
 - Fixed the display issue of health bars.
+
+### 1.5.2
+
+**Bug Fixes**
+
+- Fixed the health bar display issue on the Great Conchflies, where the damage taken by 'Driller B' is not properly reflected on the health bar.

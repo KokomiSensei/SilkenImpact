@@ -22,8 +22,7 @@ namespace SilkenImpact.Patch {
         public static void AddHP_OnEnter_Prefix(AddHP __instance, ref AddHpArg __state) {
             var go = __instance.target.GetSafe(__instance);
             go.TryGetComponent<HealthManager>(out HealthManager hm);
-
-            PluginLogger.LogWarning($"{go.name} PlayMaker AddHP");
+            PluginLogger.LogDebug($"[PlayMakerPatch][AddHP] OnEnter Prefix called. enemy={go.name}");
             if (hm) {
                 int currentHP = Mathf.Max(hm.hp, 0);
                 int handle = hm.GetComponent<IHealthBarOwner>()?.Dispatcher.Enqueue<SetHpEventArgs>() ?? -1;
@@ -32,8 +31,6 @@ namespace SilkenImpact.Patch {
                     hpInPrefix = currentHP,
                     isDeadInPrefix = hm.isDead
                 };
-
-                PluginLogger.LogWarning($"PlayMaker AddHP Prefix: {hm.gameObject.name}.isDead = {hm.isDead}");
             }
         }
 
@@ -42,7 +39,7 @@ namespace SilkenImpact.Patch {
         [HarmonyPostfix]
         public static void AddHP_OnEnter_Postfix(AddHP __instance, ref AddHpArg __state) {
             var go = __instance.target.GetSafe(__instance);
-            PluginLogger.LogWarning($"{go.name} PlayMaker AddHP");
+            PluginLogger.LogDebug($"[PlayMakerPatch][AddHP] OnEnter Postfix called. enemy={go.name}");
             go.TryGetComponent<HealthManager>(out HealthManager hm);
             if (hm) {
                 float hp = hm.hp;
@@ -54,8 +51,7 @@ namespace SilkenImpact.Patch {
                 }
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, go);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
-                PluginLogger.LogWarning($"{go.name} PlayMaker AddHP hp:{hp}");
-                PluginLogger.LogWarning($"PlayMaker AddHP Postfix: {hm.gameObject.name}.isDead = {hm.isDead}");
+                PluginLogger.LogInfo($"[PlayMakerPatch][AddHP] enemy={go.name} hpBefore={__state.hpInPrefix} hpAfter={hp} isDeadBefore={__state.isDeadInPrefix} isDeadAfter={hm.isDead}");
             }
         }
 
@@ -69,14 +65,12 @@ namespace SilkenImpact.Patch {
         [HarmonyPrefix]
         public static void SetHP_OnEnter_Prefix(SetHP __instance, ref Tuple<int, int> __state) {
             var go = __instance.target.GetSafe(__instance);
-            PluginLogger.LogWarning($"{go.name} PlayMaker SetHP");
+            PluginLogger.LogDebug($"[PlayMakerPatch][SetHP] OnEnter Prefix called. enemy={go.name}");
             go.TryGetComponent<HealthManager>(out HealthManager hm);
             if (hm) {
                 int currentHP = Mathf.Max(hm.hp, 0);
                 int handle = hm.GetComponent<IHealthBarOwner>()?.Dispatcher.Enqueue<SetHpEventArgs>() ?? -1;
                 __state = new Tuple<int, int>(currentHP, handle);
-
-                PluginLogger.LogWarning($"PlayMaker SetHP Prefix: {hm.gameObject.name}.isDead = {hm.isDead}");
             }
         }
 
@@ -89,7 +83,7 @@ namespace SilkenImpact.Patch {
         [HarmonyPostfix]
         public static void SetHP_OnEnter_Postfix(SetHP __instance, ref Tuple<int, int> __state) {
             var go = __instance.target.GetSafe(__instance);
-            PluginLogger.LogWarning($"{go.name} PlayMaker SetHP");
+            PluginLogger.LogDebug($"[PlayMakerPatch][SetHP] OnEnter Postfix called. enemy={go.name}");
             go.TryGetComponent<HealthManager>(out HealthManager hm);
             if (hm) {
                 float hp = hm.hp;
@@ -99,8 +93,7 @@ namespace SilkenImpact.Patch {
                     DamageTextSpawnUtils.SpawnHealText(hm, amount);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, go);
                 //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
-                PluginLogger.LogWarning($"{go.name} PlayMaker SetHP hp:{__state}");
-                PluginLogger.LogWarning($"PlayMaker SetHP Postfix: {hm.gameObject.name}.isDead = {hm.isDead}");
+                PluginLogger.LogInfo($"[PlayMakerPatch][SetHP] enemy={go.name} hpBefore={__state.Item1} hpAfter={hp} isDead={hm.isDead}");
             }
         }
 
@@ -110,10 +103,10 @@ namespace SilkenImpact.Patch {
         public static void SubtractHP_OnEnter_Prefix(SubtractHP __instance) {
             var go = __instance.target.GetSafe(__instance);
             go.TryGetComponent<HealthManager>(out HealthManager hm);
-            PluginLogger.LogWarning($"{go.name} PlayMaker SubtractHP");
             if (hm) {
                 int damage = __instance.amount.Value;
                 hm.GetComponent<IHealthBarOwner>()?.Dispatcher.EnqueueReady(new DamageEventArgs(damage));
+                PluginLogger.LogDebug($"[PlayMakerPatch][SubtractHP] enemy={go.name} damage={damage}");
             }
         }
 
@@ -124,13 +117,11 @@ namespace SilkenImpact.Patch {
         // public static void SubtractHP_OnEnter_Postfix(SubtractHP __instance) {
         //     var go = __instance.target.GetSafe(__instance);
         //     go.TryGetComponent<HealthManager>(out HealthManager hm);
-        //     // PluginLogger.LogWarning($"{go.name} PlayMaker SubtractHP");
         //     if (hm) {
         //         float hp = hm.hp;
         //         hm.GetComponent<IHealthBarOwner>()?.SetHP(hp);
         //         //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Die, go);
         //         //EventHandle<MobOwnerEvent>.SendEvent(HealthBarOwnerEventType.Spawn, go, hp);
-        //         // PluginLogger.LogWarning($"{go.name} PlayMaker SubtractHP hp:{hp}");
         //     }
         // }
 

@@ -9,7 +9,7 @@ namespace SilkenImpact {
             Font font = allFonts.FirstOrDefault(f => f.name.Contains(fontName));
 
             if (font == null) {
-                PluginLogger.LogError("Failed to load in-game font " + fontName);
+                PluginLogger.LogError($"[GameFontLoader][DoLoad][LoadFailed] font={fontName}");
             }
             return font;
         }

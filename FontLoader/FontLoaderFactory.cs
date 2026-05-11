@@ -3,7 +3,7 @@ using System;
 namespace SilkenImpact {
     public static class FontLoaderFactory {
         private static IFontLoader FallbackFontLoader(FontArgs args) {
-            PluginLogger.LogError($"Unknown FontOption: {args.FontOption}, FontArgs: {args}");
+            PluginLogger.LogError($"[FontLoaderFactory][FallbackFontLoader][Load Fallback Font] UnknownOption, option={args.FontOption} args={args}");
             return new SmileySansLoader();
         }
         public static IFontLoader CreateFontLoader(FontArgs args) {

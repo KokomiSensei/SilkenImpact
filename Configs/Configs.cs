@@ -109,7 +109,7 @@ namespace SilkenImpact {
                 LoadLanguageConfigs(newLang);
                 BindLanguage(newLang);
 
-                PluginLogger.LogInfo("Language changed to " + newLanguage + ". Restart game to apply config descriptions.");
+                PluginLogger.LogInfo($"[Configs][OnLanguageChanged] language={newLanguage}. Restart game to apply config descriptions.");
             } finally {
                 config.SaveOnConfigSet = autoSave;
             }

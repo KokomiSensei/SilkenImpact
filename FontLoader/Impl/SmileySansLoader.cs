@@ -5,7 +5,7 @@ namespace SilkenImpact {
         protected override Font DoLoad() {
             var bundle = Plugin.bundle;
             if (bundle == null) {
-                Plugin.Logger.LogError("AssetBundle is null!");
+                PluginLogger.LogError("[SmileySansLoader][DoLoad][BundleNull] Cannot load SmileySans font.");
                 return null;
             }
             var font = bundle.LoadAsset<Font>("Assets/Addressables/Fonts/SmileySans-Oblique.ttf");

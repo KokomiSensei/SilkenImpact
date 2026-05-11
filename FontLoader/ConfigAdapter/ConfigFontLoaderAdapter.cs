@@ -18,13 +18,13 @@ namespace SilkenImpact {
                 fontLoader = FontLoaderFactory.CreateFontLoader(currentOption);
                 cachedArgs = currentOption;
             }
-            PluginLogger.LogDebug($"{GetType().Name} Loaded Font with Args {currentOption} ");
+            PluginLogger.LogDebug($"[ConfigFontLoaderAdapter][{GetType().Name}][Load] args={currentOption}");
             font = fontLoader.Load();
             if (font == null) {
-                PluginLogger.LogError($"{GetType().Name} Load Font Failed");
+                PluginLogger.LogError($"[ConfigFontLoaderAdapter][{GetType().Name}][LoadFailed] args={currentOption}");
                 return fallbackLoader.Load();
             } else {
-                PluginLogger.LogDebug($"{GetType().Name} Loaded Font {font.name} ");
+                PluginLogger.LogDebug($"[ConfigFontLoaderAdapter][{GetType().Name}][LoadSuccess] font={font.name}");
             }
             return font;
         }

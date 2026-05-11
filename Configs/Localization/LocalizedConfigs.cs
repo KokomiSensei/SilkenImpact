@@ -69,7 +69,7 @@ namespace SilkenImpact {
             try {
                 LoadLocalizationIfNeeded(option);
             } catch (Exception e) {
-                PluginLogger.LogFatal($"Failed to load localization: {e}");
+                PluginLogger.LogFatal($"[LocalizedConfigs][Load] Load failed, language={option} error={e}");
                 return;
             }
             var configFile = Plugin.Instance.Config;

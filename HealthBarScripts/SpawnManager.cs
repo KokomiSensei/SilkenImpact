@@ -52,10 +52,10 @@ namespace SilkenImpact {
         public void SpawnHealthBar(HealthManager hm) {
             if (LinkPolicy.Instance.TryGetOriginHealthManager(hm, out var originHm)) {
                 if (originHm == null) {
-                    PluginLogger.LogError($"[SpawnManager] Failed to get origin endpoint for relay endpoint {hm.gameObject.name}");
+                    PluginLogger.LogError($"[SpawnManager][SpawnHealthBar][LinkOriginMissing] relay={hm.gameObject.name} should be linked to an origin according to LinkPolicy, but the returned origin is null.");
                     return;
                 }
-                PluginLogger.LogInfo($"[SpawnManager] Linking relay endpoint {hm.gameObject.name} to origin endpoint {originHm.gameObject.name}");
+                PluginLogger.LogInfo($"[SpawnManager][SpawnHealthBar][LinkRelay] Calling DoLink with relay={hm.gameObject.name} origin={originHm.gameObject.name}");
                 DoLink(originHm, hm);
                 return;
             }

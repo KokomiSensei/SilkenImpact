@@ -68,10 +68,10 @@ namespace SilkenImpact {
             UIHealthBar uIHealthBar = healthBar.GetComponent<UIHealthBar>();
             if (uIHealthBar) {
                 string locolisedName = HealthManagerPatch.LocalisedName(__instance: bossGO.GetComponent<HealthManager>());
-                PluginLogger.LogInfo($"BossHealthBarController: Localised name for bossGO {bossGO.name} is {locolisedName}");
+                PluginLogger.LogInfo($"[BossHealthBarController][OnEnemySpawn][SetHealthBarDisplayName] boss={bossGO.name} localizedName={locolisedName}");
                 uIHealthBar.SetNameText(locolisedName);
             } else {
-                PluginLogger.LogWarning($"BossHealthBarController: OnEnemySpawn could not find UIHealthBar component on healthBarGO for bossGO {bossGO.name}");
+                PluginLogger.LogError($"[BossHealthBarController][OnEnemySpawn][MissingUIHealthBar] boss={bossGO.name}");
             }
         }
 

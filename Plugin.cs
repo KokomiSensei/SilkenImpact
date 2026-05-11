@@ -28,7 +28,7 @@ public class Plugin : BaseUnityPlugin {
         __instance = this;
         // Plugin startup logic
         Logger = base.Logger;
-        Logger.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
+        PluginLogger.LogDebug($"[Plugin] Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
 
         // Asset Bundle
         LoadAssetBundle();
@@ -59,13 +59,13 @@ public class Plugin : BaseUnityPlugin {
 
 
     private void OnDestroy() {
-        Logger.LogDebug("Plugin is being unloaded");
+        PluginLogger.LogDebug("[Plugin] Plugin is being unloaded");
         _harmony?.UnpatchSelf();
     }
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.F5)) {
-            Logger.LogInfo("Reloading AssetBundle...");
+            PluginLogger.LogDebug("[Plugin] Reloading AssetBundle...");
             LoadAssetBundle();
         }
     }
@@ -86,62 +86,25 @@ public class Plugin : BaseUnityPlugin {
         PluginFolder = Path.GetDirectoryName(Info.Location);
         string latestBundlePath = LatestBundleInFolder(AssetsFolder);
         bundle = AssetBundle.LoadFromFile(latestBundlePath);
-        Logger.LogInfo($"Loaded AssetBundle from {latestBundlePath}");
+        PluginLogger.LogDebug($"[Plugin] Loaded AssetBundle from {latestBundlePath}");
     }
 
     public static GameObject InstantiateFromAssetsBundle(string path, string name) {
-        PluginLogger.LogInfo($"Instantiating {name} from AssetBundle at path {path}");
+        PluginLogger.LogDebug($"[Plugin] Instantiating {name} from AssetBundle at path {path}");
         var prefab = bundle.LoadAsset<GameObject>(path);
-        PluginLogger.LogInfo($"Loaded prefab: {prefab}");
+        PluginLogger.LogDebug($"[Plugin] Loaded prefab: {prefab}");
         if (prefab == null)
             return null;
-        PluginLogger.LogInfo($"Instantiating prefab {prefab.name}");
+        PluginLogger.LogDebug($"[Plugin] Instantiating prefab {prefab.name}");
         GameObject go = null;
         try {
             go = Instantiate(prefab);
         } catch (Exception e) {
-            Logger.LogFatal(e);
+            PluginLogger.LogFatal(e.ToString());
             return null;
         }
         go.name = name;
-        PluginLogger.LogInfo($"Instantiated GameObject <{path}> as <{go.name}>");
+        PluginLogger.LogDebug($"[Plugin] Instantiated GameObject <{path}> as <{go.name}>");
         return go;
     }
-
-    //private IEnumerator UpdateAddressableOnAwake() {
-    //    // remote catalog at <PluginFolder>/catalog_1.0.json
-    //    string path = Path.Combine(PluginFolder, "catalog_1.0.bin");
-    //    PluginLogger.LogInfo($"Loading Addressable Catalog from {path}");
-    //    //AsyncOperationHandle<IResourceLocator> handle = Addressables.LoadContentCatalogAsync(path, true);
-    //    //if (handle.Status != AsyncOperationStatus.Succeeded) {
-    //    //    PluginLogger.LogWarning($"Failed to load Addressable Catalog from {path}");
-    //    //    PluginLogger.LogError(handle.OperationException);
-    //    //    yield break;
-    //    //}
-    //    AsyncOperationHandle<IResourceLocator> handle = Addressables.LoadContentCatalogAsync(path);
-    //    yield return handle;
-
-    //    if (handle.Status != AsyncOperationStatus.Succeeded) {
-    //        Logger.LogWarning($"Failed to load Addressable Catalog from {path}, {handle.Status}");
-    //        Logger.LogError(handle.OperationException);
-    //        handle.Release();
-    //        yield break;
-    //    }
-    //    handle.Release();
-    //    isAddressableUpdated = true;
-    //}
-
-    //public static GameObject InstantiateFromAddressable(string key, string name) {
-    //    if (!isAddressableUpdated) {
-    //        Logger.LogWarning("Addressables not initialized yet");
-    //        return null;
-    //    }
-    //    PluginLogger.LogInfo($"Instantiating {name} from Addressable with key {key}");
-    //    var go = Addressables.InstantiateAsync(key).WaitForCompletion();
-    //    if (go == null) {
-    //        PluginLogger.LogWarning($"Failed to load Addressable with key {key}");
-    //    }
-    //    go.name = name;
-    //    return go;
-    //}
 }
