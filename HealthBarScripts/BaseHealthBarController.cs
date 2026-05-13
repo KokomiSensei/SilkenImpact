@@ -80,10 +80,10 @@ namespace SilkenImpact {
 
         protected virtual void OnEnemyShow(GameObject enemyGO) {
             if (!guardExist(enemyGO)) return;
+            PluginLogger.LogInfo($"[BaseHealthBarController][{GetType().Name}][OnEnemyShow] enemy={enemyGO.name}");
+
             var bar = healthBarOf[enemyGO];
             bar.SetVisibility(true);
-
-            PluginLogger.LogInfo($"[BaseHealthBarController][{GetType().Name}][OnEnemyShow] enemy={enemyGO.name}");
         }
 
         protected abstract float BarWidth(float maxHp);
@@ -93,7 +93,7 @@ namespace SilkenImpact {
             if (healthBarOf.ContainsKey(relayGO)) {
                 PluginLogger.LogWarning($"[HealthBar][{GetType().Name}][LinkOverwrite] relay={relayGO.name}");
                 var withBarGO = healthBarOf[relayGO].gameObject;
-                Destroy(withBarGO);
+                PooledObjectService.Instance.Release(withBarGO);
             }
             healthBarOf[relayGO] = healthBarOf[originGO];
             if (relayGO.TryGetComponent<IHealthBarOwner>(out var relayOwner)) {
@@ -147,6 +147,11 @@ namespace SilkenImpact {
             PluginLogger.LogInfo($"[HealthBar][{GetType().Name}][OnEnemySpawn] enemy={enemyGO.name} maxHp={maxHp}");
 
             healthBarGO = GetNewHealthBar;
+            healthBarGO.name = $"HealthBar_{enemyGO.name}";
+            if (healthBarGO == null) {
+                PluginLogger.LogError($"[HealthBar][{GetType().Name}][OnEnemySpawn][AcquireFailed] enemy={enemyGO.name}");
+                return;
+            }
 
             // Setup HealthBarGO
             healthBarGO.transform.SetParent(BarCanvas.transform);
@@ -183,47 +188,48 @@ namespace SilkenImpact {
 
         protected void OnEnemyDamage(GameObject enemyGO, float amount) {
             if (!guardExist(enemyGO)) return;
+            PluginLogger.LogInfo($"[BaseHealthBarController][{GetType().Name}][OnEnemyDamage] enemy={enemyGO.name} damage={amount}");
+
             var bar = healthBarOf[enemyGO];
             bar.TakeDamage(amount);
             // OnCheckHP(enemyGO, true); // Must not call this here
             OnCheckHP(enemyGO);
-
-            PluginLogger.LogInfo($"[BaseHealthBarController][{GetType().Name}][OnEnemyDamage] enemy={enemyGO.name} damage={amount}");
         }
 
         protected void OnEnemyHeal(GameObject enemyGO, float amount) {
             if (!guardExist(enemyGO)) return;
+            PluginLogger.LogInfo($"[BaseHealthBarController][{GetType().Name}][OnEnemyHeal] enemy={enemyGO.name} heal={amount}");
+
             var bar = healthBarOf[enemyGO];
             bar.Heal(amount);
             OnCheckHP(enemyGO);
-
-            PluginLogger.LogInfo($"[BaseHealthBarController][{GetType().Name}][OnEnemyHeal] enemy={enemyGO.name} heal={amount}");
         }
 
         protected virtual void OnEnemyHide(GameObject enemyGO) {
             if (!guardExist(enemyGO)) return;
+            PluginLogger.LogInfo($"[BaseHealthBarController][{GetType().Name}][OnEnemyHide] enemy={enemyGO.name}");
+
             var bar = healthBarOf[enemyGO];
             bar.SetVisibility(false);
-
-            PluginLogger.LogInfo($"[BaseHealthBarController][{GetType().Name}][OnEnemyHide] enemy={enemyGO.name}");
         }
 
         protected virtual void OnEnemyDie(GameObject enemyGO) {
             if (!guardExist(enemyGO)) return;
-            var bar = healthBarOf[enemyGO];
-            Destroy(bar.gameObject);
-            healthBarOf.Remove(enemyGO);
-
             PluginLogger.LogInfo($"[BaseHealthBarController][{GetType().Name}][OnEnemyDie] enemy={enemyGO.name}");
+
+            var bar = healthBarOf[enemyGO];
+            PluginLogger.LogInfo($"[BaseHealthBarController][{GetType().Name}][OnEnemyDie] Releasing health bar of {enemyGO.name}: {bar.gameObject.name}");
+            PooledObjectService.Instance.Release(bar.gameObject);
+            healthBarOf.Remove(enemyGO);
         }
 
         protected void OnEnemySetHP(GameObject enemyGO, float hp) {
             if (!guardExist(enemyGO)) return;
+            PluginLogger.LogInfo($"[BaseHealthBarController][{GetType().Name}][OnEnemySetHP] enemy={enemyGO.name} hp={hp}");
+
             var bar = healthBarOf[enemyGO];
             bar.ResetHealth(hp);
             OnCheckHP(enemyGO, true);
-
-            PluginLogger.LogInfo($"[BaseHealthBarController][{GetType().Name}][OnEnemySetHP] enemy={enemyGO.name} hp={hp}");
         }
     }
 }

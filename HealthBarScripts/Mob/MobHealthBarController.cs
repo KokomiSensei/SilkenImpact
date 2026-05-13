@@ -8,17 +8,10 @@ namespace SilkenImpact {
     public class MobHealthBarController : BaseHealthBarController<MobOwnerEvent, MobHealthBarOwner> {
         private string prefabPath {
             get {
-                switch (Configs.Instance.healthBarShape.Value) {
-                    case HealthBarShape.Rounded:
-                        return "Assets/Addressables/Prefabs/Health Bars/Masked UI Health Bars/Rounded.prefab";
-                    case HealthBarShape.Diamond:
-                        return "Assets/Addressables/Prefabs/Health Bars/Masked UI Health Bars/Diamond.prefab";
-                    default:
-                        return "Assets/Addressables/Prefabs/Health Bars/Masked UI Health Bars/Rounded.prefab";
-                }
+                return AssetPaths.HealthBars.ForMobShape(Configs.Instance.healthBarShape.Value);
             }
         }
-        public override GameObject GetNewHealthBar => Plugin.InstantiateFromAssetsBundle(prefabPath, "MobHealthBar");
+        public override GameObject GetNewHealthBar => PooledObjectService.Instance.Acquire(prefabPath, "MobHealthBar", BarCanvas.transform);
 
         public override Canvas BarCanvas => WorldSpaceCanvas.GetWorldSpaceCanvas;
 

@@ -81,12 +81,12 @@ namespace SilkenImpact {
             if (gameObject.layer != enemyLayer)
                 return false;
 
-            PluginLogger.LogDebug("[VisibilityController][mobIsShowing] 1. Layer Passed"); // 1600 / 2600
+            PluginLogger.LogDetail("[VisibilityController][mobIsShowing] 1. Layer Passed"); // 1600 / 2600
             if (Mathf.Abs(gameObject.transform.position.z) > maxZ)
                 return false;
 
 
-            PluginLogger.LogDebug("[VisibilityController][mobIsShowing] 2. Z Pos Passed"); // 500 / 1600
+            PluginLogger.LogDetail("[VisibilityController][mobIsShowing] 2. Z Pos Passed"); // 500 / 1600
             if (physicalPusherCollider && defaultCollider) {
                 // TODO && or || ?
                 if (!physicalPusherCollider.isActiveAndEnabled && !defaultCollider.isActiveAndEnabled) {
@@ -103,11 +103,11 @@ namespace SilkenImpact {
 
 
 
-            PluginLogger.LogDebug("[VisibilityController][mobIsShowing] 3. Collider Passed"); // 223 / 500
+            PluginLogger.LogDetail("[VisibilityController][mobIsShowing] 3. Collider Passed"); // 223 / 500
             if (renderer && (!renderer.enabled || !renderer.isVisible))
                 return false;
 
-            PluginLogger.LogDebug("[VisibilityController][mobIsShowing] 4. Renderer Passed"); // 3 / 223
+            PluginLogger.LogDetail("[VisibilityController][mobIsShowing] 4. Renderer Passed"); // 3 / 223
 
             // Garmond & Zaza (GameObject name: Garmond fighter)
             // NOTICE: Should use DamageHero as a predicate, as DamageHero is disabled when boss is stunned.

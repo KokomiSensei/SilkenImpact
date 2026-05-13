@@ -28,17 +28,20 @@ namespace SilkenImpact {
                 }
             }
             var hm = GetComponent<HealthManager>();
-            PluginLogger.LogDebug($"[BaseHealthBarOwner][Update][Status Report] Visible={visibilityController?.IsVisible} hp={hm.hp}");
+            PluginLogger.LogDetail($"[BaseHealthBarOwner][Update][Status Report] Visible={visibilityController?.IsVisible} hp={hm.hp}");
         }
 
-        // void OnDisable() {
-        //     Hide();
-        // }
-        // void OnEnable() {
-        //     Show();
-        // }
+
+        void OnDisable() {
+            updateVisibilityImmediate();
+        }
+
+        void OnEnable() {
+            updateVisibilityImmediate();
+        }
 
         void OnDestroy() {
+            PluginLogger.LogInfo($"[BaseHealthBarOwner][OnDestroy] {gameObject.name} is being destroyed. Sending Die event.");
             Die();
         }
 

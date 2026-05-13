@@ -3,7 +3,7 @@ using UnityEngine;
 namespace SilkenImpact {
 
 
-    public abstract class DamageText : MonoBehaviour {
+    public abstract class DamageText : MonoBehaviour, IPoolable {
         public DamageTextAnimationConfig config;
 
         public float maxWidth;
@@ -17,6 +17,7 @@ namespace SilkenImpact {
         [SerializeField] private Vector3 startPosition;
         [SerializeField] private Vector2 baseSize => new Vector2(maxWidth, maxHeight);
         [SerializeField] private Vector3 baseScale;
+        [SerializeField] private Vector3 prefabScale;
         [SerializeField]
         public Vector3 BaseScale {
             get => transform.localScale;
@@ -31,12 +32,26 @@ namespace SilkenImpact {
         public abstract Color TextColor { get; set; }
         public abstract Font TextFont { set; }
 
+        private void Awake() {
+            prefabScale = transform.localScale;
+        }
+
         private void Start() {
+            ResetAnimationState();
+        }
+
+        public void ResetForSpawn(float sizeScale) {
+            transform.localScale = prefabScale;
+            BaseScale = prefabScale * sizeScale;
+            ResetAnimationState();
+        }
+
+        private void ResetAnimationState() {
             startPosition = transform.position;
             secondsElapsed = 0;
 
             baseColor = this.TextColor;
-            BaseScale = transform.localScale;
+            baseScale = transform.localScale;
         }
 
         private void Update() {
@@ -44,7 +59,7 @@ namespace SilkenImpact {
             if (secondsElapsed < 1.1 * config.durationSeconds) {
                 DoAnimation();
             } else {
-                Destroy(gameObject);
+                PooledObjectService.Instance.Release(gameObject);
             }
         }
         private void DoAnimation() {
@@ -67,6 +82,16 @@ namespace SilkenImpact {
 
             // Position
             transform.position = startPosition + new Vector3(0, baseScale.y * config.verticalOffsetCurve.Evaluate(progress) * maxHeight, 0);
+        }
+
+        public void OnAcquireFromPool() {
+            ResetAnimationState();
+        }
+
+        public void OnReleaseToPool() {
+            secondsElapsed = 0;
+            transform.localScale = prefabScale;
+            rectTransform.localScale = Vector3.one;
         }
     }
 }

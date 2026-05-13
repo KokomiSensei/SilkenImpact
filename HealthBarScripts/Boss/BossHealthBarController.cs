@@ -10,18 +10,11 @@ namespace SilkenImpact {
         BossHealthBarContainer container;
         protected string healthBarPrefabPath {
             get {
-                switch (Configs.Instance.healthBarShape.Value) {
-                    case HealthBarShape.Rounded:
-                        return "Assets/Addressables/Prefabs/Health Bars/Masked UI Health Bars/RoundedBoss.prefab";
-                    case HealthBarShape.Diamond:
-                        return "Assets/Addressables/Prefabs/Health Bars/Masked UI Health Bars/DiamondBoss.prefab";
-                    default:
-                        return "Assets/Addressables/Prefabs/Health Bars/Masked UI Health Bars/RoundedBoss.prefab";
-                }
+                return AssetPaths.HealthBars.ForBossShape(Configs.Instance.healthBarShape.Value);
             }
         }
-        protected string containerPrefabPath = "Assets/Addressables/Prefabs/Container.prefab";
-        public override GameObject GetNewHealthBar => Plugin.InstantiateFromAssetsBundle(healthBarPrefabPath, "BossHealthBar");
+        protected string containerPrefabPath = AssetPaths.Prefabs.BossContainer;
+        public override GameObject GetNewHealthBar => PooledObjectService.Instance.Acquire(healthBarPrefabPath, "BossHealthBar", BarCanvas.transform);
 
         public override Canvas BarCanvas => ScreenSpaceCanvas.GetScreenSpaceCanvas;
 
@@ -67,9 +60,11 @@ namespace SilkenImpact {
             var healthBar = healthBarOf[bossGO];
             UIHealthBar uIHealthBar = healthBar.GetComponent<UIHealthBar>();
             if (uIHealthBar) {
-                string locolisedName = HealthManagerPatch.LocalisedName(__instance: bossGO.GetComponent<HealthManager>());
-                PluginLogger.LogInfo($"[BossHealthBarController][OnEnemySpawn][SetHealthBarDisplayName] boss={bossGO.name} localizedName={locolisedName}");
-                uIHealthBar.SetNameText(locolisedName);
+                HealthManager hm = bossGO.GetComponent<HealthManager>();
+
+                string localizedName = HealthManagerPatch.LocalisedName(instance: hm);
+                PluginLogger.LogInfo($"[BossHealthBarController][OnEnemySpawn][SetHealthBarDisplayName] boss={bossGO.name} localizedName={localizedName}");
+                uIHealthBar.SetNameText(localizedName);
             } else {
                 PluginLogger.LogError($"[BossHealthBarController][OnEnemySpawn][MissingUIHealthBar] boss={bossGO.name}");
             }
