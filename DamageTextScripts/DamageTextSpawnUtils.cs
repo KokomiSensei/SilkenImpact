@@ -30,8 +30,8 @@ namespace SilkenImpact {
             var text = textGO.GetComponent<DamageText>();
             text.DamageString = content;
             text.TextColor = color;
-            text.BaseScale *= sizeScale;
             text.TextFont = FontManager.instance.DamageFontLoader.Load();
+            text.ResetForSpawn(sizeScale);
         }
 
         public static void SpawnDamageText(HealthManager hm, float damage, bool isCritHit, NailElements element = NailElements.None, Color? color = null) {
@@ -48,7 +48,11 @@ namespace SilkenImpact {
             float randomSizeScale = Random.Range(1f, 1.1f) * (isCritHit ? Mathf.Clamp(damageScale(damage), 2, 2.5f) : Mathf.Clamp(damageScale(damage), 0.5f, 1.5f));
             randomSizeScale *= Configs.Instance.damageFontSizeScaler.Value;
             updateAvgDamagePerHit(damage);
-            var textGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/DamageOldText.prefab", "DamageText");
+            var textGO = PooledObjectService.Instance.Acquire(AssetPaths.Prefabs.DamageText, "DamageText", WorldSpaceCanvas.GetWorldSpaceCanvas.transform);
+            if (textGO == null) {
+                PluginLogger.LogError("[DamageTextSpawnUtils][SpawnDamageText][AcquireFailed] prefab=DamageOldText");
+                return;
+            }
             spawnTextOn(hm, textGO, ((int)damage).ToString(), horizontalOffsetScale, verticalOffsetScale, randomSizeScale, color ?? textColor(element, isCritHit));
         }
 
@@ -65,7 +69,11 @@ namespace SilkenImpact {
 
             float randomSizeScale = Random.Range(1.5f, 1.8f);
             randomSizeScale *= Configs.Instance.damageFontSizeScaler.Value;
-            var textGO = Plugin.InstantiateFromAssetsBundle("Assets/Addressables/Prefabs/HealOldText.prefab", "HealText");
+            var textGO = PooledObjectService.Instance.Acquire(AssetPaths.Prefabs.HealText, "HealText", WorldSpaceCanvas.GetWorldSpaceCanvas.transform);
+            if (textGO == null) {
+                PluginLogger.LogError("[DamageTextSpawnUtils][SpawnHealText][AcquireFailed] prefab=HealOldText");
+                return;
+            }
             spawnTextOn(hm, textGO, $"+{(int)amount}", horizontalOffsetScale, verticalOffsetScale, randomSizeScale, color ?? Configs.Instance.healTextColor.Value);
         }
 

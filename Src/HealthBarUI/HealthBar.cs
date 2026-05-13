@@ -3,7 +3,7 @@ using UnityEngine;
 namespace SilkenImpact {
 
 
-    public class HealthBar : MonoBehaviour {
+    public class HealthBar : MonoBehaviour, IPoolable {
         [SerializeField] protected HealthBarConfig config;
 
         [SerializeField] protected Bar hp;
@@ -90,16 +90,18 @@ namespace SilkenImpact {
 
         protected void Update() {
             //TODO bro why did i decide to do it like this?? that seems stupid and expensive
-            if (DecayingHealth > currentHealth) {
+            float decayingHealth = DecayingHealth;
+            if (decayingHealth > currentHealth) {
                 if (decayTimer < config.decayThresholdSeconds) {
                     decayTimer += Time.deltaTime;
                 } else {
-                    delayedEffect.SetPercentage(currentHealth / maxHealth, (DecayingHealth - currentHealth) / maxHealth / config.decayPercentagePerSecond);
+                    delayedEffect.SetPercentage(currentHealth / maxHealth, (decayingHealth - currentHealth) / maxHealth / config.decayPercentagePerSecond);
                     //decayingHealth = currentHealth;
                     decayTimer = 0;
                 }
-            } else {
+            } else if (decayingHealth < currentHealth) {
                 decayTimer = 0;
+                delayedEffect.SetPercentage(currentHealth / maxHealth, 0);
             }
         }
 
@@ -124,7 +126,7 @@ namespace SilkenImpact {
             //if (currentHealth > DecayingHealth) {
             //    //DecayingHealth = currentHealth;
             //}
-            delayedEffect.SetPercentage(currentHealth / maxHealth, config.healthChangeDuration);
+            // delayedEffect.SetPercentage(currentHealth / maxHealth, config.healthChangeDuration);
             hp.SetPercentage(currentHealth / maxHealth, config.healthChangeDuration);
             OnHealthChanged();
         }
@@ -141,6 +143,16 @@ namespace SilkenImpact {
             hp.SetVisibility(visible);
             delayedEffect.SetVisibility(visible);
             background.SetVisibility(visible);
+        }
+
+        public virtual void OnAcquireFromPool() {
+            decayTimer = 0f;
+            SetVisibility(false);
+        }
+
+        public virtual void OnReleaseToPool() {
+            decayTimer = 0f;
+            SetVisibility(false);
         }
 
 #if !(UNITY_EDITOR || UNITY_STANDALONE)

@@ -32,6 +32,7 @@ public class Plugin : BaseUnityPlugin {
 
         // Asset Bundle
         LoadAssetBundle();
+        PooledObjectService.Instance.InitializeAndPrewarm();
 
         // Patch 
         _harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
@@ -60,13 +61,16 @@ public class Plugin : BaseUnityPlugin {
 
     private void OnDestroy() {
         PluginLogger.LogDebug("[Plugin] Plugin is being unloaded");
+        PooledObjectService.Instance.ClearAll();
         _harmony?.UnpatchSelf();
     }
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.F5)) {
             PluginLogger.LogDebug("[Plugin] Reloading AssetBundle...");
+            PooledObjectService.Instance.ClearAll();
             LoadAssetBundle();
+            PooledObjectService.Instance.InitializeAndPrewarm();
         }
     }
 

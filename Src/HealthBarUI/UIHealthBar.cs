@@ -9,13 +9,17 @@ namespace SilkenImpact {
 
         Vector3 nameTextOriginalScale;
         Vector3 hpTextOriginalScale;
+        bool textScaleInitialized;
 
 
         protected override void OnStart() {
             base.OnStart();
             GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
-            hpTextOriginalScale = hpText?.transform.localScale ?? Vector3.one;
-            nameTextOriginalScale = nameText?.transform.localScale ?? Vector3.one;
+            if (!textScaleInitialized) {
+                hpTextOriginalScale = hpText?.transform.localScale ?? Vector3.one;
+                nameTextOriginalScale = nameText?.transform.localScale ?? Vector3.one;
+                textScaleInitialized = true;
+            }
         }
         protected override void Redraw() {
             base.Redraw();
@@ -66,6 +70,34 @@ namespace SilkenImpact {
         internal void SetHpNumberScale(float value) {
             if (hpText == null) return;
             hpText.transform.localScale = hpTextOriginalScale * value;
+        }
+
+        public override void OnAcquireFromPool() {
+            base.OnAcquireFromPool();
+            if (textScaleInitialized) {
+                if (nameText != null) {
+                    nameText.transform.localScale = nameTextOriginalScale;
+                }
+                if (hpText != null) {
+                    hpText.transform.localScale = hpTextOriginalScale;
+                }
+            }
+        }
+
+        public override void OnReleaseToPool() {
+            base.OnReleaseToPool();
+            if (textScaleInitialized) {
+                if (nameText != null) {
+                    nameText.transform.localScale = nameTextOriginalScale;
+                    nameText.text = string.Empty;
+                }
+                if (hpText != null) {
+                    hpText.transform.localScale = hpTextOriginalScale;
+                }
+            }
+            if (canvasGroup != null) {
+                canvasGroup.alpha = 0f;
+            }
         }
     }
 }

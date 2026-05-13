@@ -254,3 +254,16 @@
 **Bug Fixes**
 
 - Fixed the health bar display issue on the Great Conchflies, where the damage taken by 'Driller B' is not properly reflected on the health bar.
+
+### 1.6.0
+
+**Improvements**
+
+- Improve performance by introducing object pooling for damage/heal popups and health bars.
+- Adjust heal animation of health bars.
+
+**Fixes**
+
+- Shakra's name shown as "Mapper Spar NPC".
+- Health bar not disappearing when some enemies' GameObject is suddenly disabled.
+
